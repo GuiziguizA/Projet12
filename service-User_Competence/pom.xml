@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>org.sid</groupId>
-	<artifactId>service-compagnie</artifactId>
+	<artifactId>service-user_competence</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>service-compagnie</name>
+	<name>service-user_competence</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
@@ -55,13 +55,21 @@
 </dependency>
 		
 		
-		
-	<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-test</artifactId>
+	<!-- https://mvnrepository.com/artifact/junit/junit -->
+<dependency>
+    <groupId>junit</groupId>
+    <artifactId>junit</artifactId>
+    <version>4.11</version>
     <scope>test</scope>
-    <version>2.2.6.RELEASE</version>
 </dependency>
+	
+
+<dependency>
+    <groupId>org.junit.jupiter</groupId>
+    <artifactId>junit-jupiter-engine</artifactId>
+
+</dependency>
+
 
 		<dependency>
 			<groupId>com.h2database</groupId>
@@ -106,7 +114,19 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-		</plugins>
+		
+		
+		
+	
+    <plugin>
+        <groupId>org.liquibase</groupId>
+        <artifactId>liquibase-maven-plugin</artifactId>
+        <version>3.4.1</version>
+        <configuration>                  
+            <propertyFile>src/main/resources/liquibase.properties</propertyFile>
+        </configuration>                
+    </plugin>
+</plugins> 
 	</build>
 
 </project>

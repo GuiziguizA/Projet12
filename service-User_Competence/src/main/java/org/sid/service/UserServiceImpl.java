@@ -1,9 +1,7 @@
 package org.sid.service;
 
-import java.util.List;
 import java.util.Optional;
 
-import org.sid.classe.Competence;
 import org.sid.classe.Roles;
 import org.sid.classe.User;
 import org.sid.dao.CompetenceRepository;
@@ -60,13 +58,65 @@ public class UserServiceImpl implements UserService {
 
 		if (!user.get().getCompetences().isEmpty()) {
 
-			List<Competence> listUserCompetence = competenceRepository.finByUser(user.get());
-
-			competenceRepository.deleteAll(listUserCompetence);
+			competenceRepository.deleteUSer(user.get());
 
 		}
 
 		userRepository.delete(user.get());
+
+	}
+
+	@Override
+	public User getUser(Long id) throws ResultNotFoundException {
+		Optional<User> user = userRepository.findById(id);
+
+		if (!user.isPresent()) {
+			throw new ResultNotFoundException("user doesn't exist");
+		}
+		return user.get();
+	}
+
+	@Override
+	public UserDto getUserDto(Long id) throws ResultNotFoundException {
+		Optional<User> user = userRepository.findById(id);
+
+		if (!user.isPresent()) {
+			throw new ResultNotFoundException("user doesn't exist");
+		}
+
+		UserDto userDto = new UserDto();
+
+		userDto.setAdresse(user.get().getAdresse());
+		userDto.setCodePostal(user.get().getCodePostal());
+		userDto.setMail(user.get().getMail());
+		userDto.setMotDePasse(user.get().getMotDePasse());
+		userDto.setNom(user.get().getNom());
+		userDto.setRoles(user.get().getRoles());
+		return userDto;
+	}
+
+	@Override
+	public void updateUser(UserDto userDto) throws EntityAlreadyExistException, ResultNotFoundException {
+
+		Optional<Roles> role = rolesRepository.findByNom(userDto.getRoles().getNom());
+		if (!role.isPresent()) {
+			throw new ResultNotFoundException("role doesn't exist");
+		}
+
+		Optional<User> userE = userRepository.findByMail(userDto.getMail());
+		if (userE.isPresent()) {
+			throw new EntityAlreadyExistException("mail use by an other user");
+		}
+
+		User user = new User();
+
+		user.setAdresse(userDto.getAdresse());
+		user.setCodePostal(userDto.getCodePostal());
+		user.setMail(userDto.getMail());
+		user.setMotDePasse(userDto.getMotDePasse());
+		user.setNom(userDto.getNom());
+		user.setRoles(role.get());
+		userRepository.saveAndFlush(user);
 
 	}
 

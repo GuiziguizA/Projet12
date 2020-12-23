@@ -3,6 +3,8 @@ package org.sid.dto;
 import javax.persistence.Column;
 import javax.validation.constraints.Size;
 
+import org.sid.classe.Roles;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,5 +21,6 @@ public class UserDto {
 	private String motDePasse;
 	@Size(min = 5, max = 5, message = "le code postal doit etre a 5 chiffres")
 	private String codePostal;
+	private Roles roles;
 
 }

@@ -11,4 +11,10 @@ public interface UserService {
 
 	public void deleteUser(Long id) throws ResultNotFoundException;
 
+	public User getUser(Long id) throws ResultNotFoundException;
+
+	public UserDto getUserDto(Long id) throws ResultNotFoundException;
+
+	public void updateUser(UserDto userDto) throws EntityAlreadyExistException, ResultNotFoundException;
+
 }
