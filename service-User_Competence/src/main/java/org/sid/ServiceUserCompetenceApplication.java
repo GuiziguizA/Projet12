@@ -14,7 +14,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @EnableDiscoveryClient
 @SpringBootApplication
 public class ServiceUserCompetenceApplication implements CommandLineRunner {
-
+	
 	public static void main(String[] args) {
 		SpringApplication.run(ServiceUserCompetenceApplication.class, args);
 	}

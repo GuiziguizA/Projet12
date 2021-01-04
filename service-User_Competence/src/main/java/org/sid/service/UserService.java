@@ -1,5 +1,7 @@
 package org.sid.service;
 
+import java.util.Optional;
+
 import org.sid.classe.User;
 import org.sid.dto.UserDto;
 import org.sid.exception.EntityAlreadyExistException;
@@ -15,6 +17,6 @@ public interface UserService {
 
 	public UserDto getUserDto(Long id) throws ResultNotFoundException;
 
-	public void updateUser(UserDto userDto) throws EntityAlreadyExistException, ResultNotFoundException;
+	public void updateUser(UserDto userDto, Optional<String> role) throws ResultNotFoundException;
 
 }

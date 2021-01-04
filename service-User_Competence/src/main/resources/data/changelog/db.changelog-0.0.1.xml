@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
     <changeSet author="guali (generated)" id="1608715943376-1">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="competence"/>
+            </not>
+        </preConditions>
         <createTable tableName="competence">
             <column autoIncrement="true" name="code_competence" type="BIGINT">
                 <constraints primaryKey="true"/>
@@ -12,6 +17,11 @@
         </createTable>
     </changeSet>
     <changeSet author="guali (generated)" id="1608715943376-2">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="roles"/>
+            </not>
+        </preConditions>
         <createTable tableName="roles">
             <column autoIncrement="true" name="code_role" type="BIGINT">
                 <constraints primaryKey="true"/>
@@ -20,6 +30,11 @@
         </createTable>
     </changeSet>
     <changeSet author="guali (generated)" id="1608715943376-3">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="user"/>
+            </not>
+        </preConditions>
         <createTable tableName="user">
             <column autoIncrement="true" name="code_utilisateur" type="BIGINT">
                 <constraints primaryKey="true"/>
@@ -33,14 +48,23 @@
         </createTable>
     </changeSet>
     <changeSet author="guali (generated)" id="1608715943376-4">
+        <!-- <preConditions onFail="MARK_RAN">
+            <not>
+            <sqlCheck expectedResult="0">select * from INFORMATION_SCHEMA.TABLE_CONSTRAINTS where CONSTRAINT_TYPE='UNIQUE'</sqlCheck>
+            </not>
+        </preConditions> -->
+
         <addUniqueConstraint columnNames="mail" constraintName="UK_6sou31qus5dnws6dwfu61e71v" tableName="user"/>
     </changeSet>
     <changeSet author="guali (generated)" id="1608715943376-5">
+
         <createIndex indexName="FKa79hm2k2nfrpjf27h052e8r1d" tableName="user">
             <column name="id_roles"/>
         </createIndex>
     </changeSet>
+
     <changeSet author="guali (generated)" id="1608715943376-6">
+
         <createIndex indexName="FKdno6dw04lrl65o7tak9r8bb4a" tableName="competence">
             <column name="id_user"/>
         </createIndex>

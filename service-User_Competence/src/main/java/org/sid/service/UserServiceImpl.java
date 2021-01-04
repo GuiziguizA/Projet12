@@ -12,6 +12,7 @@ import org.sid.exception.EntityAlreadyExistException;
 import org.sid.exception.ResultNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -49,19 +50,19 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void deleteUser(Long id) throws ResultNotFoundException {
+	public void deleteUser(@RequestParam Long id) throws ResultNotFoundException {
 		Optional<User> user = userRepository.findById(id);
 
 		if (!user.isPresent()) {
 			throw new ResultNotFoundException("user doesn't exist");
 		}
-
-		if (!user.get().getCompetences().isEmpty()) {
-
-			competenceRepository.deleteUSer(user.get());
-
-		}
-
+		/*
+		 * if (!user.get().getCompetences().isEmpty()) {
+		 * 
+		 * competenceRepository.deleteUSer(user.get());
+		 * 
+		 * }
+		 */
 		userRepository.delete(user.get());
 
 	}
@@ -91,21 +92,23 @@ public class UserServiceImpl implements UserService {
 		userDto.setMail(user.get().getMail());
 		userDto.setMotDePasse(user.get().getMotDePasse());
 		userDto.setNom(user.get().getNom());
-		userDto.setRoles(user.get().getRoles());
+		
 		return userDto;
 	}
 
 	@Override
-	public void updateUser(UserDto userDto) throws EntityAlreadyExistException, ResultNotFoundException {
-
-		Optional<Roles> role = rolesRepository.findByNom(userDto.getRoles().getNom());
+	public void updateUser(UserDto userDto,Optional<String>rol) throws ResultNotFoundException {
+		if(!rol.isPresent()) {
+			rol=Optional.of("user");
+		}
+		Optional<Roles> role = rolesRepository.findByNom(rol.get());
 		if (!role.isPresent()) {
 			throw new ResultNotFoundException("role doesn't exist");
+		
 		}
-
 		Optional<User> userE = userRepository.findByMail(userDto.getMail());
-		if (userE.isPresent()) {
-			throw new EntityAlreadyExistException("mail use by an other user");
+		if (!userE.isPresent()) {
+			throw new ResultNotFoundException("user doesn't exist");
 		}
 
 		User user = new User();
@@ -113,11 +116,16 @@ public class UserServiceImpl implements UserService {
 		user.setAdresse(userDto.getAdresse());
 		user.setCodePostal(userDto.getCodePostal());
 		user.setMail(userDto.getMail());
-		user.setMotDePasse(userDto.getMotDePasse());
+		
 		user.setNom(userDto.getNom());
 		user.setRoles(role.get());
 		userRepository.saveAndFlush(user);
 
 	}
+	
+	
+	
+	
+	
 
 }
