@@ -1,4 +1,4 @@
-INSERT INTO `user` (`code_utilisateur`, `adresse`,`code_postal`,`mail`,`mot_de_passe`,`nom`,`id_roles`) VALUES
+INSERT INTO `user` (`code_utilisateur`, `adresse`,`code_postal`,`mail`,`password`,`username`,`id_roles`) VALUES
 (1,  '3 rue du cerisier','45121', 'bob@gmail.com', 'bob','bob',1);
 
 

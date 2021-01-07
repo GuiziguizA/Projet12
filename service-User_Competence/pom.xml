@@ -12,7 +12,7 @@
 	<artifactId>service-user_competence</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>service-user_competence</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Demo project for  Boot</description>
 
 	<properties>
 		<java.version>1.8</java.version>
@@ -48,17 +48,19 @@
 		<groupId>org.liquibase</groupId>
 		<artifactId>liquibase-core</artifactId>
 		</dependency>
-		
-		<!-- https://mvnrepository.com/artifact/org.springframework/spring-web -->
-<dependency>
-    <groupId>org.springframework</groupId>
-    <artifactId>spring-web</artifactId>
-</dependency>
-		
+	
+
+
+
 		
 		<dependency>
     <groupId>mysql</groupId>
     <artifactId>mysql-connector-java</artifactId>
+</dependency>
+		<!-- ######################################## -->
+		<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-web</artifactId>
 </dependency>
 		
 		

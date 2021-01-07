@@ -11,6 +11,7 @@ import org.sid.dto.UserDto;
 import org.sid.exception.EntityAlreadyExistException;
 import org.sid.exception.ResultNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -42,13 +43,16 @@ public class UserServiceImpl implements UserService {
 		user.setAdresse(userDto.getAdresse());
 		user.setCodePostal(userDto.getCodePostal());
 		user.setMail(userDto.getMail());
-		user.setMotDePasse(userDto.getMotDePasse());
-		user.setNom(userDto.getNom());
+		user.setPassword(passwordcryptage(userDto.getMotDePasse()));
+		user.setUsername(userDto.getNom());
 		user.setRoles(role.get());
 		userRepository.saveAndFlush(user);
 		return user;
 	}
 
+	
+	
+	
 	@Override
 	public void deleteUser(@RequestParam Long id) throws ResultNotFoundException {
 		Optional<User> user = userRepository.findById(id);
@@ -90,8 +94,8 @@ public class UserServiceImpl implements UserService {
 		userDto.setAdresse(user.get().getAdresse());
 		userDto.setCodePostal(user.get().getCodePostal());
 		userDto.setMail(user.get().getMail());
-		userDto.setMotDePasse(user.get().getMotDePasse());
-		userDto.setNom(user.get().getNom());
+		userDto.setMotDePasse(user.get().getPassword());
+		userDto.setNom(user.get().getUsername());
 		
 		return userDto;
 	}
@@ -117,14 +121,19 @@ public class UserServiceImpl implements UserService {
 		user.setCodePostal(userDto.getCodePostal());
 		user.setMail(userDto.getMail());
 		
-		user.setNom(userDto.getNom());
+		user.setUsername(userDto.getNom());
 		user.setRoles(role.get());
 		userRepository.saveAndFlush(user);
 
 	}
 	
 	
-	
+	private String passwordcryptage(String password) {
+	       
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+      String password1 =  passwordEncoder.encode(password);
+        return password1;
+}
 	
 	
 
