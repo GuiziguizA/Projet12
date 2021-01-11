@@ -1,0 +1,30 @@
+# Docker Compose file Reference (https://docs.docker.com/compose/compose-file/)
+
+version: '3.3'
+
+# Define services
+services:
+
+ # service-config
+ 
+  service-config:
+    build: 
+      context: service-config
+      dockerfile: Dockerfile     
+    ports: 
+    - "9900:9900" # Map the exposed port 9999 on the container to port 9998 on the host machine
+  
+     
+
+  # service-register
+  service-register :
+  
+    build: 
+      context: service-register
+      dockerfile: Dockerfile 
+    ports:
+      - "9922:9922" # Forward the exposed port 9999 on the container to port 9999 on the host machine
+    
+    
+
+ 

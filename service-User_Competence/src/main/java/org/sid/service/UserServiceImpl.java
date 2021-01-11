@@ -3,10 +3,10 @@ package org.sid.service;
 import java.util.Optional;
 
 import org.sid.classe.Roles;
-import org.sid.classe.User;
+import org.sid.classe.Users;
 import org.sid.dao.CompetenceRepository;
 import org.sid.dao.RolesRepository;
-import org.sid.dao.UserRepository;
+import org.sid.dao.UsersRepository;
 import org.sid.dto.UserDto;
 import org.sid.exception.EntityAlreadyExistException;
 import org.sid.exception.ResultNotFoundException;
@@ -22,23 +22,23 @@ public class UserServiceImpl implements UserService {
 	RolesRepository rolesRepository;
 
 	@Autowired
-	UserRepository userRepository;
+	UsersRepository userRepository;
 	@Autowired
 	CompetenceRepository competenceRepository;
 
 	@Override
-	public User createUser(UserDto userDto) throws ResultNotFoundException, EntityAlreadyExistException {
+	public Users createUser(UserDto userDto) throws ResultNotFoundException, EntityAlreadyExistException {
 		Optional<Roles> role = rolesRepository.findByNom("user");
 		if (!role.isPresent()) {
 			throw new ResultNotFoundException("role doesn't exist");
 		}
 
-		Optional<User> userE = userRepository.findByMail(userDto.getMail());
+		Optional<Users> userE = userRepository.findByMail(userDto.getMail());
 		if (userE.isPresent()) {
 			throw new EntityAlreadyExistException("mail use by an other user");
 		}
 
-		User user = new User();
+		Users user = new Users();
 
 		user.setAdresse(userDto.getAdresse());
 		user.setCodePostal(userDto.getCodePostal());
@@ -50,12 +50,9 @@ public class UserServiceImpl implements UserService {
 		return user;
 	}
 
-	
-	
-	
 	@Override
 	public void deleteUser(@RequestParam Long id) throws ResultNotFoundException {
-		Optional<User> user = userRepository.findById(id);
+		Optional<Users> user = userRepository.findById(id);
 
 		if (!user.isPresent()) {
 			throw new ResultNotFoundException("user doesn't exist");
@@ -72,8 +69,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User getUser(Long id) throws ResultNotFoundException {
-		Optional<User> user = userRepository.findById(id);
+	public Users getUser(Long id) throws ResultNotFoundException {
+		Optional<Users> user = userRepository.findById(id);
 
 		if (!user.isPresent()) {
 			throw new ResultNotFoundException("user doesn't exist");
@@ -83,7 +80,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDto getUserDto(Long id) throws ResultNotFoundException {
-		Optional<User> user = userRepository.findById(id);
+		Optional<Users> user = userRepository.findById(id);
 
 		if (!user.isPresent()) {
 			throw new ResultNotFoundException("user doesn't exist");
@@ -96,45 +93,42 @@ public class UserServiceImpl implements UserService {
 		userDto.setMail(user.get().getMail());
 		userDto.setMotDePasse(user.get().getPassword());
 		userDto.setNom(user.get().getUsername());
-		
+
 		return userDto;
 	}
 
 	@Override
-	public void updateUser(UserDto userDto,Optional<String>rol) throws ResultNotFoundException {
-		if(!rol.isPresent()) {
-			rol=Optional.of("user");
+	public void updateUser(UserDto userDto, Optional<String> rol) throws ResultNotFoundException {
+		if (!rol.isPresent()) {
+			rol = Optional.of("user");
 		}
 		Optional<Roles> role = rolesRepository.findByNom(rol.get());
 		if (!role.isPresent()) {
 			throw new ResultNotFoundException("role doesn't exist");
-		
+
 		}
-		Optional<User> userE = userRepository.findByMail(userDto.getMail());
+		Optional<Users> userE = userRepository.findByMail(userDto.getMail());
 		if (!userE.isPresent()) {
 			throw new ResultNotFoundException("user doesn't exist");
 		}
 
-		User user = new User();
+		Users user = new Users();
 
 		user.setAdresse(userDto.getAdresse());
 		user.setCodePostal(userDto.getCodePostal());
 		user.setMail(userDto.getMail());
-		
+
 		user.setUsername(userDto.getNom());
 		user.setRoles(role.get());
 		userRepository.saveAndFlush(user);
 
 	}
-	
-	
+
 	private String passwordcryptage(String password) {
-	       
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-      String password1 =  passwordEncoder.encode(password);
-        return password1;
-}
-	
-	
+
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		String password1 = passwordEncoder.encode(password);
+		return password1;
+	}
 
 }

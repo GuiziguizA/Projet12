@@ -1,6 +1,6 @@
 package org.sid.classe;
 
-public class User {
+public class Users {
 
 	private String mail;
 	private String password;

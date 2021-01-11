@@ -14,13 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-
 @Entity
-public class User {
+public class Users {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,16 +27,13 @@ public class User {
 	private String password;
 	@Size(min = 5, max = 5, message = "le code postal doit etre a 5 chiffres")
 	private String codePostal;
-	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private Collection<Competence> competences;
 	@ManyToOne
 	@JoinColumn(name = "ID_ROLES")
 	private Roles roles;
-	public User() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	public User(Long codeUtilisateur, String username, String mail, String adresse, String password,
+
+	public Users(Long codeUtilisateur, String username, String mail, String adresse, String password,
 			@Size(min = 5, max = 5, message = "le code postal doit etre a 5 chiffres") String codePostal,
 			Collection<Competence> competences, Roles roles) {
 		super();
@@ -54,56 +46,74 @@ public class User {
 		this.competences = competences;
 		this.roles = roles;
 	}
+
+	public Users() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	public Long getCodeUtilisateur() {
 		return codeUtilisateur;
 	}
+
 	public void setCodeUtilisateur(Long codeUtilisateur) {
 		this.codeUtilisateur = codeUtilisateur;
 	}
+
 	public String getUsername() {
 		return username;
 	}
+
 	public void setUsername(String username) {
 		this.username = username;
 	}
+
 	public String getMail() {
 		return mail;
 	}
+
 	public void setMail(String mail) {
 		this.mail = mail;
 	}
+
 	public String getAdresse() {
 		return adresse;
 	}
+
 	public void setAdresse(String adresse) {
 		this.adresse = adresse;
 	}
+
 	public String getPassword() {
 		return password;
 	}
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
 	public String getCodePostal() {
 		return codePostal;
 	}
+
 	public void setCodePostal(String codePostal) {
 		this.codePostal = codePostal;
 	}
+
 	public Collection<Competence> getCompetences() {
 		return competences;
 	}
+
 	public void setCompetences(Collection<Competence> competences) {
 		this.competences = competences;
 	}
+
 	public Roles getRoles() {
 		return roles;
 	}
+
 	public void setRoles(Roles roles) {
 		this.roles = roles;
 	}
-	
 
-	
-	
 }

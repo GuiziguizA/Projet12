@@ -1,11 +1,10 @@
 package org.sid.service;
 
-
 import java.util.Optional;
 
 import org.sid.classe.Competence;
 import org.sid.classe.Roles;
-import org.sid.classe.User;
+import org.sid.classe.Users;
 import org.sid.dao.CompetenceRepository;
 import org.sid.dto.CompetenceDto;
 import org.sid.exception.EntityAlreadyExistException;
@@ -22,8 +21,6 @@ import org.springframework.stereotype.Service;
 public class CompetenceServiceImpl implements CompetenceService {
 	@Autowired
 	CompetenceRepository competenceRepository;
-	
-	
 
 	@Override
 	public Competence createCompetence(CompetenceDto competenceDto) throws EntityAlreadyExistException {
@@ -43,8 +40,9 @@ public class CompetenceServiceImpl implements CompetenceService {
 
 		return competence1;
 	}
-@Override
-	public void deleteCompetence (Long id) throws ResultNotFoundException{
+
+	@Override
+	public void deleteCompetence(Long id) throws ResultNotFoundException {
 
 		Optional<Competence> competence = competenceRepository.findById(id);
 		if (!competence.isPresent()) {
@@ -55,12 +53,12 @@ public class CompetenceServiceImpl implements CompetenceService {
 
 	}
 
+	@Override
+	public Page<Competence> searchCompetence(CompetenceCriteria criteria, int page, int size)
+			throws ResultNotFoundException {
 
-@Override
-	public Page<Competence> searchCompetence (CompetenceCriteria criteria ,int page, int size ) throws ResultNotFoundException{
-		
 		CompetenceSpecificationImpl competenceSpecificationImpl = new CompetenceSpecificationImpl(criteria);
-		
+
 		if (size == 0) {
 			throw new ResultNotFoundException("le parametre size est incorrect");
 		}
@@ -70,32 +68,26 @@ public class CompetenceServiceImpl implements CompetenceService {
 		Page<Competence> results = competenceRepository.findAll(competenceSpecificationImpl, pageable);
 
 		return results;
-		
-
 
 	}
 
-@Override
-public CompetenceDto getCompetenceDto() {	
-	Roles role = new Roles("user");
-User user = new User(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
+	@Override
+	public CompetenceDto getCompetenceDto() {
+		Roles role = new Roles("user");
+		Users user = new Users(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
 
-CompetenceDto competenceDto = new CompetenceDto("changer un pneu", "mecanique",
-		"j'ai une machine permettant de changer les pneus d'une voiture", user);
-return competenceDto;
+		CompetenceDto competenceDto = new CompetenceDto("changer un pneu", "mecanique",
+				"j'ai une machine permettant de changer les pneus d'une voiture", user);
+		return competenceDto;
 
-	
-	
-}
+	}
 
-@Override
-public CompetenceCriteria getCompetenceCriteria() {
-	CompetenceCriteria comp =new CompetenceCriteria(null, "cuisine", null);
-	
-	return comp;
-	
-}
+	@Override
+	public CompetenceCriteria getCompetenceCriteria() {
+		CompetenceCriteria comp = new CompetenceCriteria(null, "cuisine", null);
 
+		return comp;
 
+	}
 
 }

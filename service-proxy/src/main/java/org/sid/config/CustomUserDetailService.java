@@ -1,10 +1,5 @@
 package org.sid.config;
 
-import java.util.Optional;
-
-import org.sid.dao.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,9 +8,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomUserDetailService implements UserDetailsService {
 
-	@Autowired
-	private UserRepository userRepository;
-
+	/*
+	 * @Autowired private UsersRepository userRepository;
+	 */
 	/**
 	 * Modification du UserDetails de spring Security
 	 * 
@@ -27,14 +22,18 @@ public class CustomUserDetailService implements UserDetailsService {
 	 */
 	@Override
 	public UserDetails loadUserByUsername(String mail) throws UsernameNotFoundException {
-		Optional<org.sid.classe.User> user = userRepository.findByMail(mail);
+		/*
+		 * Optional<Users> user = userRepository.findByMail(mail);
+		 * 
+		 * if (!user.isPresent()) { throw new
+		 * UsernameNotFoundException("l'utilisateurn'existe pas "); }
+		 * 
+		 * return
+		 * User.withUsername(user.get().getMail()).password(user.get().getPassword())
+		 * .roles(user.get().getRoles().getNom()).build();
+		 */
+		return null;
 
-		if (!user.isPresent()) {
-			throw new UsernameNotFoundException("l'utilisateurn'existe pas ");
-		}
-
-		return User.withUsername(user.get().getMail()).password(user.get().getPassword())
-				.roles(user.get().getRoles().getNom()).build();
 	}
 
 }

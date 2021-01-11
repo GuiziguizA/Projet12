@@ -17,7 +17,7 @@ public class Roles {
 
 	private String nom;
 	@OneToMany(mappedBy = "roles", fetch = FetchType.LAZY)
-	private Collection<User> users;
+	private Collection<Users> users;
 
 	public Roles() {
 		super();

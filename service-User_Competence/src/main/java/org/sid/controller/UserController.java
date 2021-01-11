@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
-import org.sid.classe.User;
+import org.sid.classe.Users;
 import org.sid.dto.UserDto;
 import org.sid.exception.EntityAlreadyExistException;
 import org.sid.exception.ResultNotFoundException;
@@ -23,32 +23,33 @@ public class UserController {
 
 	@Autowired
 	public UserService userService;
-	
-	
+
 	@GetMapping("/")
 	public void init() throws ResultNotFoundException {
-		
+
 	}
-	
-	
+
 	@PostMapping("/user")
-	public void createUserController(@Valid @RequestBody UserDto userDto) throws ResultNotFoundException, EntityAlreadyExistException {
+	public void createUserController(@Valid @RequestBody UserDto userDto)
+			throws ResultNotFoundException, EntityAlreadyExistException {
 		userService.createUser(userDto);
 	}
-	
+
 	@GetMapping("/user/{id}")
-	public User getUserController(@PathVariable Long id) throws ResultNotFoundException {
-		User user = userService.getUser(id);
-		
+	public Users getUserController(@PathVariable Long id) throws ResultNotFoundException {
+		Users user = userService.getUser(id);
+
 		return user;
 	}
+
 	@PutMapping("/user")
-	public void updateUserController(UserDto userDto) throws EntityAlreadyExistException, ResultNotFoundException  {
-		userService.updateUser(userDto,Optional.empty());
+	public void updateUserController(UserDto userDto) throws EntityAlreadyExistException, ResultNotFoundException {
+		userService.updateUser(userDto, Optional.empty());
 	}
+
 	@DeleteMapping("/user")
 	public void deleteUserController(Long id) throws ResultNotFoundException, EntityAlreadyExistException {
 		userService.deleteUser(id);
 	}
-	
+
 }

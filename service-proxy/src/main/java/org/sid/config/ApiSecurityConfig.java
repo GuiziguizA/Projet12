@@ -6,8 +6,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * 
@@ -30,10 +28,14 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-		http.authorizeRequests().antMatchers("/login/**").permitAll();
-		http.authorizeRequests().anyRequest().authenticated();
-		http.addFilterBefore(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+		/*
+		 * http.csrf().disable().sessionManagement().sessionCreationPolicy(
+		 * SessionCreationPolicy.STATELESS);
+		 * http.authorizeRequests().antMatchers("/login/**").permitAll();
+		 * http.authorizeRequests().anyRequest().authenticated();
+		 * http.addFilterBefore(new JWTAuthorizationFilter(),
+		 * UsernamePasswordAuthenticationFilter.class);
+		 */
 	}
 
 }

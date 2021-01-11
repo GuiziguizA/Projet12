@@ -2,7 +2,7 @@ package org.sid.dao;
 
 import java.util.Optional;
 
-import org.sid.classe.User;
+import org.sid.classe.Users;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RefreshScope
 @RestController
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UsersRepository extends JpaRepository<Users, Long> {
 	@Query("select u from User u where u.mail = :mail")
-	public Optional<User> findByMail(@Param("mail") String mail);
+	public Optional<Users> findByMail(@Param("mail") String mail);
 
 }

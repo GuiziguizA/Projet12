@@ -12,7 +12,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.sid.classe.Competence;
 import org.sid.classe.Roles;
-import org.sid.classe.User;
+import org.sid.classe.Users;
 import org.sid.dao.CompetenceRepository;
 import org.sid.dto.CompetenceDto;
 import org.sid.exception.EntityAlreadyExistException;
@@ -40,13 +40,13 @@ class CompetenceServiceTest {
 	@Test
 	void createCompetenceTest() throws EntityAlreadyExistException {
 		Roles role = new Roles("user");
-		User user = new User(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
+		Users user = new Users(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
 		Competence competence = new Competence(1L, "changer un pneu", "mecanique",
 				"j'ai une machine permettant de changer les pneus d'une voiture", user);
 		CompetenceDto competenceDto = new CompetenceDto("changer un pneu", "mecanique",
 				"j'ai une machine permettant de changer les pneus d'une voiture", user);
 
-		Mockito.when(competenceRepository.findByUserAndNom(Mockito.any(User.class), Mockito.anyString()))
+		Mockito.when(competenceRepository.findByUserAndNom(Mockito.any(Users.class), Mockito.anyString()))
 				.thenReturn(Optional.empty());
 
 		Competence competence1 = competenceService.createCompetence(competenceDto);
@@ -56,13 +56,13 @@ class CompetenceServiceTest {
 	@Test
 	void createCompetenceTestEntityAlreadyExist() throws EntityAlreadyExistException {
 		Roles role = new Roles("user");
-		User user = new User(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
+		Users user = new Users(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
 		Competence competence = new Competence(1L, "changer un pneu", "mecanique",
 				"j'ai une machine permettant de changer les pneus d'une voiture", user);
 		CompetenceDto competenceDto = new CompetenceDto("changer un pneu", "mecanique",
 				"j'ai une machine permettant de changer les pneus d'une voiture", user);
 
-		Mockito.when(competenceRepository.findByUserAndNom(Mockito.any(User.class), Mockito.anyString()))
+		Mockito.when(competenceRepository.findByUserAndNom(Mockito.any(Users.class), Mockito.anyString()))
 				.thenReturn(Optional.of(competence));
 
 		EntityAlreadyExistException exception = assertThrows(EntityAlreadyExistException.class, () -> {
@@ -77,37 +77,32 @@ class CompetenceServiceTest {
 
 	}
 
-
-
-
 	@Test
-	void deleteCompetence() throws ResultNotFoundException{
+	void deleteCompetence() throws ResultNotFoundException {
 		Roles role = new Roles("user");
-		User user = new User(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
+		Users user = new Users(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
 		Competence competence = new Competence(1L, "changer un pneu", "mecanique",
 				"j'ai une machine permettant de changer les pneus d'une voiture", user);
 		CompetenceDto competenceDto = new CompetenceDto("changer un pneu", "mecanique",
 				"j'ai une machine permettant de changer les pneus d'une voiture", user);
-		
+
 		Mockito.when(competenceRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(competence));
 		Mockito.doNothing().when(competenceRepository).delete(Mockito.any(Competence.class));
-		
+
 		competenceService.deleteCompetence(1L);
 
 	}
-	
+
 	@Test
-	void deleteCompetenceException() throws ResultNotFoundException{
+	void deleteCompetenceException() throws ResultNotFoundException {
 		Roles role = new Roles("user");
-		User user = new User(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
+		Users user = new Users(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
 		Competence competence = new Competence(1L, "changer un pneu", "mecanique",
 				"j'ai une machine permettant de changer les pneus d'une voiture", user);
 		CompetenceDto competenceDto = new CompetenceDto("changer un pneu", "mecanique",
 				"j'ai une machine permettant de changer les pneus d'une voiture", user);
-		
-		
-		Mockito.when(competenceRepository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
 
+		Mockito.when(competenceRepository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
 
 		ResultNotFoundException exception = assertThrows(ResultNotFoundException.class, () -> {
 			competenceService.deleteCompetence(1L);
@@ -119,8 +114,6 @@ class CompetenceServiceTest {
 
 		assertTrue(actualMessage.contains(expectedMessage));
 
-
 	}
-	
-	
+
 }

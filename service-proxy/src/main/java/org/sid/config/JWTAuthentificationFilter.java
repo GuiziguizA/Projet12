@@ -8,7 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.sid.classe.User;
+import org.sid.classe.Users;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -31,9 +31,9 @@ public class JWTAuthentificationFilter extends UsernamePasswordAuthenticationFil
 			throws AuthenticationException {
 		// TODO Auto-generated method stub
 
-		User user = null;
+		Users user = null;
 		try {
-			user = new ObjectMapper().readValue(request.getInputStream(), User.class);
+			user = new ObjectMapper().readValue(request.getInputStream(), Users.class);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

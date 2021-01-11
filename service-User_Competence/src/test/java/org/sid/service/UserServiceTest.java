@@ -14,10 +14,10 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.sid.classe.Competence;
 import org.sid.classe.Roles;
-import org.sid.classe.User;
+import org.sid.classe.Users;
 import org.sid.dao.CompetenceRepository;
 import org.sid.dao.RolesRepository;
-import org.sid.dao.UserRepository;
+import org.sid.dao.UsersRepository;
 import org.sid.dto.UserDto;
 import org.sid.exception.EntityAlreadyExistException;
 import org.sid.exception.ResultNotFoundException;
@@ -34,7 +34,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 class UserServiceTest {
 
 	@MockBean
-	UserRepository userRepository;
+	UsersRepository userRepository;
 	@MockBean
 	RolesRepository rolesRepository;
 	@Autowired
@@ -49,14 +49,14 @@ class UserServiceTest {
 	@Test
 	public void createUserTest() throws ResultNotFoundException, EntityAlreadyExistException {
 		Roles role = new Roles("user");
-		User user = new User(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
+		Users user = new Users(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
 		UserDto userDto = new UserDto("bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125");
 
 		Mockito.when(rolesRepository.findByNom("user")).thenReturn(Optional.of(role));
 		Mockito.when(userRepository.findByMail(Mockito.anyString())).thenReturn(Optional.empty());
-		Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
+		Mockito.when(userRepository.save(Mockito.any(Users.class))).thenReturn(user);
 
-		User user1 = userService.createUser(userDto);
+		Users user1 = userService.createUser(userDto);
 
 		assertEquals(user.getMail(), user1.getMail());
 	}
@@ -64,13 +64,13 @@ class UserServiceTest {
 	@Test
 	public void createUserTestResultNotFounfRole() throws ResultNotFoundException, EntityAlreadyExistException {
 		Roles role = new Roles("user");
-		User user = new User(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
+		Users user = new Users(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
 		UserDto userDto = new UserDto("bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125");
 
 		Mockito.when(rolesRepository.findByNom("user")).thenReturn(Optional.empty());
 
 		ResultNotFoundException exception = assertThrows(ResultNotFoundException.class, () -> {
-			User user1 = userService.createUser(userDto);
+			Users user1 = userService.createUser(userDto);
 
 		});
 
@@ -84,14 +84,14 @@ class UserServiceTest {
 	public void createUserTestEntityAlreadyExistException()
 			throws ResultNotFoundException, EntityAlreadyExistException {
 		Roles role = new Roles("user");
-		User user = new User(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
+		Users user = new Users(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
 		UserDto userDto = new UserDto("bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125");
 
 		Mockito.when(rolesRepository.findByNom("user")).thenReturn(Optional.of(role));
 		Mockito.when(userRepository.findByMail(Mockito.anyString())).thenReturn(Optional.of(user));
 
 		EntityAlreadyExistException exception = assertThrows(EntityAlreadyExistException.class, () -> {
-			User user1 = userService.createUser(userDto);
+			Users user1 = userService.createUser(userDto);
 
 		});
 
@@ -105,14 +105,14 @@ class UserServiceTest {
 	public void deleteUserTest() throws ResultNotFoundException {
 		Roles role = new Roles("user");
 		List<Competence> listComp = new ArrayList<Competence>();
-		User user = new User(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", listComp, role);
+		Users user = new Users(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", listComp, role);
 		Competence comp = new Competence(1L, "gateau chocolat", "cuisine", "gateau", user);
 		Competence comp1 = new Competence(2L, "gateau chocolat", "cuisine", "gateau", user);
 		listComp.add(comp);
 		listComp.add(comp1);
 
 		Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(user));
-		Mockito.doNothing().when(userRepository).delete(Mockito.any(User.class));
+		Mockito.doNothing().when(userRepository).delete(Mockito.any(Users.class));
 
 		/*
 		 * Mockito.when(competenceRepository.deleteUSer(Mockito.any(User.class))).
@@ -126,12 +126,12 @@ class UserServiceTest {
 	public void deleteUserTest1() throws ResultNotFoundException {
 		Roles role = new Roles("user");
 		List<Competence> listComp = new ArrayList<Competence>();
-		User user = new User(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", listComp, role);
+		Users user = new Users(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", listComp, role);
 		Competence comp = new Competence(1L, "gateau chocolat", "cuisine", "gateau", user);
 		Competence comp1 = new Competence(2L, "gateau chocolat", "cuisine", "gateau", user);
 
 		Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(user));
-		Mockito.doNothing().when(userRepository).delete(Mockito.any(User.class));
+		Mockito.doNothing().when(userRepository).delete(Mockito.any(Users.class));
 		/*
 		 * Mockito.when(competenceRepository.deleteUSer(Mockito.any(User.class))).
 		 * thenReturn(listComp);
@@ -143,7 +143,7 @@ class UserServiceTest {
 	@Test
 	public void deleteUserTestResultNotFoundException() throws ResultNotFoundException {
 		Roles role = new Roles("user");
-		User user = new User(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
+		Users user = new Users(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
 
 		Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
 
@@ -162,7 +162,7 @@ class UserServiceTest {
 	@Test
 	public void getUserTestResultNotFoundException() throws ResultNotFoundException {
 		Roles role = new Roles("user");
-		User user = new User(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
+		Users user = new Users(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
 
 		Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
 
@@ -180,11 +180,11 @@ class UserServiceTest {
 	@Test
 	public void getUserTest() throws ResultNotFoundException {
 		Roles role = new Roles("user");
-		User user = new User(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
+		Users user = new Users(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
 
 		Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(user));
 
-		User user1 = userService.getUser(1L);
+		Users user1 = userService.getUser(1L);
 
 		assertEquals(user1, user);
 	}
@@ -192,7 +192,7 @@ class UserServiceTest {
 	@Test
 	public void getUserDtoTest() throws ResultNotFoundException {
 		Roles role = new Roles("user");
-		User user = new User(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
+		Users user = new Users(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
 
 		UserDto userDto = new UserDto("bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125");
 
@@ -206,7 +206,7 @@ class UserServiceTest {
 	@Test
 	public void getUserDtoTestResultNotFoundException() throws ResultNotFoundException {
 		Roles role = new Roles("user");
-		User user = new User(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
+		Users user = new Users(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
 
 		Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
 
@@ -222,17 +222,16 @@ class UserServiceTest {
 	}
 
 	@Test
-	public void updateUserTestResultNotFOundUser()
-			throws ResultNotFoundException, EntityAlreadyExistException {
+	public void updateUserTestResultNotFOundUser() throws ResultNotFoundException, EntityAlreadyExistException {
 		Roles role = new Roles("user");
-		User user = new User(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
+		Users user = new Users(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
 		UserDto userDto = new UserDto("bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125");
 
 		Mockito.when(rolesRepository.findByNom("user")).thenReturn(Optional.of(role));
 		Mockito.when(userRepository.findByMail(Mockito.anyString())).thenReturn(Optional.empty());
 
 		ResultNotFoundException exception = assertThrows(ResultNotFoundException.class, () -> {
-			userService.updateUser(userDto,Optional.empty());
+			userService.updateUser(userDto, Optional.empty());
 
 		});
 
@@ -245,14 +244,14 @@ class UserServiceTest {
 	@Test
 	public void updateUserTestResultNotFound() throws ResultNotFoundException, EntityAlreadyExistException {
 		Roles role = new Roles("user");
-		User user = new User(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
+		Users user = new Users(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
 		UserDto userDto = new UserDto("bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125");
 
 		Mockito.when(rolesRepository.findByNom("user")).thenReturn(Optional.empty());
 		Mockito.when(userRepository.findByMail(Mockito.anyString())).thenReturn(Optional.of(user));
 
 		ResultNotFoundException exception = assertThrows(ResultNotFoundException.class, () -> {
-			userService.updateUser(userDto,Optional.empty());
+			userService.updateUser(userDto, Optional.empty());
 
 		});
 
@@ -265,14 +264,14 @@ class UserServiceTest {
 	@Test
 	public void updateUserTest() throws ResultNotFoundException, EntityAlreadyExistException {
 		Roles role = new Roles("user");
-		User user = new User(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
+		Users user = new Users(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
 		UserDto userDto = new UserDto("bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125");
 
 		Mockito.when(rolesRepository.findByNom("user")).thenReturn(Optional.of(role));
 		Mockito.when(userRepository.findByMail(Mockito.anyString())).thenReturn(Optional.of(user));
-		Mockito.when(userRepository.saveAndFlush(Mockito.any(User.class))).thenReturn(user);
+		Mockito.when(userRepository.saveAndFlush(Mockito.any(Users.class))).thenReturn(user);
 
-		userService.updateUser(userDto,Optional.empty());
+		userService.updateUser(userDto, Optional.empty());
 
 	}
 
