@@ -22,7 +22,7 @@ public class ChatServiceImpl implements ChatService {
 		Optional<Chat> chat = chatRepository.findByUserAndUser(chatDto.getIdUser(), chatDto.getIdUser1());
 
 		if (chat.isPresent()) {
-			throw new EntityAlreadyExistException("chat introuvable");
+			throw new EntityAlreadyExistException("chat existe deja");
 		}
 
 		Chat chat1 = new Chat();
@@ -39,7 +39,7 @@ public class ChatServiceImpl implements ChatService {
 	public Chat getUnChat(Long idUser, Long idUser1) throws ResultNotFoundException {
 		Optional<Chat> chat = chatRepository.findByUserAndUser(idUser, idUser1);
 		if (!chat.isPresent()) {
-			throw new ResultNotFoundException("le chat est inexistant");
+			throw new ResultNotFoundException("chat introuvable");
 		}
 
 		return chat.get();
@@ -49,7 +49,7 @@ public class ChatServiceImpl implements ChatService {
 	public void deleteUnChat(Long id) throws ResultNotFoundException {
 		Optional<Chat> chat = chatRepository.findById(id);
 		if (!chat.isPresent()) {
-			throw new ResultNotFoundException("le chat est inexistant");
+			throw new ResultNotFoundException("chat introuvable");
 		}
 		chatRepository.delete(chat.get());
 
