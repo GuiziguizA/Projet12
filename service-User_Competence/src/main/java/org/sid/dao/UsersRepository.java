@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RefreshScope
 @RestController
 public interface UsersRepository extends JpaRepository<Users, Long> {
-	@Query("select u from User u where u.mail = :mail")
+	@Query("select u from Users u where u.mail = :mail")
 	public Optional<Users> findByMail(@Param("mail") String mail);
 
 }

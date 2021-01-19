@@ -1,6 +1,6 @@
 # Docker Compose file Reference (https://docs.docker.com/compose/compose-file/)
 
-version: '3.3'
+version: "3.8"
 
 # Define services
 services:
@@ -12,7 +12,7 @@ services:
       context: service-config
       dockerfile: Dockerfile     
     ports: 
-    - "9900:9900" # Map the exposed port 9999 on the container to port 9998 on the host machine
+     - "8888:80" # Map the exposed port 9999 on the container to port 9998 on the host machine
   
      
 
@@ -23,8 +23,18 @@ services:
       context: service-register
       dockerfile: Dockerfile 
     ports:
-      - "9922:9922" # Forward the exposed port 9999 on the container to port 9999 on the host machine
+      - "5000:8884" # Forward the exposed port 9999 on the container to port 9999 on the host machine
+    
+     # service-creneaux_requetes
+  service-creneaux_requetes :
+  
+    build: 
+      context: service-creneaux_requetes
+      dockerfile: Dockerfile 
+    ports:
+      - "9911:9911" # Forward the exposed port 9999 on the container to port 9999 on the host machine
     
     
+
 
  

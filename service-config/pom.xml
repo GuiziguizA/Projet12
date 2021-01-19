@@ -58,7 +58,7 @@
             </plugin>
             
         </plugins>
-        <finalName>service-config</finalName>
+      
     </build>
 
 </project>

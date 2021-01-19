@@ -1,0 +1,14 @@
+package sid.org.api;
+
+import org.springframework.web.client.HttpStatusCodeException;
+
+import sid.org.classe.Chat;
+import sid.org.dto.ChatDto;
+
+public interface ChatConnect {
+
+	public Chat getChat(Long idUser, Long idUser1);
+
+	public void createChat(ChatDto chatDto) throws HttpStatusCodeException;
+
+}

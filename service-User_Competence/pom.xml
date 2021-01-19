@@ -12,7 +12,7 @@
 	<artifactId>service-user_competence</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>service-user_competence</name>
-	<description>Demo project for  Boot</description>
+	<description>service-user_competence</description>
 
 	<properties>
 		<java.version>1.8</java.version>
