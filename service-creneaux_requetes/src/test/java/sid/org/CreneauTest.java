@@ -25,6 +25,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import sid.org.classe.Creneau;
 import sid.org.dao.CreneauRepository;
 import sid.org.dto.CreneauDto;
+import sid.org.exception.APiUSerAndCompetenceException;
 import sid.org.exception.EntityAlreadyExistException;
 import sid.org.exception.ResultNotFoundException;
 import sid.org.service.CreneauService;
@@ -39,13 +40,13 @@ class CreneauTest {
 	CreneauRepository creneauRepository;
 
 	@Test
-	public void createCreneauTest() throws EntityAlreadyExistException {
+	public void createCreneauTest() throws EntityAlreadyExistException, APiUSerAndCompetenceException {
 		Creneau creneau = new Creneau(new Date(), 1L, 2L, 1L);
 		CreneauDto creneauDto = new CreneauDto(1L, 2L, 1L, "demande");
 		Mockito.when(creneauRepository.findByIdUserAndIdComp(Mockito.anyLong(), Mockito.anyLong()))
 				.thenReturn(Optional.empty());
 
-		Creneau creneau1 = creneauService.createCreneau(creneauDto);
+		Creneau creneau1 = creneauService.createCreneau(creneauDto, 1L);
 
 		assertEquals(creneau.getIdComp(), creneau1.getIdComp());
 
@@ -60,7 +61,7 @@ class CreneauTest {
 				.thenReturn(Optional.of(creneau));
 
 		EntityAlreadyExistException exception = assertThrows(EntityAlreadyExistException.class, () -> {
-			creneauService.createCreneau(creneauDto);
+			creneauService.createCreneau(creneauDto, 1L);
 
 		});
 

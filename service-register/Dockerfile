@@ -10,6 +10,7 @@ RUN mvn clean install -DskipTests
 #run the application
 FROM openjdk:8-jdk-alpine
 VOLUME /tmp
-CMD ["java", "-jar", "target/service-config-0.0.1-SNAPSHOT.jar"]
-
-
+COPY --from=build /home/app1/target/service-register-0.0.1-SNAPSHOT.jar /home/app1/service-register-0.0.1-SNAPSHOT.jar
+WORKDIR /home/app1
+#Run the application
+CMD java -jar service-register-0.0.1-SNAPSHOT.jar

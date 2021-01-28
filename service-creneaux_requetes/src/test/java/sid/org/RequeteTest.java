@@ -25,6 +25,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import sid.org.classe.Requete;
 import sid.org.dao.RequeteRepository;
 import sid.org.dto.RequeteDto;
+import sid.org.exception.APiUSerAndCompetenceException;
 import sid.org.exception.EntityAlreadyExistException;
 import sid.org.exception.ResultNotFoundException;
 import sid.org.service.RequeteService;
@@ -39,7 +40,7 @@ public class RequeteTest {
 	RequeteRepository requeteRepository;
 
 	@Test
-	public void createRequeteTest() throws EntityAlreadyExistException {
+	public void createRequeteTest() throws EntityAlreadyExistException, APiUSerAndCompetenceException {
 		Requete requete = new Requete(1L, new Date(), 1L, 2L, "demande");
 		RequeteDto requeteDto = new RequeteDto(new Date(), 1L, 2L, "demande");
 

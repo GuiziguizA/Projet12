@@ -11,6 +11,8 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.sid.classe.Competence;
 import org.sid.classe.Roles;
@@ -21,25 +23,20 @@ import org.sid.dao.UsersRepository;
 import org.sid.dto.UserDto;
 import org.sid.exception.EntityAlreadyExistException;
 import org.sid.exception.ResultNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-
-@ContextConfiguration
 class UserServiceTest {
 
-	@MockBean
+	@Mock
 	UsersRepository userRepository;
-	@MockBean
+	@Mock
 	RolesRepository rolesRepository;
-	@Autowired
-	UserService userService;
-	@MockBean
+	@InjectMocks
+	UserServiceImpl userService;
+	@Mock
 	CompetenceRepository competenceRepository;
 
 	@BeforeEach

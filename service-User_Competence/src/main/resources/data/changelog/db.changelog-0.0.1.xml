@@ -32,10 +32,10 @@
     <changeSet author="guali (generated)" id="1608715943376-3">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="user"/>
+                <tableExists tableName="users"/>
             </not>
         </preConditions>
-        <createTable tableName="user">
+        <createTable tableName="users">
             <column autoIncrement="true" name="code_utilisateur" type="BIGINT">
                 <constraints primaryKey="true"/>
             </column>
@@ -54,11 +54,11 @@
             </not>
         </preConditions> -->
 
-        <addUniqueConstraint columnNames="mail" constraintName="UK_6sou31qus5dnws6dwfu61e71v" tableName="user"/>
+        <addUniqueConstraint columnNames="mail" constraintName="UK_6sou31qus5dnws6dwfu61e71v" tableName="users"/>
     </changeSet>
     <changeSet author="guali (generated)" id="1608715943376-5">
 
-        <createIndex indexName="FKa79hm2k2nfrpjf27h052e8r1d" tableName="user">
+        <createIndex indexName="FKa79hm2k2nfrpjf27h052e8r1d" tableName="users">
             <column name="id_roles"/>
         </createIndex>
     </changeSet>

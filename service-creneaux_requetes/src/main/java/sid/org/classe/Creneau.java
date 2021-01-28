@@ -1,11 +1,15 @@
 package sid.org.classe;
 
+import java.util.Collection;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Creneau {
@@ -18,6 +22,8 @@ public class Creneau {
 	private Long idUser1;
 	private Long idComp;
 	private String statut;
+	@OneToMany(mappedBy = "creneau", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	private Collection<Avis> avis;
 
 	public Creneau(Date date, Long idUser, Long idUser1, Long idComp) {
 		super();

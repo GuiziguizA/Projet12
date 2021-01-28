@@ -40,6 +40,32 @@ public class ExceptionHandlerControllerAdvice {
 		return error;
 	}
 
+	@ExceptionHandler(ForbiddenException.class)
+
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	public @ResponseBody ExceptionReponse ForbiddenException(final ForbiddenException exception,
+			final HttpServletRequest request) {
+
+		ExceptionReponse error = new ExceptionReponse();
+		error.setMessage(exception.getMessage());
+		error.setDate(new Date());
+		error.setHttpCodeMessage(request.getRequestURI());
+		error.setStatus(403);
+		return error;
+	}
 	
+	@ExceptionHandler(APiUSerAndCompetenceException.class)
+
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	public @ResponseBody ExceptionReponse APiUSerAndCompetenceException(final APiUSerAndCompetenceException exception,
+			final HttpServletRequest request) {
+
+		ExceptionReponse error = new ExceptionReponse();
+		error.setMessage(exception.getMessage());
+		error.setDate(new Date());
+		error.setHttpCodeMessage(request.getRequestURI());
+		error.setStatus(403);
+		return error;
+	}
 
 }

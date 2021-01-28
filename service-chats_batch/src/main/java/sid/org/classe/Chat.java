@@ -2,9 +2,12 @@ package sid.org.classe;
 
 import java.util.Collection;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Chat {
@@ -14,6 +17,7 @@ public class Chat {
 	private String statut;
 	private Long idUser;
 	private Long idUser1;
+	@OneToMany(mappedBy = "chat", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private Collection<Message> messages;
 
 	public Chat(Long id, String statut, Long idUser, Long idUser1) {

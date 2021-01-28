@@ -6,10 +6,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Optional;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.sid.classe.Competence;
 import org.sid.classe.Roles;
 import org.sid.classe.Users;
@@ -17,24 +20,21 @@ import org.sid.dao.CompetenceRepository;
 import org.sid.dto.CompetenceDto;
 import org.sid.exception.EntityAlreadyExistException;
 import org.sid.exception.ResultNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-
-@ContextConfiguration
 class CompetenceServiceTest {
-	@MockBean
+	@Mock
 	CompetenceRepository competenceRepository;
-	@Autowired
-	CompetenceService competenceService;
+	@InjectMocks
+	CompetenceServiceImpl competenceService;
 
-	@BeforeEach
-	void setUp() throws Exception {
+	@Before
+	public void setup() {
+		MockitoAnnotations.initMocks(this);
+
 	}
 
 	@Test

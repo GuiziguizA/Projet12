@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.4.2</version>
+		<version>2.2.6.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>sid.org</groupId>
@@ -14,9 +14,12 @@
 	<name>service-chats_batch</name>
 	<description>chat</description>
 
+	
+	
+
 	<properties>
 		<java.version>1.8</java.version>
-		<spring-cloud.version>2020.0.0</spring-cloud.version>
+		<spring-cloud.version>Hoxton.SR3</spring-cloud.version>
 	</properties>
 
 	<dependencies>
@@ -30,43 +33,91 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-rest</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-config</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+		<dependency> 
+		<groupId>org.liquibase</groupId>
+		<artifactId>liquibase-core</artifactId>
 		</dependency>
-
-		<dependency>
+<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope>
-			<optional>true</optional>
-		</dependency>
+			<artifactId>spring-boot-starter-amqp</artifactId>
+		</dependency>	
+
+
+
+		
 		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-test</artifactId>
-   
-    <scope>test</scope>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
 </dependency>
-	<dependency>
+		<!-- ######################################## -->
+		<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-web</artifactId>
+</dependency>
+		
+		
+	<!-- https://mvnrepository.com/artifact/junit/junit -->
+<dependency>
     <groupId>junit</groupId>
     <artifactId>junit</artifactId>
 
     <scope>test</scope>
 </dependency>
+	
+<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-devtools -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-devtools</artifactId>
+ 
+</dependency>
 
-</dependencies>
 
+
+<dependency>
+    <groupId>org.junit.jupiter</groupId>
+    <artifactId>junit-jupiter-engine</artifactId>
+
+</dependency>
+
+
+		<!-- <dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency> -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.junit.vintage</groupId>
+					<artifactId>junit-vintage-engine</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		
+		
+	</dependencies>
 
 	<dependencyManagement>
 		<dependencies>
@@ -86,15 +137,19 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-		</plugins>
+		
+		
+		
+	
+    <plugin>
+        <groupId>org.liquibase</groupId>
+        <artifactId>liquibase-maven-plugin</artifactId>
+        <version>3.4.1</version>
+        <configuration>                  
+            <propertyFile>src/main/resources/liquibase.properties</propertyFile>
+        </configuration>                
+    </plugin>
+</plugins> 
 	</build>
-
-	<repositories>
-		<repository>
-			<id>spring-milestones</id>
-			<name>Spring Milestones</name>
-			<url>https://repo.spring.io/milestone</url>
-		</repository>
-	</repositories>
 
 </project>

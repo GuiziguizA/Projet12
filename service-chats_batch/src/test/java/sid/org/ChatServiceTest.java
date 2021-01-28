@@ -55,8 +55,6 @@ class ChatServiceTest {
 		Mockito.when(chatRepository.findByUserAndUser(Mockito.anyLong(), Mockito.anyLong()))
 				.thenReturn(Optional.of(chat));
 
-		Chat chat1 = chatService.creerUnChat(chatDto);
-
 		EntityAlreadyExistException exception = assertThrows(EntityAlreadyExistException.class, () -> {
 			chatService.creerUnChat(chatDto);
 
@@ -101,8 +99,7 @@ class ChatServiceTest {
 	@Test
 	public void deleteChatTest() throws ResultNotFoundException {
 		Chat chat = new Chat(1L, "ouvert", 1L, 2L);
-		Mockito.when(chatRepository.findByUserAndUser(Mockito.anyLong(), Mockito.anyLong()))
-				.thenReturn(Optional.of(chat));
+		Mockito.when(chatRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(chat));
 		Mockito.doNothing().when(chatRepository).delete(chat);
 		chatService.deleteUnChat(1L);
 

@@ -1,20 +1,29 @@
 package sid.org.service;
 
 import org.springframework.data.domain.Page;
+import org.springframework.web.client.HttpStatusCodeException;
 
 import sid.org.classe.Requete;
 import sid.org.dto.RequeteDto;
+import sid.org.exception.APiUSerAndCompetenceException;
 import sid.org.exception.EntityAlreadyExistException;
+import sid.org.exception.ForbiddenException;
 import sid.org.exception.ResultNotFoundException;
 
 public interface RequeteService {
 
-	public void deleteRequete(Long id) throws ResultNotFoundException;
+	public void deleteRequete(Long id, Long idUser)
+			throws ResultNotFoundException, APiUSerAndCompetenceException, ForbiddenException;
 
-	public Requete createRequete(RequeteDto requeteDto) throws EntityAlreadyExistException;
+	public Requete createRequete(RequeteDto requeteDto)
+			throws EntityAlreadyExistException, APiUSerAndCompetenceException;
 
-	public Requete getRequete(Long id) throws ResultNotFoundException;
+	public Requete getRequete(Long id, Long idUser)
+			throws ResultNotFoundException, ForbiddenException, APiUSerAndCompetenceException;
 
-	public Page<Requete> getRequetes(Long idUser);
+	public Page<Requete> getRequetes(Long idUser) throws APiUSerAndCompetenceException;
+
+	public void validerUneRequete(Long id, Long idUser1) throws ResultNotFoundException, EntityAlreadyExistException,
+			HttpStatusCodeException, APiUSerAndCompetenceException;
 
 }

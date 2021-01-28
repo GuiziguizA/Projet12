@@ -5,19 +5,30 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import sid.org.api.RequeteConnect;
 import sid.org.classe.Chat;
+import sid.org.classe.Requete;
 import sid.org.dao.ChatRepository;
 import sid.org.dto.ChatDto;
+import sid.org.exception.APiUSerAndCompetenceException;
 import sid.org.exception.EntityAlreadyExistException;
+import sid.org.exception.ForbiddenException;
 import sid.org.exception.ResultNotFoundException;
 
 @Service
 public class ChatServiceImpl implements ChatService {
 	@Autowired
 	ChatRepository chatRepository;
+	@Autowired
+	RequeteConnect requeteConnect;
 
 	@Override
-	public Chat creerUnChat(ChatDto chatDto) throws EntityAlreadyExistException {
+	public Chat creerUnChat(ChatDto chatDto, Long idRequete, Long CodeMicroservice)
+			throws EntityAlreadyExistException, APiUSerAndCompetenceException, ForbiddenException {
+		Requete requete = requeteConnect.getRequete(idRequete);
+		if (requete.getStatut() != "valide") {
+			throw new ForbiddenException("impossible de creer ce chat la requete n'a pas ete valide");
+		}
 
 		Optional<Chat> chat = chatRepository.findByUserAndUser(chatDto.getIdUser(), chatDto.getIdUser1());
 
@@ -54,4 +65,5 @@ public class ChatServiceImpl implements ChatService {
 		chatRepository.delete(chat.get());
 
 	}
+
 }
