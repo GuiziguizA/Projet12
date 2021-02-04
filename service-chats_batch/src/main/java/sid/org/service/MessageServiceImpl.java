@@ -2,7 +2,6 @@ package sid.org.service;
 
 import java.util.Date;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import sid.org.api.UserConnect;
+import sid.org.classe.Chat;
 import sid.org.classe.Message;
 import sid.org.classe.Users;
 import sid.org.config.MessagingConfig;
@@ -38,13 +38,26 @@ public class MessageServiceImpl implements MessageService {
 	private static final Logger logger = LoggerFactory.getLogger(MessageServiceImpl.class);
 
 	@Override
-	public String createMessage(Message message, Long idUser, Long idUser1) throws APiUSerAndCompetenceException {
+	public String createMessage(Message message, Long idUser, Long idChat)
+			throws APiUSerAndCompetenceException, ResultNotFoundException, ForbiddenException {
 		userConnect.getUser(idUser);
-		chatRepository.findByUserAndUser(idUser, idUser1);
+		Optional<Chat> chat = chatRepository.findById(idChat);
 
-		message.setId(UUID.randomUUID().toString());
-		message.setDate(new Date());
-		template.convertAndSend(MessagingConfig.EXCHANGE, MessagingConfig.ROUTIN_KEY, message);
+		if (!chat.isPresent()) {
+			throw new ResultNotFoundException("chat introuvable");
+		}
+		if (idUser != chat.get().getIdUser() && idUser != chat.get().getIdUser1()) {
+			throw new ForbiddenException("interdit d'envoyer ce message");
+		}
+
+		Message message1 = new Message();
+
+		message1.setDate(new Date());
+		message1.setIdUser(idUser);
+		message1.setChat(chat.get());
+
+		message1.setContent(message.getContent());
+		template.convertAndSend(MessagingConfig.EXCHANGE, MessagingConfig.ROUTIN_KEY, message1);
 		return "sucess";
 
 	}
@@ -52,9 +65,13 @@ public class MessageServiceImpl implements MessageService {
 	@RabbitListener(queues = MessagingConfig.QUEUE)
 	public void getMessage(Message message) {
 		Message message1 = new Message();
-		message.setStatut("non lu");
-		messageRepository.saveAndFlush(message);
-		logger.info(message.getContent());
+		message1.setChat(message.getChat());
+		message1.setContent(message.getContent());
+		message1.setDate(new Date());
+		message1.setIdUser(message.getIdUser());
+		message1.setStatut("non lu");
+		messageRepository.saveAndFlush(message1);
+		logger.info(message1.toString());
 
 	}
 
@@ -65,20 +82,21 @@ public class MessageServiceImpl implements MessageService {
 		Optional<Message> message = messageRepository.findById(id);
 		Users user = userConnect.getUser(idUser);
 
-		if (user.getCodeUtilisateur() != message.get().getChat().getIdUser()
-				|| user.getCodeUtilisateur() != message.get().getChat().getIdUser1()) {
+		if (user.getCodeUtilisateur() == message.get().getChat().getIdUser()
+				|| user.getCodeUtilisateur() == message.get().getChat().getIdUser1()) {
+			if (!message.isPresent()) {
+				throw new ResultNotFoundException("message introuvable");
+			}
+			if (message.get().getStatut().equals("non lu")) {
+				message.get().setStatut("lu");
+			}
+			messageRepository.saveAndFlush(message.get());
+
+			return message.get();
+		} else {
+
 			throw new ForbiddenException("interdiction de lire se message");
 		}
-		if (!message.isPresent()) {
-			throw new ResultNotFoundException("message introuvable");
-		}
-		if (message.get().getStatut().equals("non lu")) {
-			message.get().setStatut("lu");
-		}
-		messageRepository.saveAndFlush(message.get());
-
-		return message.get();
-
 	}
 
 	@Override

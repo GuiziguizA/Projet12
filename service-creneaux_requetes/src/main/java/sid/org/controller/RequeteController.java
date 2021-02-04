@@ -1,10 +1,10 @@
+
 package sid.org.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,17 +32,18 @@ public class RequeteController {
 
 	@PostMapping("/requete")
 	public Requete createRequete(@RequestBody RequeteDto requeteDto)
-			throws EntityAlreadyExistException, APiUSerAndCompetenceException {
-		userConnect.getUser(requeteDto.getIdUser());
-		compApi.getCompetence(requeteDto.getIdComp());
-
+			throws EntityAlreadyExistException, APiUSerAndCompetenceException, ForbiddenException {
+		/*
+		 * userConnect.getUser(requeteDto.getIdUser());
+		 * compApi.getCompetence(requeteDto.getIdComp());
+		 */
 		Requete requete = requeteService.createRequete(requeteDto);
 		return requete;
 
 	}
 
-	@GetMapping("/requete/{id}")
-	public Requete getRequete(@PathVariable Long id, @RequestParam Long idUser)
+	@GetMapping("/requete")
+	public Requete getRequete(@RequestParam Long id, @RequestParam Long idUser)
 			throws ResultNotFoundException, ForbiddenException, APiUSerAndCompetenceException {
 
 		Requete requete = requeteService.getRequete(id, idUser);
@@ -69,7 +70,7 @@ public class RequeteController {
 	@PostMapping("/validateRequete")
 	public void validateRequete(@RequestParam Long idRequete, @RequestParam Long idUser1)
 			throws HttpStatusCodeException, ResultNotFoundException, APiUSerAndCompetenceException,
-			EntityAlreadyExistException {
+			EntityAlreadyExistException, ForbiddenException {
 
 		requeteService.validerUneRequete(idRequete, idUser1);
 

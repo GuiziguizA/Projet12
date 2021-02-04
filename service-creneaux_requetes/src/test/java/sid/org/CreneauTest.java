@@ -27,6 +27,7 @@ import sid.org.dao.CreneauRepository;
 import sid.org.dto.CreneauDto;
 import sid.org.exception.APiUSerAndCompetenceException;
 import sid.org.exception.EntityAlreadyExistException;
+import sid.org.exception.ForbiddenException;
 import sid.org.exception.ResultNotFoundException;
 import sid.org.service.CreneauService;
 
@@ -40,13 +41,14 @@ class CreneauTest {
 	CreneauRepository creneauRepository;
 
 	@Test
-	public void createCreneauTest() throws EntityAlreadyExistException, APiUSerAndCompetenceException {
+	public void createCreneauTest() throws EntityAlreadyExistException, APiUSerAndCompetenceException,
+			ForbiddenException, ResultNotFoundException {
 		Creneau creneau = new Creneau(new Date(), 1L, 2L, 1L);
 		CreneauDto creneauDto = new CreneauDto(1L, 2L, 1L, "demande");
 		Mockito.when(creneauRepository.findByIdUserAndIdComp(Mockito.anyLong(), Mockito.anyLong()))
 				.thenReturn(Optional.empty());
 
-		Creneau creneau1 = creneauService.createCreneau(creneauDto, 1L);
+		Creneau creneau1 = creneauService.createCreneau(creneauDto, 1L, 2L);
 
 		assertEquals(creneau.getIdComp(), creneau1.getIdComp());
 
@@ -61,7 +63,7 @@ class CreneauTest {
 				.thenReturn(Optional.of(creneau));
 
 		EntityAlreadyExistException exception = assertThrows(EntityAlreadyExistException.class, () -> {
-			creneauService.createCreneau(creneauDto, 1L);
+			creneauService.createCreneau(creneauDto, 1L, 3L);
 
 		});
 
@@ -72,12 +74,12 @@ class CreneauTest {
 	}
 
 	@Test
-	public void getCreneauTest() throws ResultNotFoundException {
+	public void getCreneauTest() throws ResultNotFoundException, APiUSerAndCompetenceException {
 		Creneau creneau = new Creneau(new Date(), 1L, 2L, 1L);
 
 		Mockito.when(creneauRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(creneau));
 
-		Creneau creneau1 = creneauService.getCreneau(1L);
+		Creneau creneau1 = creneauService.getCreneau(1L, 2L, 3L);
 
 		assertEquals(creneau.getIdComp(), creneau1.getIdComp());
 
@@ -90,7 +92,7 @@ class CreneauTest {
 		Mockito.when(creneauRepository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
 
 		ResultNotFoundException exception = assertThrows(ResultNotFoundException.class, () -> {
-			creneauService.getCreneau(1L);
+			creneauService.getCreneau(1L, 2L, 3L);
 
 		});
 
@@ -102,7 +104,7 @@ class CreneauTest {
 	}
 
 	@Test
-	public void getCreneauxTest() {
+	public void getCreneauxTest() throws APiUSerAndCompetenceException {
 		Creneau creneau = new Creneau(new Date(), 1L, 2L, 1L);
 		Creneau creneau1 = new Creneau(new Date(), 2L, 3L, 2L);
 
@@ -113,19 +115,19 @@ class CreneauTest {
 		Page<Creneau> pageCreneaux = new PageImpl<Creneau>(creneaux);
 		Mockito.when(creneauRepository.findByIdUser(1L, pageable)).thenReturn(pageCreneaux);
 
-		Page<Creneau> pageCreneaux1 = creneauService.getCreneaux(1L);
+		Page<Creneau> pageCreneaux1 = creneauService.getCreneaux(1L, 2L);
 
 		assertEquals(2, pageCreneaux1.getSize());
 
 	}
 
 	@Test
-	public void deleteCreneauxTest() throws ResultNotFoundException {
+	public void deleteCreneauxTest() throws ResultNotFoundException, APiUSerAndCompetenceException {
 		Creneau creneau = new Creneau(new Date(), 1L, 2L, 1L);
 
 		Mockito.when(creneauRepository.findById(1L)).thenReturn(Optional.of(creneau));
 		Mockito.doNothing().when(creneauRepository).delete(creneau);
-		creneauService.deleteCreneau(1L);
+		creneauService.deleteCreneau(1L, 2L, 3L);
 
 	}
 
@@ -135,7 +137,7 @@ class CreneauTest {
 		Mockito.when(creneauRepository.findById(1L)).thenReturn(Optional.empty());
 
 		ResultNotFoundException exception = assertThrows(ResultNotFoundException.class, () -> {
-			creneauService.deleteCreneau(1L);
+			creneauService.deleteCreneau(1L, 2L, 3L);
 
 		});
 

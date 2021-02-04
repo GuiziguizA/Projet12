@@ -23,16 +23,14 @@ public class ChatServiceImpl implements ChatService {
 	RequeteConnect requeteConnect;
 
 	@Override
-	public Chat creerUnChat(ChatDto chatDto, Long idRequete, Long CodeMicroservice)
+	public Chat creerUnChat(ChatDto chatDto, Long idRequete, Long CodeMicroservice, Long idUser)
 			throws EntityAlreadyExistException, APiUSerAndCompetenceException, ForbiddenException {
-		Requete requete = requeteConnect.getRequete(idRequete);
-		if (requete.getStatut() != "valide") {
-			throw new ForbiddenException("impossible de creer ce chat la requete n'a pas ete valide");
-		}
+		Requete requete = requeteConnect.getRequete(idRequete, idUser);
 
 		Optional<Chat> chat = chatRepository.findByUserAndUser(chatDto.getIdUser(), chatDto.getIdUser1());
+		Optional<Chat> chat2 = chatRepository.findByUserAndUser(chatDto.getIdUser1(), chatDto.getIdUser());
 
-		if (chat.isPresent()) {
+		if (chat.isPresent() || chat2.isPresent()) {
 			throw new EntityAlreadyExistException("chat existe deja");
 		}
 
@@ -49,11 +47,17 @@ public class ChatServiceImpl implements ChatService {
 	@Override
 	public Chat getUnChat(Long idUser, Long idUser1) throws ResultNotFoundException {
 		Optional<Chat> chat = chatRepository.findByUserAndUser(idUser, idUser1);
-		if (!chat.isPresent()) {
+		Optional<Chat> chat1 = chatRepository.findByUserAndUser(idUser1, idUser);
+
+		if (!chat.isPresent() && !chat1.isPresent()) {
 			throw new ResultNotFoundException("chat introuvable");
 		}
+		if (chat.isPresent() && !chat1.isPresent()) {
+			return chat.get();
+		} else {
+			return chat1.get();
+		}
 
-		return chat.get();
 	}
 
 	@Override

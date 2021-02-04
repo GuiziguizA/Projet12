@@ -21,9 +21,9 @@ public class MesageController {
 	MessageService messageService;
 
 	@PostMapping("/message")
-	public String createMessage(@RequestBody Message message, @RequestParam Long idUser, @RequestParam Long idUser1)
-			throws APiUSerAndCompetenceException {
-		String sucess = messageService.createMessage(message, idUser, idUser1);
+	public String createMessage(@RequestBody Message message, @RequestParam Long idUser, @RequestParam Long idChat)
+			throws APiUSerAndCompetenceException, ResultNotFoundException, ForbiddenException {
+		String sucess = messageService.createMessage(message, idUser, idChat);
 
 		return sucess;
 

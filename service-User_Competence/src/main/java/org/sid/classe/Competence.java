@@ -17,7 +17,6 @@ public class Competence {
 	private String type;
 	private String description;
 	@ManyToOne
-
 	@JoinColumn(name = "ID_USER")
 	private Users user;
 
@@ -28,6 +27,7 @@ public class Competence {
 		this.type = type;
 		this.description = description;
 		this.user = user;
+
 	}
 
 	public Competence() {

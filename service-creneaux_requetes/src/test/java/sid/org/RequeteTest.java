@@ -27,6 +27,7 @@ import sid.org.dao.RequeteRepository;
 import sid.org.dto.RequeteDto;
 import sid.org.exception.APiUSerAndCompetenceException;
 import sid.org.exception.EntityAlreadyExistException;
+import sid.org.exception.ForbiddenException;
 import sid.org.exception.ResultNotFoundException;
 import sid.org.service.RequeteService;
 
@@ -40,9 +41,10 @@ public class RequeteTest {
 	RequeteRepository requeteRepository;
 
 	@Test
-	public void createRequeteTest() throws EntityAlreadyExistException, APiUSerAndCompetenceException {
+	public void createRequeteTest()
+			throws EntityAlreadyExistException, APiUSerAndCompetenceException, ForbiddenException {
 		Requete requete = new Requete(1L, new Date(), 1L, 2L, "demande");
-		RequeteDto requeteDto = new RequeteDto(new Date(), 1L, 2L, "demande");
+		RequeteDto requeteDto = new RequeteDto(1L, 2L, "demande");
 
 		Mockito.when(requeteRepository.findByIdUserAndIdComp(Mockito.anyLong(), Mockito.anyLong()))
 				.thenReturn(Optional.empty());
@@ -57,7 +59,7 @@ public class RequeteTest {
 	@Test
 	public void createRequeteTestEntityAlreadyExistException() throws EntityAlreadyExistException {
 		Requete requete = new Requete(1L, new Date(), 1L, 2L, "demande");
-		RequeteDto requeteDto = new RequeteDto(new Date(), 1L, 1L, "demande");
+		RequeteDto requeteDto = new RequeteDto(1L, 1L, "demande");
 
 		Mockito.when(requeteRepository.findByIdUserAndIdComp(Mockito.anyLong(), Mockito.anyLong()))
 				.thenReturn(Optional.of(requete));
@@ -75,13 +77,13 @@ public class RequeteTest {
 	}
 
 	@Test
-	public void getRequeteTest() throws ResultNotFoundException {
+	public void getRequeteTest() throws ResultNotFoundException, ForbiddenException, APiUSerAndCompetenceException {
 
 		Requete requete = new Requete(1L, new Date(), 1L, 2L, "demande");
 
 		Mockito.when(requeteRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(requete));
 
-		Requete requete1 = requeteService.getRequete(1L);
+		Requete requete1 = requeteService.getRequete(1L, 2L);
 
 		assertEquals(requete, requete1);
 
@@ -93,7 +95,7 @@ public class RequeteTest {
 		Mockito.when(requeteRepository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
 
 		ResultNotFoundException exception = assertThrows(ResultNotFoundException.class, () -> {
-			requeteService.getRequete(1L);
+			requeteService.getRequete(1L, 2L);
 
 		});
 
@@ -105,7 +107,7 @@ public class RequeteTest {
 	}
 
 	@Test
-	public void getRequetesTest() {
+	public void getRequetesTest() throws APiUSerAndCompetenceException {
 
 		Requete requete = new Requete(1L, new Date(), 1L, 2L, "demande");
 		Requete requete1 = new Requete(1L, new Date(), 1L, 2L, "demande");
@@ -123,13 +125,13 @@ public class RequeteTest {
 	}
 
 	@Test
-	public void deleteRequetesTest() throws ResultNotFoundException {
+	public void deleteRequetesTest() throws ResultNotFoundException, APiUSerAndCompetenceException, ForbiddenException {
 		Requete requete = new Requete(1L, new Date(), 1L, 2L, "demande");
 
 		Mockito.when(requeteRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(requete));
 		Mockito.doNothing().when(requeteRepository).delete(requete);
 
-		requeteService.deleteRequete(1L);
+		requeteService.deleteRequete(1L, 2L);
 
 	}
 
@@ -139,7 +141,7 @@ public class RequeteTest {
 		Mockito.when(requeteRepository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
 
 		ResultNotFoundException exception = assertThrows(ResultNotFoundException.class, () -> {
-			requeteService.deleteRequete(1L);
+			requeteService.deleteRequete(1L, 3L);
 
 		});
 

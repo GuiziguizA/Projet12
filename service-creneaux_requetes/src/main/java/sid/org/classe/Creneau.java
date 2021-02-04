@@ -22,6 +22,7 @@ public class Creneau {
 	private Long idUser1;
 	private Long idComp;
 	private String statut;
+
 	@OneToMany(mappedBy = "creneau", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private Collection<Avis> avis;
 

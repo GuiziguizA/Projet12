@@ -42,6 +42,20 @@ public class CompetenceServiceImpl implements CompetenceService {
 	}
 
 	@Override
+	public Competence getCompetence(Long id) throws ResultNotFoundException {
+
+		Optional<Competence> competence = competenceRepository.findById(id);
+		if (!competence.isPresent()) {
+			throw new ResultNotFoundException("la competence n'existe pas");
+		}
+
+		Competence comp = competence.get();
+
+		return comp;
+
+	}
+
+	@Override
 	public void deleteCompetence(Long id) throws ResultNotFoundException {
 
 		Optional<Competence> competence = competenceRepository.findById(id);

@@ -9,7 +9,8 @@ import sid.org.exception.ResultNotFoundException;
 
 public interface MessageService {
 
-	public String createMessage(Message message, Long idUser, Long idUser1) throws APiUSerAndCompetenceException;
+	public String createMessage(Message message, Long idUser, Long idUser1)
+			throws APiUSerAndCompetenceException, ResultNotFoundException, ForbiddenException;
 
 	public void getMessage(Message message);
 

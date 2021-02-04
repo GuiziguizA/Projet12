@@ -13,10 +13,13 @@ public interface CompetenceService {
 
 	public void deleteCompetence(Long id) throws ResultNotFoundException;
 
-	public Page<Competence> searchCompetence(CompetenceCriteria criteria, int page, int size) throws ResultNotFoundException;
+	public Page<Competence> searchCompetence(CompetenceCriteria criteria, int page, int size)
+			throws ResultNotFoundException;
 
 	public CompetenceDto getCompetenceDto();
 
 	public CompetenceCriteria getCompetenceCriteria();
+
+	public Competence getCompetence(Long id) throws ResultNotFoundException;
 
 }

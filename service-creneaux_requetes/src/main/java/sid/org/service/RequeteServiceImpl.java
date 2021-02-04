@@ -1,7 +1,10 @@
 package sid.org.service;
 
+import java.util.Date;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,7 +15,6 @@ import org.springframework.web.client.HttpStatusCodeException;
 import sid.org.api.ChatConnect;
 import sid.org.api.CompetenceApi;
 import sid.org.api.UserConnect;
-import sid.org.classe.Chat;
 import sid.org.classe.Competence;
 import sid.org.classe.Requete;
 import sid.org.classe.Users;
@@ -35,9 +37,11 @@ public class RequeteServiceImpl implements RequeteService {
 	@Autowired
 	UserConnect userConnect;
 
+	private static final Logger logger = LoggerFactory.getLogger(RequeteServiceImpl.class);
+
 	@Override
 	public Requete createRequete(RequeteDto requeteDto)
-			throws EntityAlreadyExistException, APiUSerAndCompetenceException {
+			throws EntityAlreadyExistException, APiUSerAndCompetenceException, ForbiddenException {
 
 		Optional<Requete> requete = requeteRepository.findByIdUserAndIdComp(requeteDto.getIdUser(),
 				requeteDto.getIdComp());
@@ -45,11 +49,17 @@ public class RequeteServiceImpl implements RequeteService {
 			throw new EntityAlreadyExistException("la requete existe deja");
 		}
 
-		Competence competence = competenceApi.getCompetence(requete.get().getIdComp());
+		userConnect.getUser(requeteDto.getIdUser());
+		Competence competence = competenceApi.getCompetence(requeteDto.getIdComp());
+
+		if (requeteDto.getIdUser() == competence.getUser().getCodeUtilisateur()) {
+			throw new ForbiddenException("un utilisateur ne peut pas s'envoyer une requete a lui même");
+		}
 
 		Requete requete1 = new Requete();
+
 		requete1.setIdComp(requeteDto.getIdComp());
-		requete1.setDate(requeteDto.getDate());
+		requete1.setDate(new Date());
 		requete1.setStatut("demande");
 		requete1.setIdUser(requeteDto.getIdUser());
 
@@ -60,20 +70,28 @@ public class RequeteServiceImpl implements RequeteService {
 
 	@Override
 	public void validerUneRequete(Long id, Long idUser1) throws ResultNotFoundException, EntityAlreadyExistException,
-			HttpStatusCodeException, APiUSerAndCompetenceException {
+			HttpStatusCodeException, APiUSerAndCompetenceException, ForbiddenException {
 		Optional<Requete> requete = requeteRepository.findById(id);
 		if (!requete.isPresent()) {
 			throw new ResultNotFoundException("requete introuvable");
 		}
+		logger.info(new Long(requete.get().getIdComp()).toString());
+		Competence competence = competenceApi.getCompetence(requete.get().getIdComp());
+		if (idUser1 == competence.getUser().getCodeUtilisateur()) {
 
-		requete.get().setStatut("valide");
-		try {
-			Chat chat = chatConnect.getChat(requete.get().getIdUser(), idUser1);
-			throw new EntityAlreadyExistException("le chat existe deja");
-		} catch (HttpStatusCodeException e) {
-			ChatDto chatDto = new ChatDto(requete.get().getIdUser(), idUser1);
-			chatConnect.createChat(chatDto);
+			try {
+				chatConnect.getChat(requete.get().getIdUser(), idUser1);
+				throw new EntityAlreadyExistException("le chat existe deja");
 
+			} catch (APiUSerAndCompetenceException e) {
+				ChatDto chatDto = new ChatDto(requete.get().getIdUser(), idUser1);
+				chatConnect.createChat(chatDto, id);
+			}
+
+			requete.get().setStatut("valide");
+			requeteRepository.saveAndFlush(requete.get());
+		} else {
+			throw new ForbiddenException("action interdite");
 		}
 
 	}

@@ -32,15 +32,15 @@ public class ChatController {
 
 	@PostMapping("/chat")
 	public Chat creerChat(@RequestBody ChatDto chatDto, @RequestParam Long idRequete,
-			@RequestBody Long codeMicroservice)
+			@RequestParam Long codeMicroservice, @RequestParam Long idUser)
 			throws EntityAlreadyExistException, APiUSerAndCompetenceException, ForbiddenException {
-		Chat chat = chatService.creerUnChat(chatDto, idRequete, codeMicroservice);
+		Chat chat = chatService.creerUnChat(chatDto, idRequete, codeMicroservice, idUser);
 		return chat;
 
 	}
 
 	@DeleteMapping("/chat")
-	public void supprimerChat(@RequestParam Long id, @RequestBody Long codeMicroservice)
+	public void supprimerChat(@RequestParam Long id, @RequestParam Long codeMicroservice)
 			throws ResultNotFoundException {
 		chatService.deleteUnChat(id);
 

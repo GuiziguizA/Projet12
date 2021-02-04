@@ -25,10 +25,10 @@ public class CreneauController {
 
 	@PostMapping("/creneau")
 	public Creneau createCreneau(@RequestBody CreneauDto CreneauDto, @RequestParam Long idUser,
-			@RequestParam Long idUser1)
-			throws EntityAlreadyExistException, APiUSerAndCompetenceException, ForbiddenException {
+			@RequestParam Long idRequete) throws EntityAlreadyExistException, APiUSerAndCompetenceException,
+			ForbiddenException, ResultNotFoundException {
 
-		Creneau creneau = creneauService.createCreneau(CreneauDto, idUser, idUser1);
+		Creneau creneau = creneauService.createCreneau(CreneauDto, idUser, idRequete);
 		return creneau;
 
 	}

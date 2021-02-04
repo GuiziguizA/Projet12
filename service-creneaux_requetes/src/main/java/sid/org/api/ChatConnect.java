@@ -10,6 +10,7 @@ public interface ChatConnect {
 
 	public Chat getChat(Long idUser, Long idUser1) throws APiUSerAndCompetenceException;
 
-	public void createChat(ChatDto chatDto) throws HttpStatusCodeException, APiUSerAndCompetenceException;
+	public void createChat(ChatDto chatDto, Long idRequete)
+			throws HttpStatusCodeException, APiUSerAndCompetenceException;
 
 }

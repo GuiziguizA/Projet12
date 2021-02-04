@@ -12,7 +12,7 @@ public class Requete {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long codeCreneau;
+	private Long codeRequete;
 	private Date date;
 	private Long idUser;
 	private Long idComp;
@@ -23,21 +23,21 @@ public class Requete {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Requete(Long codeCreneau, Date date, Long idUser, Long idComp, String statut) {
+	public Requete(Long codeRequete, Date date, Long idUser, Long idComp, String statut) {
 		super();
-		this.codeCreneau = codeCreneau;
+		this.codeRequete = codeRequete;
 		this.date = date;
 		this.idUser = idUser;
 		this.idComp = idComp;
 		this.statut = statut;
 	}
 
-	public Long getCodeCreneau() {
-		return codeCreneau;
+	public Long getCodeRequete() {
+		return codeRequete;
 	}
 
-	public void setCodeCreneau(Long codeCreneau) {
-		this.codeCreneau = codeCreneau;
+	public void setCodeRequete(Long codeRequete) {
+		this.codeRequete = codeRequete;
 	}
 
 	public Date getDate() {

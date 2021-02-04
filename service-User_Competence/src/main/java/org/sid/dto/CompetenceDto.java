@@ -20,7 +20,7 @@ public class CompetenceDto {
 		this.nom = nom;
 		this.type = type;
 		this.description = description;
-		this.user = user;
+
 	}
 
 	public String getNom() {

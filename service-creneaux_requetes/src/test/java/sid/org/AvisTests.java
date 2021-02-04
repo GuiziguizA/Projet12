@@ -24,6 +24,7 @@ import sid.org.classe.Creneau;
 import sid.org.dao.AvisRepository;
 import sid.org.dao.CreneauRepository;
 import sid.org.dto.AvisDto;
+import sid.org.exception.APiUSerAndCompetenceException;
 import sid.org.exception.ForbiddenException;
 import sid.org.exception.ResultNotFoundException;
 import sid.org.service.AvisServiceImpl;
@@ -45,14 +46,14 @@ class AvisTests {
 	}
 
 	@Test
-	public void createAvisTest() throws ResultNotFoundException {
+	public void createAvisTest() throws ResultNotFoundException, APiUSerAndCompetenceException, ForbiddenException {
 		Creneau creneau = new Creneau(new Date(), 1L, 2L, 3L);
 		Avis avis = new Avis(3, "insufisant", creneau);
 		AvisDto avisDto = new AvisDto(3, "insufisant", creneau);
 
 		Mockito.when(creneauRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(creneau));
 
-		Avis avis1 = avisService.createAvis(avisDto);
+		Avis avis1 = avisService.createAvis(avisDto, 1L);
 
 		assertEquals(avis.getCommentaire(), avis1.getCommentaire());
 	}
@@ -66,7 +67,7 @@ class AvisTests {
 		Mockito.when(creneauRepository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
 
 		ResultNotFoundException exception = assertThrows(ResultNotFoundException.class, () -> {
-			avisService.createAvis(avisDto);
+			avisService.createAvis(avisDto, 1L);
 
 		});
 
@@ -78,13 +79,13 @@ class AvisTests {
 	}
 
 	@Test
-	public void getAvisTest() throws ResultNotFoundException {
+	public void getAvisTest() throws ResultNotFoundException, ForbiddenException {
 		Creneau creneau = new Creneau(new Date(), 1L, 2L, 3L);
 		Avis avis = new Avis(3, "insufisant", creneau);
 
 		Mockito.when(avisRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(avis));
 
-		Avis avis1 = avisService.getAvis(1L);
+		Avis avis1 = avisService.getAvis(1L, 2L);
 
 		assertEquals(avis.getCommentaire(), avis1.getCommentaire());
 	}
@@ -98,7 +99,7 @@ class AvisTests {
 		Mockito.when(avisRepository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
 
 		ResultNotFoundException exception = assertThrows(ResultNotFoundException.class, () -> {
-			avisService.getAvis(1L);
+			avisService.getAvis(1L, 1L);
 
 		});
 
@@ -110,7 +111,7 @@ class AvisTests {
 	}
 
 	@Test
-	public void getListAvisTest() throws ResultNotFoundException {
+	public void getListAvisTest() throws ResultNotFoundException, ForbiddenException {
 		Creneau creneau = new Creneau(new Date(), 1L, 2L, 3L);
 		Avis avis = new Avis(3, "insufisant", creneau);
 		Avis avis1 = new Avis(4, "insufisant", creneau);
@@ -122,7 +123,7 @@ class AvisTests {
 
 		Mockito.when(avisRepository.findByCreneau(creneau)).thenReturn(listavis);
 
-		List<Avis> listavis1 = avisService.getlistAvis(creneau);
+		List<Avis> listavis1 = avisService.getlistAvis(creneau, 1L);
 
 		assertEquals(listavis1.size(), 3);
 

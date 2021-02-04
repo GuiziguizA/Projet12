@@ -9,7 +9,7 @@ import sid.org.exception.ResultNotFoundException;
 
 public interface ChatService {
 
-	public Chat creerUnChat(ChatDto chatDto, Long idRequete, Long CodeMicroservice)
+	public Chat creerUnChat(ChatDto chatDto, Long idRequete, Long CodeMicroservice, Long idUser)
 			throws EntityAlreadyExistException, APiUSerAndCompetenceException, ForbiddenException;
 
 	public Chat getUnChat(Long idUser, Long idUser1) throws ResultNotFoundException;

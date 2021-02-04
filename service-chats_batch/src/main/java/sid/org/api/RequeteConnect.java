@@ -5,6 +5,6 @@ import sid.org.exception.APiUSerAndCompetenceException;
 
 public interface RequeteConnect {
 
-	Requete getRequete(Long idRequete) throws APiUSerAndCompetenceException;
+	public Requete getRequete(Long idRequete, Long idUser) throws APiUSerAndCompetenceException;
 
 }

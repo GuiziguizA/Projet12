@@ -12,8 +12,11 @@ import org.springframework.stereotype.Service;
 import sid.org.api.ChatConnect;
 import sid.org.api.CompetenceApi;
 import sid.org.api.UserConnect;
+import sid.org.classe.Competence;
 import sid.org.classe.Creneau;
+import sid.org.classe.Requete;
 import sid.org.dao.CreneauRepository;
+import sid.org.dao.RequeteRepository;
 import sid.org.dto.CreneauDto;
 import sid.org.exception.APiUSerAndCompetenceException;
 import sid.org.exception.EntityAlreadyExistException;
@@ -30,18 +33,27 @@ public class CreneauServiceImpl implements CreneauService {
 	UserConnect userConnect;
 	@Autowired
 	ChatConnect chatConnect;
+	@Autowired
+	RequeteRepository requeteRepository;
 
 	@Override
-	public Creneau createCreneau(CreneauDto creneauDto, Long idUser, Long idUser1)
-			throws EntityAlreadyExistException, APiUSerAndCompetenceException, ForbiddenException {
+	public Creneau createCreneau(CreneauDto creneauDto, Long idUser, Long idRequete) throws EntityAlreadyExistException,
+			APiUSerAndCompetenceException, ForbiddenException, ResultNotFoundException {
 
 		Optional<Creneau> creneau = creneauRepository.findByIdUserAndIdComp(creneauDto.getIdUser(),
 				creneauDto.getIdComp());
 		if (creneau.isPresent()) {
 			throw new EntityAlreadyExistException("le creneau existe deja");
 		}
+		Optional<Requete> requete = requeteRepository.findById(idRequete);
+
+		if (!requete.isPresent()) {
+			throw new ResultNotFoundException("la requete est introuvable");
+		}
+		Competence competence = competenceApi.getCompetence(requete.get().getIdComp());
+
 		// chatConnect verifie si le chat existe
-		chatConnect.getChat(idUser, idUser1);
+		chatConnect.getChat(idUser, competence.getUser().getCodeUtilisateur());
 
 		Creneau creneau1 = new Creneau();
 		creneau1.setIdComp(creneauDto.getIdComp());

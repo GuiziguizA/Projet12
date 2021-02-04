@@ -53,7 +53,7 @@ public class ExceptionHandlerControllerAdvice {
 		error.setStatus(403);
 		return error;
 	}
-	
+
 	@ExceptionHandler(APiUSerAndCompetenceException.class)
 
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)

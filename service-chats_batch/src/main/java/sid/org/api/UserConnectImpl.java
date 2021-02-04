@@ -17,7 +17,7 @@ public class UserConnectImpl implements UserConnect {
 	@Override
 	public Users getUser(Long idUser) throws APiUSerAndCompetenceException {
 
-		String uri = url + "/compagny-user_competence/user";
+		String uri = url + "/compagny-user_competence/user/" + idUser;
 
 		RestTemplate rt = new RestTemplate();
 
@@ -25,7 +25,7 @@ public class UserConnectImpl implements UserConnect {
 			ResponseEntity<Users> user = rt.getForEntity(uri, Users.class);
 			return user.getBody();
 		} catch (HttpStatusCodeException e) {
-			throw new APiUSerAndCompetenceException("Impossible d'effectuer cette action");
+			throw new APiUSerAndCompetenceException("l'api getUser ne marche pas et l'erreure est : " + e.getMessage());
 		}
 
 	}

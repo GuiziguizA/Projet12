@@ -2,23 +2,35 @@ package sid.org.classe;
 
 import java.util.Collection;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Chat {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String statut;
 	private Long idUser;
 	private Long idUser1;
-	@OneToMany(mappedBy = "chat", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	@JsonIgnore
+	@OneToMany(mappedBy = "chat", fetch = FetchType.LAZY)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Collection<Message> messages;
+
+	public Chat() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	public Chat(Long id, String statut, Long idUser, Long idUser1) {
 		super();
@@ -26,11 +38,6 @@ public class Chat {
 		this.statut = statut;
 		this.idUser = idUser;
 		this.idUser1 = idUser1;
-	}
-
-	public Chat() {
-		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Long getId() {
@@ -63,6 +70,14 @@ public class Chat {
 
 	public void setIdUser1(Long idUser1) {
 		this.idUser1 = idUser1;
+	}
+
+	public Collection<Message> getMessages() {
+		return messages;
+	}
+
+	public void setMessages(Collection<Message> messages) {
+		this.messages = messages;
 	}
 
 }

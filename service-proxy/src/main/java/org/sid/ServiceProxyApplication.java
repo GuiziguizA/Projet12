@@ -16,7 +16,7 @@ public class ServiceProxyApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ServiceProxyApplication.class, args);
-		logger.info("service-register Started........");
+		logger.info("service-proxy Started........");
 	}
 
 }
