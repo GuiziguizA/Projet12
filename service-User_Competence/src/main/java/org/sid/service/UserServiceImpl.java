@@ -1,5 +1,6 @@
 package org.sid.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.sid.classe.Roles;
@@ -76,6 +77,13 @@ public class UserServiceImpl implements UserService {
 			throw new ResultNotFoundException("user doesn't exist");
 		}
 		return user.get();
+	}
+
+	@Override
+	public List<Users> getUsers() throws ResultNotFoundException {
+		List<Users> users = userRepository.findAll();
+
+		return users;
 	}
 
 	@Override

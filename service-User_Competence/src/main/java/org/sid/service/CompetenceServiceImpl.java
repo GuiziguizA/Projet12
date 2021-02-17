@@ -6,6 +6,7 @@ import org.sid.classe.Competence;
 import org.sid.classe.Roles;
 import org.sid.classe.Users;
 import org.sid.dao.CompetenceRepository;
+import org.sid.dao.UsersRepository;
 import org.sid.dto.CompetenceDto;
 import org.sid.exception.EntityAlreadyExistException;
 import org.sid.exception.ResultNotFoundException;
@@ -21,6 +22,8 @@ import org.springframework.stereotype.Service;
 public class CompetenceServiceImpl implements CompetenceService {
 	@Autowired
 	CompetenceRepository competenceRepository;
+	@Autowired
+	UsersRepository usersRepository;
 
 	@Override
 	public Competence createCompetence(CompetenceDto competenceDto) throws EntityAlreadyExistException {
@@ -80,6 +83,20 @@ public class CompetenceServiceImpl implements CompetenceService {
 		Pageable pageable = PageRequest.of(page, size);
 
 		Page<Competence> results = competenceRepository.findAll(competenceSpecificationImpl, pageable);
+
+		return results;
+
+	}
+
+	@Override
+	public Page<Competence> getCompetencesUser(Long idUser, int page, int size) throws ResultNotFoundException {
+
+		Pageable pageable = PageRequest.of(page, size);
+		Optional<Users> user = usersRepository.findById(idUser);
+		if (!user.isPresent()) {
+			throw new ResultNotFoundException("user introuvable");
+		}
+		Page<Competence> results = competenceRepository.findByUser(user.get(), pageable);
 
 		return results;
 

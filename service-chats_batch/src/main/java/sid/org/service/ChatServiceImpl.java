@@ -1,8 +1,13 @@
 package sid.org.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import sid.org.api.RequeteConnect;
@@ -38,6 +43,9 @@ public class ChatServiceImpl implements ChatService {
 		chat1.setIdUser(chatDto.getIdUser());
 		chat1.setIdUser1(chatDto.getIdUser1());
 		chat1.setStatut("enMarche");
+		chat1.setIdRequete(idRequete);
+		chat1.setCompetenceName(requete.getCompetenceNom());
+		chat1.setUsername(requete.getUsername());
 
 		chatRepository.saveAndFlush(chat1);
 		return chat1;
@@ -57,6 +65,17 @@ public class ChatServiceImpl implements ChatService {
 		} else {
 			return chat1.get();
 		}
+
+	}
+
+	@Override
+	public Page<Chat> getChatsUser(Long idUser, int page, int size) throws ResultNotFoundException {
+		List<Chat> chats = chatRepository.findByidUser(idUser);
+		List<Chat> chats1 = chatRepository.findByidUser1(idUser);
+		chats.addAll(chats1);
+		Pageable pageable = PageRequest.of(page, size);
+		Page<Chat> pageChat = new PageImpl<>(chats);
+		return pageChat;
 
 	}
 

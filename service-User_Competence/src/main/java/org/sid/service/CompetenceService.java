@@ -22,4 +22,6 @@ public interface CompetenceService {
 
 	public Competence getCompetence(Long id) throws ResultNotFoundException;
 
+	public Page<Competence> getCompetencesUser(Long idUser, int page, int size) throws ResultNotFoundException;
+
 }

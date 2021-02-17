@@ -1,5 +1,6 @@
 package org.sid.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -40,6 +41,13 @@ public class UserController {
 		Users user = userService.getUser(id);
 
 		return user;
+	}
+
+	@GetMapping("/users")
+	public List<Users> getUsersController() throws ResultNotFoundException {
+		List<Users> users = userService.getUsers();
+
+		return users;
 	}
 
 	@PutMapping("/user")

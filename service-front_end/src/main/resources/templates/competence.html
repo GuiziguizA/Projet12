@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://ultraq.net.nz/thymleaf/layout"
+	data-layout-decorate="template1">
+
+<head>
+	<meta charset="UTF-8">
+	<script type="text/javascript" src="webjars/jquery/3.5.1/jquery.min.js"></script>
+	<script type="text/javascript" src="webjars/bootstrap/4.5.3/js/bootstrap.min.js"></script>
+	<script type="text/javascript" th:src="@{js/main.js}" src="../static/js/main.js"></script>
+
+	<link rel="stylesheet" href="webjars/bootstrap/4.5.3/css/bootstrap.min.css" />
+</head>
+
+<body>
+
+	<div layout:fragment="content">
+		<div class="container pt-3">
+			<div class="form-group">
+				<div class="jumbotron text-center">
+					
+				</div>
+
+				<br>
+				<h2>Competence</h2>
+				<div>
+					<table class="table table-striped">
+						<tr>
+							<th scope="col">Nom</th>
+							<th scope="col">Auteur</th>
+							<th scope="col">Type</th>
+							<th scope="col">description</th>
+								<th scope="col"></th>
+						</tr>
+
+						<tr>
+							<td th:text="${competence.nom}"></td>
+							<td th:text="${competence.user.username}"></td>
+							<td th:text="${competence.type}"></td>
+							<td th:text="${competence.description}"></td>
+							<td>	<form method="post" th:action="@{/requete?(idComp=${competence.codeCompetence})}" >
+
+	
+
+						<input type="submit" class="btn btn-primary" value="Demande de chat">
+						<br>
+						<br>
+
+					</form></td>
+					
+						</tr>
+
+					</table>
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+</body>
+
+</html>

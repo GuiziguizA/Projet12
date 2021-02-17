@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://ultraq.net.nz/thymleaf/layout"
+	data-layout-decorate="template1">
+
+<head>
+	<meta charset="UTF-8">
+	<script type="text/javascript" src="webjars/jquery/3.5.1/jquery.min.js"></script>
+	<script type="text/javascript" src="webjars/bootstrap/4.5.3/js/bootstrap.min.js"></script>
+	<script type="text/javascript" th:src="@{js/main.js}" src="../static/js/main.js"></script>
+
+	<link rel="stylesheet" href="webjars/bootstrap/4.5.3/css/bootstrap.min.css" />
+</head>
+
+<body>
+
+
+
+	<div layout:fragment="content">
+	
+
+
+
+		<div class="container pt-3">
+			<div class="form-group">
+				<div class="jumbotron text-center">
+
+					<h1>Creneaux</h1>
+				</div>
+				
+			
+				</div>
+				<br>
+				<br>
+					
+				<div class="border rounded" >
+			
+					<table class="table table-striped">
+						<tr>
+							
+							<th scope="col">Nom de l'utilisateur </th>
+							<th scope="col">Date</th>
+							<th scope="col">Statut</th>
+							<th scope="col"></th>
+							
+						</tr>
+						
+						<tr th:each="creneau:${pageCreneau}">
+						
+						
+							<td th:text="${creneau.idUser1}"></td>
+							<td th:text="${creneau.date}"></td>
+								<td th:text="${creneau.statut}"></td>
+									<!-- <td th:if="${requete.statut!='valide'}" ><form method="post" th:action="@{/valideRequete(idRequete=${requete.codeRequete})}"  >
+	            <button type="submit" name="submit" value="value" class="btn btn-primary">Reserver</button>
+	        </form> </td> -->
+				</tr>
+		
+		</table>
+		
+</div>
+
+<div>
+<div th:if="${pageCreneau.totalPages > 0}"
+    th:each="pageNumber : ${pageNumbers}" class="btn-group btn-group-toggle">
+    <nav aria-label="...">
+  <ul class="pagination pagination-sm">
+    <li class="page-item"> <a class="btn btn-secondary" th:href="@{/creneaux(page=${pageNumber-1},size=${pageCreneau.size})}"
+        th:text=${pageNumber}
+        th:class="${pageNumber==pageCreneau.number} ? active"></a>
+        </li>
+        </ul>
+        </nav>
+</div>
+	</div>
+	</div>
+	
+	
+
+	<div class="alert alert-success"th:if="${succes}" th:text="${succes}"role="alert" >
+</div>
+	
+
+				</div>
+				
+				
+			
+	
+
+</body>
+
+</html>

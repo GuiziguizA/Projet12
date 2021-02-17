@@ -44,11 +44,11 @@ class CreneauTest {
 	public void createCreneauTest() throws EntityAlreadyExistException, APiUSerAndCompetenceException,
 			ForbiddenException, ResultNotFoundException {
 		Creneau creneau = new Creneau(new Date(), 1L, 2L, 1L);
-		CreneauDto creneauDto = new CreneauDto(1L, 2L, 1L, "demande");
-		Mockito.when(creneauRepository.findByIdUserAndIdComp(Mockito.anyLong(), Mockito.anyLong()))
-				.thenReturn(Optional.empty());
+		CreneauDto creneauDto = new CreneauDto(1L, 2L, 1L, "demande", new Date());
+		Mockito.when(creneauRepository.findByIdUserAndIdUser1AndIdComp(Mockito.anyLong(), Mockito.anyLong(),
+				Mockito.anyLong())).thenReturn(Optional.empty());
 
-		Creneau creneau1 = creneauService.createCreneau(creneauDto, 1L, 2L);
+		Creneau creneau1 = creneauService.createCreneau(creneauDto, 2L);
 
 		assertEquals(creneau.getIdComp(), creneau1.getIdComp());
 
@@ -58,12 +58,12 @@ class CreneauTest {
 	@Test
 	public void createCreneauTestEntityAlreadyExistException() throws EntityAlreadyExistException {
 		Creneau creneau = new Creneau(new Date(), 1L, 2L, 1L);
-		CreneauDto creneauDto = new CreneauDto(1L, 2L, 1L, "demande");
-		Mockito.when(creneauRepository.findByIdUserAndIdComp(Mockito.anyLong(), Mockito.anyLong()))
-				.thenReturn(Optional.of(creneau));
+		CreneauDto creneauDto = new CreneauDto(1L, 2L, 1L, "demande", new Date());
+		Mockito.when(creneauRepository.findByIdUserAndIdUser1AndIdComp(Mockito.anyLong(), Mockito.anyLong(),
+				Mockito.anyLong())).thenReturn(Optional.of(creneau));
 
 		EntityAlreadyExistException exception = assertThrows(EntityAlreadyExistException.class, () -> {
-			creneauService.createCreneau(creneauDto, 1L, 3L);
+			creneauService.createCreneau(creneauDto, 3L);
 
 		});
 
@@ -115,7 +115,7 @@ class CreneauTest {
 		Page<Creneau> pageCreneaux = new PageImpl<Creneau>(creneaux);
 		Mockito.when(creneauRepository.findByIdUser(1L, pageable)).thenReturn(pageCreneaux);
 
-		Page<Creneau> pageCreneaux1 = creneauService.getCreneaux(1L, 2L);
+		Page<Creneau> pageCreneaux1 = creneauService.getCreneauxUser(1L);
 
 		assertEquals(2, pageCreneaux1.getSize());
 

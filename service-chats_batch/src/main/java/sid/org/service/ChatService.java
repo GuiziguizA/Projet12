@@ -1,5 +1,7 @@
 package sid.org.service;
 
+import org.springframework.data.domain.Page;
+
 import sid.org.classe.Chat;
 import sid.org.dto.ChatDto;
 import sid.org.exception.APiUSerAndCompetenceException;
@@ -15,5 +17,7 @@ public interface ChatService {
 	public Chat getUnChat(Long idUser, Long idUser1) throws ResultNotFoundException;
 
 	public void deleteUnChat(Long id) throws ResultNotFoundException;
+
+	public Page<Chat> getChatsUser(Long idUser, int page, int size) throws ResultNotFoundException;
 
 }

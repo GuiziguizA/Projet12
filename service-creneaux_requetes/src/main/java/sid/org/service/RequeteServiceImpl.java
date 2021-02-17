@@ -3,6 +3,8 @@ package sid.org.service;
 import java.util.Date;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,14 +44,13 @@ public class RequeteServiceImpl implements RequeteService {
 	@Override
 	public Requete createRequete(RequeteDto requeteDto)
 			throws EntityAlreadyExistException, APiUSerAndCompetenceException, ForbiddenException {
-
+		Users user = userConnect.getUser(requeteDto.getIdUser());
 		Optional<Requete> requete = requeteRepository.findByIdUserAndIdComp(requeteDto.getIdUser(),
 				requeteDto.getIdComp());
 		if (requete.isPresent()) {
 			throw new EntityAlreadyExistException("la requete existe deja");
 		}
 
-		userConnect.getUser(requeteDto.getIdUser());
 		Competence competence = competenceApi.getCompetence(requeteDto.getIdComp());
 
 		if (requeteDto.getIdUser() == competence.getUser().getCodeUtilisateur()) {
@@ -62,12 +63,15 @@ public class RequeteServiceImpl implements RequeteService {
 		requete1.setDate(new Date());
 		requete1.setStatut("demande");
 		requete1.setIdUser(requeteDto.getIdUser());
-
+		requete1.setIdUserComp(competence.getUser().getCodeUtilisateur());
+		requete1.setUsername(user.getUsername());
+		requete1.setCompetenceNom(competence.getNom());
 		requeteRepository.saveAndFlush(requete1);
 		return requete1;
 
 	}
 
+	@Transactional
 	@Override
 	public void validerUneRequete(Long id, Long idUser1) throws ResultNotFoundException, EntityAlreadyExistException,
 			HttpStatusCodeException, APiUSerAndCompetenceException, ForbiddenException {
@@ -84,12 +88,12 @@ public class RequeteServiceImpl implements RequeteService {
 				throw new EntityAlreadyExistException("le chat existe deja");
 
 			} catch (APiUSerAndCompetenceException e) {
-				ChatDto chatDto = new ChatDto(requete.get().getIdUser(), idUser1);
+				ChatDto chatDto = new ChatDto(requete.get().getIdUser(), idUser1, requete.get().getIdComp());
 				chatConnect.createChat(chatDto, id);
+				requete.get().setStatut("valide");
+				requeteRepository.saveAndFlush(requete.get());
 			}
 
-			requete.get().setStatut("valide");
-			requeteRepository.saveAndFlush(requete.get());
 		} else {
 			throw new ForbiddenException("action interdite");
 		}
@@ -117,10 +121,10 @@ public class RequeteServiceImpl implements RequeteService {
 	}
 
 	@Override
-	public Page<Requete> getRequetes(Long idUser) throws APiUSerAndCompetenceException {
-		Pageable pageable = PageRequest.of(0, 2);
-		userConnect.getUser(idUser);
-		Page<Requete> requete = requeteRepository.findByIdUser(idUser, pageable);
+	public Page<Requete> getRequetes(Long idUserComp, int page, int size) throws APiUSerAndCompetenceException {
+		Pageable pageable = PageRequest.of(page, size);
+		userConnect.getUser(idUserComp);
+		Page<Requete> requete = requeteRepository.findByIdUserComp(idUserComp, pageable);
 		return requete;
 
 	}

@@ -1,6 +1,5 @@
 package sid.org.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,23 +47,6 @@ public class AvisServiceImpl implements AvisService {
 		avisRepository.saveAndFlush(avis);
 
 		return avis;
-
-	}
-
-	@Override
-
-	public List<Avis> getlistAvis(Creneau creneau, Long idUser) throws ResultNotFoundException, ForbiddenException {
-		Optional<Creneau> creneau1 = creneauRepository.findById(creneau.getCodeCreneau());
-		if (!creneau1.isPresent()) {
-			throw new ResultNotFoundException("creneau introuvable");
-		}
-
-		if (idUser != creneau1.get().getIdUser()) {
-			throw new ForbiddenException("Vous n'estes pas autorisé a consulter ces avis");
-		}
-		List<Avis> listAvis = avisRepository.findByCreneau(creneau);
-
-		return listAvis;
 
 	}
 

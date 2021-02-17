@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://ultraq.net.nz/thymleaf/layout"
+	data-layout-decorate="template1">
+
+<head>
+	<meta charset="UTF-8">
+	<script type="text/javascript" src="webjars/jquery/3.5.1/jquery.min.js"></script>
+	<script type="text/javascript" src="webjars/bootstrap/4.5.3/js/bootstrap.min.js"></script>
+	<script type="text/javascript" th:src="@{js/main.js}" src="../static/js/main.js"></script>
+
+	<link rel="stylesheet" href="webjars/bootstrap/4.5.3/css/bootstrap.min.css" />
+</head>
+
+<body>
+
+
+
+	<div layout:fragment="content">
+	
+
+
+
+		<div class="container pt-3">
+			<div class="form-group">
+				<div class="jumbotron text-center">
+
+					<h1>Competences</h1>
+				</div>
+				
+				<br>
+				
+
+					<br>
+
+					<form th:action="@{/competences}" method="get">
+
+	<br>
+					
+							<input type="text" th:name="recherche" class="form-control" placeholder="Rechercher">
+
+						</div>
+						<br>
+
+						<input type="submit" class="btn btn-primary" value="rechercher">
+						<br>
+						<br>
+
+					</form>
+				</div>
+				<br>
+				<br>
+				<div class="border rounded">
+					<table class="table table-striped">
+						<tr>
+							<th scope="col">Nom de la competence</th>
+							<th scope="col">Utilisateur</th>
+							<th scope="col">Type</th>
+							<th scope="col"></th>
+							
+						</tr>
+						<tr th:each="competence:${competencePage}">
+						<td th:text="${competence.nom}"></td>
+							<td th:text="${competence.user.username}"></td>
+							<td th:text="${competence.type}"></td>
+							<td><a th:href="@{/competence/{id}(id=${competence.codeCompetence})}"><input type="button"  id="${competence.codeCompetence}" class="btn btn-primary" value="Consulter" /></a></td>
+					
+				</tr>
+		
+		</table>
+		
+</div>
+<div>
+<div th:if="${competencePage.totalPages > 0}"
+    th:each="pageNumber : ${pageNumbers}" class="btn-group btn-group-toggle">
+    <nav aria-label="...">
+  <ul class="pagination pagination-sm">
+    <li class="page-item"> <a class="btn btn-secondary" th:href="@{/competences(page=${pageNumber-1},size=${competencePage.size},recherche=${recherche})}"
+        th:text=${pageNumber}
+        th:class="${pageNumber==competencePage.number} ? active"></a>
+        </li>
+        </ul>
+        </nav>
+</div>
+	</div>
+	</div>
+	
+	
+
+	<div class="alert alert-success"th:if="${succes}" th:text="${succes}"role="alert" >
+</div>
+	
+
+				</div>
+				
+				
+			
+	
+
+</body>
+
+</html>

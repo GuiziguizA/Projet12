@@ -4,9 +4,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -15,10 +13,6 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -106,23 +100,24 @@ public class RequeteTest {
 
 	}
 
-	@Test
-	public void getRequetesTest() throws APiUSerAndCompetenceException {
-
-		Requete requete = new Requete(1L, new Date(), 1L, 2L, "demande");
-		Requete requete1 = new Requete(1L, new Date(), 1L, 2L, "demande");
-
-		List<Requete> listRequetes = new ArrayList<Requete>();
-		listRequetes.add(requete);
-		listRequetes.add(requete1);
-		Pageable pageable = PageRequest.of(0, 2);
-		Page<Requete> pageRequetes = new PageImpl<Requete>(listRequetes);
-
-		Mockito.when(requeteRepository.findByIdUser(1L, pageable)).thenReturn(pageRequetes);
-
-		requeteService.getRequetes(1L);
-
-	}
+	/*
+	 * @Test public void getRequetesTest() throws APiUSerAndCompetenceException {
+	 * 
+	 * Requete requete = new Requete(1L, new Date(), 1L, 2L, "demande"); Requete
+	 * requete1 = new Requete(1L, new Date(), 1L, 2L, "demande");
+	 * 
+	 * List<Requete> listRequetes = new ArrayList<Requete>();
+	 * listRequetes.add(requete); listRequetes.add(requete1); Pageable pageable =
+	 * PageRequest.of(0, 2); Page<Requete> pageRequetes = new
+	 * PageImpl<Requete>(listRequetes);
+	 * 
+	 * Mockito.when(requeteRepository.findByIdUser(1L,
+	 * pageable)).thenReturn(pageRequetes);
+	 * 
+	 * requeteService.getRequetes(1L);
+	 * 
+	 * }
+	 */
 
 	@Test
 	public void deleteRequetesTest() throws ResultNotFoundException, APiUSerAndCompetenceException, ForbiddenException {

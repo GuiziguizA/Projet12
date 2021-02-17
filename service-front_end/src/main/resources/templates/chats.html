@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://ultraq.net.nz/thymleaf/layout"
+	data-layout-decorate="template1">
+
+<head>
+	<meta charset="UTF-8">
+	<script type="text/javascript" src="webjars/jquery/3.5.1/jquery.min.js"></script>
+	<script type="text/javascript" src="webjars/bootstrap/4.5.3/js/bootstrap.min.js"></script>
+	<script type="text/javascript" th:src="@{js/main.js}" src="../static/js/main.js"></script>
+
+	<link rel="stylesheet" href="webjars/bootstrap/4.5.3/css/bootstrap.min.css" />
+</head>
+
+<body>
+
+
+
+	<div layout:fragment="content">
+	
+
+
+
+		<div class="container pt-3">
+			<div class="form-group">
+				<div class="jumbotron text-center">
+
+					<h1>Chats</h1>
+				</div>
+				
+				
+					 <div class="modal fade" id="myModal" role="dialog">
+							<div class="modal-dialog modal-sm">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal">&times;</button>
+										<h4 class="modal-title">Supprimer</h4>
+									</div>
+									<div class="modal-body">
+										<p class="alert alert-danger">Etes-vous sûr de vouloir supprimer ce prêt en
+											Attente</p>
+									</div>
+									<div class="modal-footer">
+									 <form th:action="@{/creneau?(chat=${chat})}" th:object="${dateDto}" method="post">
+        <br>
+        <input type="text" th:field="*{jour}" id="jour" class="form-control" placeholder="jour de la semaine">
+        <div th:if="${#fields.hasErrors('jour')}" class="alert alert-danger" role="alert"><span class="alert alert-primary" th:errors="*{jour}"></span></div>
+   <br>
+    <input type="text" th:field="*{mois}" id="mois" class="form-control" placeholder="mois de l'année">
+     <div  th:if="${#fields.hasErrors('mois')}" class="alert alert-danger" role="alert"><span class="alert alert-primary" th:errors="*{mois}"></span></div>
+      <br>
+    <input type="text" th:field="*{annee}" id="annee" class="form-control" placeholder="annee">
+   <div  th:if="${#fields.hasErrors('annee')}" class="alert alert-danger" role="alert"> <span class="alert alert-primary" th:errors="*{annee}"></span></div>
+  
+<br>
+ <input type="text" th:field="*{heure}" id="heure" class="form-control" placeholder="heure">
+   <div  th:if="${#fields.hasErrors('heure')}" class="alert alert-danger" role="alert"> <span class="alert alert-primary" th:errors="*{heure}"></span></div>
+  
+<br>
+   
+     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+     <button type="submit" class="btn btn-primary">Submit</button>
+   
+    
+</form>
+										
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<script>
+							function modal_btn_click() {
+
+								$('#myModal').modal({ show: true });
+							}
+						</script>
+			
+				</div>
+				<br>
+				<br> 
+				<div class="border rounded" >
+					<table class="table table-striped">
+						<tr>
+							<th scope="col">idUser</th>
+							<th scope="col">idUser1</th>
+							<th scope="col">Statut</th>
+							<th scope="col"></th>
+							
+						</tr>
+						<tr th:each="chat:${pageChat}">
+						<td th:text="${chat.idUser}"></td>
+							<td th:text="${chat.idUser1}"></td>
+							<td th:text="${chat.statut}"></td>
+								<td>	
+								<input type="submit" class="btn btn-danger delBtn"  id="delBtn" value="Demande de creneau">
+						
+
+					</td>
+							
+				</tr>
+		
+		</table>
+		
+</div>
+<div>
+<div th:if="${pageChat.totalPages > 0}"
+    th:each="pageNumber : ${pageNumbers}" class="btn-group btn-group-toggle">
+    <nav aria-label="...">
+  <ul class="pagination pagination-sm">
+    <li class="page-item"> <a class="btn btn-secondary" th:href="@{/chats(page=${pageNumber-1},size=${pageChat.size})}"
+        th:text=${pageNumber}
+        th:class="${pageNumber==pageChat.number} ? active"></a>
+        </li>
+        </ul>
+        </nav>
+</div>
+	</div>
+	</div>
+	
+	
+
+	<div class="alert alert-success"th:if="${succes}" th:text="${succes}"role="alert" >
+</div>
+	
+
+				</div>
+				
+				
+			
+	
+
+</body>
+
+</html>

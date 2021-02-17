@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 import sid.org.api.CompetenceApi;
-import sid.org.service.CreneauService;
+import sid.org.service.CreneauServiceImpl;
 import sid.org.service.RequeteService;
 
 @EnableDiscoveryClient
@@ -23,11 +23,11 @@ public class ServiceCreneauxRequetesApplication implements CommandLineRunner {
 	}
 
 	@Autowired
-	CreneauService creneauService;
-	@Autowired
 	RequeteService requeteService;
 	@Autowired
 	CompetenceApi competenceApi;
+	@Autowired
+	CreneauServiceImpl creneauServiceImpl;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -50,6 +50,12 @@ public class ServiceCreneauxRequetesApplication implements CommandLineRunner {
 		 * requeteService.createRequete(requeteDto1);
 		 * requeteService.createRequete(requeteDto2);
 		 * requeteService.createRequete(requeteDto3);
+		 */
+		/*
+		 * RequeteDto requeteDto = new RequeteDto(1L, 2L, "demande");
+		 * requeteService.createRequete(requeteDto); CreneauDto creneau = new
+		 * CreneauDto(1L, 2L, 1L, "demande", new Date());
+		 * creneauServiceImpl.createCreneau(creneau, 1L);
 		 */
 
 	}

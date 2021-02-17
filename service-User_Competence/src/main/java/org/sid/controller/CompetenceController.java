@@ -62,4 +62,11 @@ public class CompetenceController {
 		return competence;
 	}
 
+	@GetMapping("/competences")
+	public Page<Competence> getcompetencesUser(@RequestParam Long idUser, @RequestParam int page,
+			@RequestParam int size) throws ResultNotFoundException {
+		Page<Competence> competences = competenceService.getCompetencesUser(idUser, page, size);
+		return competences;
+	}
+
 }

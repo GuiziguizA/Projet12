@@ -21,7 +21,7 @@ public interface RequeteService {
 	public Requete getRequete(Long id, Long idUser)
 			throws ResultNotFoundException, ForbiddenException, APiUSerAndCompetenceException;
 
-	public Page<Requete> getRequetes(Long idUser) throws APiUSerAndCompetenceException;
+	Page<Requete> getRequetes(Long idUserComp, int page, int size) throws APiUSerAndCompetenceException;
 
 	public void validerUneRequete(Long id, Long idUser1) throws ResultNotFoundException, EntityAlreadyExistException,
 			HttpStatusCodeException, APiUSerAndCompetenceException, ForbiddenException;

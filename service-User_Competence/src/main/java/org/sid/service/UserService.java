@@ -1,5 +1,6 @@
 package org.sid.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.sid.classe.Users;
@@ -18,5 +19,7 @@ public interface UserService {
 	public UserDto getUserDto(Long id) throws ResultNotFoundException;
 
 	public void updateUser(UserDto userDto, Optional<String> role) throws ResultNotFoundException;
+
+	public List<Users> getUsers() throws ResultNotFoundException;
 
 }

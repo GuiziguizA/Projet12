@@ -4,11 +4,13 @@ public class ChatDto {
 
 	private Long idUser;
 	private Long idUser1;
+	private Long idComp;
 
-	public ChatDto(Long idUser, Long idUser1) {
+	public ChatDto(Long idUser, Long idUser1, Long idComp) {
 		super();
 		this.idUser = idUser;
 		this.idUser1 = idUser1;
+		this.setIdComp(idComp);
 	}
 
 	public ChatDto() {
@@ -30,6 +32,14 @@ public class ChatDto {
 
 	public void setIdUser1(Long idUser1) {
 		this.idUser1 = idUser1;
+	}
+
+	public Long getIdComp() {
+		return idComp;
+	}
+
+	public void setIdComp(Long idComp) {
+		this.idComp = idComp;
 	}
 
 }

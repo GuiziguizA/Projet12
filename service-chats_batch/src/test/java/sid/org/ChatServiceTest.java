@@ -37,7 +37,7 @@ class ChatServiceTest {
 	public void creerUnChattest()
 			throws EntityAlreadyExistException, APiUSerAndCompetenceException, ForbiddenException {
 
-		Chat chat = new Chat(1L, "ouvert", 1L, 2L);
+		Chat chat = new Chat("ouvert", 1L, 2L, 1L, 1L);
 		ChatDto chatDto = new ChatDto(1L, 2L);
 
 		Mockito.when(chatRepository.findByUserAndUser(Mockito.anyLong(), Mockito.anyLong()))
@@ -52,7 +52,7 @@ class ChatServiceTest {
 	@Test
 	public void creerUnChattestEntityAlreadyExistException() throws EntityAlreadyExistException {
 
-		Chat chat = new Chat(1L, "ouvert", 1L, 2L);
+		Chat chat = new Chat("ouvert", 1L, 2L, 1L, 1L);
 		ChatDto chatDto = new ChatDto(1L, 2L);
 
 		Mockito.when(chatRepository.findByUserAndUser(Mockito.anyLong(), Mockito.anyLong()))
@@ -89,7 +89,7 @@ class ChatServiceTest {
 
 	@Test
 	public void getUnChatTest() throws ResultNotFoundException {
-		Chat chat = new Chat(1L, "ouvert", 1L, 2L);
+		Chat chat = new Chat("ouvert", 1L, 2L, 1L, 1L);
 		Mockito.when(chatRepository.findByUserAndUser(Mockito.anyLong(), Mockito.anyLong()))
 				.thenReturn(Optional.of(chat));
 
@@ -101,7 +101,7 @@ class ChatServiceTest {
 
 	@Test
 	public void deleteChatTest() throws ResultNotFoundException {
-		Chat chat = new Chat(1L, "ouvert", 1L, 2L);
+		Chat chat = new Chat("ouvert", 1L, 2L, 1L, 1L);
 		Mockito.when(chatRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(chat));
 		Mockito.doNothing().when(chatRepository).delete(chat);
 		chatService.deleteUnChat(1L);

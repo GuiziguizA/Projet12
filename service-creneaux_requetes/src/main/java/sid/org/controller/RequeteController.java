@@ -34,7 +34,7 @@ public class RequeteController {
 	public Requete createRequete(@RequestBody RequeteDto requeteDto)
 			throws EntityAlreadyExistException, APiUSerAndCompetenceException, ForbiddenException {
 		/*
-		 * userConnect.getUser(requeteDto.getIdUser());
+		 * 
 		 * compApi.getCompetence(requeteDto.getIdComp());
 		 */
 		Requete requete = requeteService.createRequete(requeteDto);
@@ -52,9 +52,10 @@ public class RequeteController {
 	}
 
 	@GetMapping("/requetes")
-	public Page<Requete> getRequetes(@RequestParam Long idUser) throws APiUSerAndCompetenceException {
+	public Page<Requete> getRequetes(@RequestParam Long idUserComp, @RequestParam int page, @RequestParam int size)
+			throws APiUSerAndCompetenceException {
 
-		Page<Requete> requetes = requeteService.getRequetes(idUser);
+		Page<Requete> requetes = requeteService.getRequetes(idUserComp, page, size);
 
 		return requetes;
 	}

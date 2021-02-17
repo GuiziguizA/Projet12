@@ -1,6 +1,6 @@
 # Docker Compose file Reference (https://docs.docker.com/compose/compose-file/)
 
-version: '3.3'
+version: '2.1'
 
 # Define services
 services:
@@ -33,7 +33,7 @@ services:
      # service-creneaux_requetes
   service-creneaux_requetes :
     depends_on: 
-      - database1
+      - database_creneaux_requetes
     restart: always
     build: 
       context: service-creneaux_requetes
@@ -42,24 +42,23 @@ services:
       - "8074:8074"
       
     environment:
-     - spring.cloud.config.uri=http://192.168.99.100:8888/
+     - spring.cloud.config.uri=http://service-config:8888/
     #Database
-     - spring.datasource.url=jdbc:mysql://database1:3306/creneaux&requetes
-     - spring.datasource.username = guimiom
-     - spring.datasource.password = guimiom
+     - SPRING_CLOUD_CONFIG_URI=jdbc:mysql://database_creneaux_requetes:3306/creneaux&requetes
+     - SPRING_DATASOURCE_USERNAME=guimiom
+     - SPRING_DATASOURCE_PASSWORD=guimiom
     
   #Mysql Database user&competence
   database_user_competence:
         container_name: database_user_competence
         image: "mysql:5.6.51"
         
-        ports: 
-            - "3306:3306"
+       
         environment:
-            MYSQL_DATABASE: user_competence
-            MYSQL_USER: guimiom
-            MYSQL_PASSWORD: guimiom
-            MYSQL_ROOT_PASSWORD: guimiom
+           - MYSQL_DATABASE=user_competence
+           - MYSQL_USER=guimiom
+           - MYSQL_PASSWORD=guimiom
+           - MYSQL_ROOT_PASSWORD=guimiom
         entrypoint:
           sh -c "
           echo 'CREATE DATABASE IF NOT EXISTS user_competence;' > /docker-entrypoint-initdb.d/init.sql;
@@ -68,33 +67,40 @@ services:
            - ./mysql_data_userCommpetence:/var/lib/mysql
    
            
-  database1:
-        container_name: database1
+  database_creneaux_requetes:
+        container_name: database_creneaux_requetes
         image: "mysql:5.6.51"
         
-        ports: 
-            - "3306:3306"
+        
         environment:
-            MYSQL_DATABASE: creneaux&requetes
-            MYSQL_USER: guimiom
-            MYSQL_PASSWORD: guimiom
-            MYSQL_ROOT_PASSWORD: guimiom
-            
+           - MYSQL_DATABASE=creneaux_requetes
+           - MYSQL_USER=guimiom
+           - MYSQL_PASSWORD=guimiom
+           - MYSQL_ROOT_PASSWORD=guimiom
+        entrypoint:
+          sh -c "
+          echo 'CREATE DATABASE IF NOT EXISTS creneaux_requetes;' > /docker-entrypoint-initdb.d/init.sql;
+          /usr/local/bin/docker-entrypoint.sh --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci"
+        volumes:
+           - ./mysql_data_creneaux_requetes:/var/lib/mysql
    
 
-  database2:
-        container_name: database2
+  database_chat_batch:
+        container_name: database_chat_batch
         image: "mysql:5.6.51"
         
-        ports: 
-            - "3308:3306"
+        
         environment:
-            MYSQL_DATABASE: chat&batch
-            MYSQL_USER: guimiom
-            MYSQL_PASSWORD: guimiom
-            MYSQL_ROOT_PASSWORD: guimiom
-          
- 
+           - MYSQL_DATABASE=chat_batch
+           - MYSQL_USER=guimiom
+           - MYSQL_PASSWORD=guimiom
+           - MYSQL_ROOT_PASSWORD=guimiom
+        entrypoint:
+          sh -c "
+          echo 'CREATE DATABASE IF NOT EXISTS chat_batch;' > /docker-entrypoint-initdb.d/init.sql;
+          /usr/local/bin/docker-entrypoint.sh --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci"
+        volumes:
+           - ./mysql_data_chat_batch:/var/lib/mysql
           
 
 # service-proxy 
@@ -104,8 +110,7 @@ services:
       dockerfile: Dockerfile
     ports: 
      - "8089:8089"
-    environment:
-      - serviceUrl='http://192.168.99.100:8761/eureka/
+   
 # service-user_competence
   service-user_competence:
     depends_on: 
@@ -129,7 +134,7 @@ services:
 # service-chats_batch
   service-chats_batch:
     depends_on: 
-      - database2
+      - database_chat_batch
     restart: always
     build: 
       context: service-chats_batch
@@ -137,11 +142,11 @@ services:
     ports: 
      - "8234:8234"
     environment:
-      - spring.cloud.config.uri=http://192.168.99.100:8888/
-      - spring.application.name=compagny-chat_batch
-      - server.port=8234
+      - SPRING_CLOUD_CONFIG_URI=http://service-config:8888/
+      - SPRING_APPLICATION_NAME=compagny-chat_batch
+      - SERVER_PORT=8234
     #Database
-      - spring.datasource.url=jdbc:mysql://database2:3306/chat&batch
-      - spring.datasource.username = guimiom
-      - spring.datasource.password = guimiom
+      - SPRING_DATASOURCE_URL=jdbc:mysql://database_chat_batch:3306/chat&batch
+      - SPRING_DATASOURCE_USERNAME=guimiom
+      - SPRING_DATASOURCE_PASSWORD=guimiom
      

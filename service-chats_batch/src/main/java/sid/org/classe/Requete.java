@@ -9,6 +9,10 @@ public class Requete {
 	private Long idUser;
 	private Long idComp;
 	private String statut;
+	private Long codeRequete;
+	private String username;
+	private String competenceNom;
+	private Long idUserComp;
 
 	public Requete() {
 		super();
@@ -62,6 +66,38 @@ public class Requete {
 
 	public void setStatut(String statut) {
 		this.statut = statut;
+	}
+
+	public Long getCodeRequete() {
+		return codeRequete;
+	}
+
+	public void setCodeRequete(Long codeRequete) {
+		this.codeRequete = codeRequete;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getCompetenceNom() {
+		return competenceNom;
+	}
+
+	public void setCompetenceNom(String competenceNom) {
+		this.competenceNom = competenceNom;
+	}
+
+	public Long getIdUserComp() {
+		return idUserComp;
+	}
+
+	public void setIdUserComp(Long idUserComp) {
+		this.idUserComp = idUserComp;
 	}
 
 }

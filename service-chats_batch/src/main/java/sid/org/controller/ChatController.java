@@ -1,6 +1,7 @@
 package sid.org.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +28,16 @@ public class ChatController {
 		Chat chat = chatService.getUnChat(idUser, idUser1);
 
 		return chat;
+
+	}
+
+	@GetMapping("/chats")
+	public Page<Chat> getChatsUser(@RequestParam Long idUser, @RequestParam int page, @RequestParam int size)
+			throws ResultNotFoundException {
+
+		Page<Chat> chatPage = chatService.getChatsUser(idUser, page, size);
+
+		return chatPage;
 
 	}
 
