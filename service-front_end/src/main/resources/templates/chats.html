@@ -81,26 +81,23 @@
 				<div class="border rounded" >
 					<table class="table table-striped">
 						<tr>
-							<th scope="col">idUser</th>
-							<th scope="col">idUser1</th>
+							<th scope="col">Competence</th>
+							<th scope="col">utilisateur</th>
 							<th scope="col">Statut</th>
+							<th scope="col"></th>
 							<th scope="col"></th>
 							
 						</tr>
 						<tr th:each="chat:${pageChat}">
-						<td th:text="${chat.idUser}"></td>
-							<td th:text="${chat.idUser1}"></td>
+						<td th:text="${chat.competenceName}"></td>
+							<td th:text="${chat.username}"></td>
 							<td th:text="${chat.statut}"></td>
 								<td>	
 								<input type="submit" class="btn btn-danger delBtn"  id="delBtn" value="Demande de creneau">
-						
-
 					</td>
-							
+					<td><a th:href="@{/messages(idChat=${chat.id},page=0,size=2)}"><input type="button"  id="${chat.id}" class="btn btn-primary" value="Messages" /></a></td>		
 				</tr>
-		
 		</table>
-		
 </div>
 <div>
 <div th:if="${pageChat.totalPages > 0}"

@@ -3,8 +3,6 @@ package org.sid.controller;
 import java.util.List;
 import java.util.Optional;
 
-import javax.validation.Valid;
-
 import org.sid.classe.Users;
 import org.sid.dto.UserDto;
 import org.sid.exception.EntityAlreadyExistException;
@@ -31,7 +29,7 @@ public class UserController {
 	}
 
 	@PostMapping("/user")
-	public void createUserController(@Valid @RequestBody UserDto userDto)
+	public void createUserController(@RequestBody UserDto userDto)
 			throws ResultNotFoundException, EntityAlreadyExistException {
 		userService.createUser(userDto);
 	}

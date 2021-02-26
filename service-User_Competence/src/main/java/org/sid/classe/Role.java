@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 @Entity
-public class Roles {
+public class Role {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long codeRole;
@@ -19,12 +19,12 @@ public class Roles {
 	@OneToMany(mappedBy = "roles", fetch = FetchType.LAZY)
 	private Collection<Users> users;
 
-	public Roles() {
+	public Role() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public Roles(String nom) {
+	public Role(String nom) {
 		super();
 		this.nom = nom;
 	}

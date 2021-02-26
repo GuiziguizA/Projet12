@@ -2,11 +2,11 @@ package org.sid.dao;
 
 import java.util.Optional;
 
-import org.sid.classe.Roles;
+import org.sid.classe.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface RolesRepository extends JpaRepository<Roles, Long> {
+public interface RolesRepository extends JpaRepository<Role, Long> {
 
-	public Optional<Roles> findByNom(String nom);
+	public Optional<Role> findByNom(String nom);
 
 }

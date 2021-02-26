@@ -3,7 +3,7 @@ package org.sid.service;
 import java.util.Optional;
 
 import org.sid.classe.Competence;
-import org.sid.classe.Roles;
+import org.sid.classe.Role;
 import org.sid.classe.Users;
 import org.sid.dao.CompetenceRepository;
 import org.sid.dao.UsersRepository;
@@ -104,7 +104,7 @@ public class CompetenceServiceImpl implements CompetenceService {
 
 	@Override
 	public CompetenceDto getCompetenceDto() {
-		Roles role = new Roles("user");
+		Role role = new Role("user");
 		Users user = new Users(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
 
 		CompetenceDto competenceDto = new CompetenceDto("changer un pneu", "mecanique",

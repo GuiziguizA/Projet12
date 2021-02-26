@@ -5,6 +5,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -55,12 +57,13 @@ public class CompetenceController {
 
 	}
 
-	@GetMapping("/")
+	@GetMapping("/home")
 	public String getCompetencesUser(Model model, @RequestParam(required = false) Optional<Integer> size,
 			@RequestParam(required = false) Optional<Integer> page) {
 		Long idUser = 1L;
 		int currentPage = page.orElse(0);
 		int pageSize = size.orElse(2);
+
 		try {
 			Page<Competence> competencePage = competenceService.getCompetencesUser(idUser, pageSize, currentPage);
 			model.addAttribute("competencePage", competencePage);
@@ -101,19 +104,23 @@ public class CompetenceController {
 	}
 
 	@PostMapping("/competence")
-	public String createcompetence(CompetenceDto competenceDto, BindingResult result, Model model)
+	public String createcompetence(@Valid CompetenceDto competenceDto, BindingResult result, Model model)
 			throws APiUSerAndCompetenceException {
 		Long idUser = 1L;
+		if (result.hasErrors()) {
+			return "formulaireCompetence";
+
+		}
 
 		try {
 			competenceService.createComp(competenceDto, idUser);
 			getCompetencesUser(model, Optional.of(2), Optional.of(0));
-			;
 			String succes = "Votre competence a ete ajoute";
 			model.addAttribute("succes", succes);
 			return "home";
 		} catch (HttpStatusCodeException e) {
 			String error = httpService.traiterLesExceptionsApi(e);
+
 			model.addAttribute("error", error);
 			return "formulaireCompetence";
 		}

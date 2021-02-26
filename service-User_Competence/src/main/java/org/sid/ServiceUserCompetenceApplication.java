@@ -1,6 +1,9 @@
 package org.sid;
 
+import org.sid.dao.CompetenceRepository;
 import org.sid.dao.RolesRepository;
+import org.sid.dao.UsersRepository;
+import org.sid.service.KeycloakService;
 import org.sid.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +20,12 @@ public class ServiceUserCompetenceApplication implements CommandLineRunner {
 	private UserService userService;
 	@Autowired
 	RolesRepository rolesRepository;
-
+	@Autowired
+	KeycloakService keycloakService;
+	@Autowired
+	CompetenceRepository competenceRepository;
+	@Autowired
+	UsersRepository usersRepository;
 	private static final Logger logger = LoggerFactory.getLogger(ServiceUserCompetenceApplication.class);
 
 	public static void main(String[] args) {
@@ -29,13 +37,20 @@ public class ServiceUserCompetenceApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 
 		/*
-		 * Roles role = new Roles("user"); rolesRepository.save(role); List<Competence>
+		 * Role role = new Role("user"); rolesRepository.save(role); List<Competence>
 		 * listComp = new ArrayList<Competence>(); UserDto userDto = new UserDto("boba",
 		 * "boba@gmail.com", "3 rue du cerisier", "boba", "45125"); Users user =
-		 * userService.createUser(userDto); Competence comp = new Competence(1L,
-		 * "gateau chocolat", "cuisine", "gateau", user); Competence comp1 = new
-		 * Competence(2L, "gateau chocolat", "cuisine", "gateau", user);
-		 * listComp.add(comp); listComp.add(comp1);
+		 * userService.createUser(userDto); competenceRepository.save(new Competence(1L,
+		 * "gateau chocolat", "cuisine", "gateau", user)); competenceRepository.save(new
+		 * Competence(2L, "gateau chocolat", "cuisine", "gateau", user));
+		 */
+
+		/*
+		 * keycloakService.RecupTokenAdmin("admin", "admin", "admin-cli");
+		 * keycloakService.createUserKeycloak("kamel", "kamel@gmail.com", "frere");
+		 * 
+		 * String id = keycloakService.UserGetId("kamel@gmail.com");
+		 * System.out.println(id);
 		 */
 
 	}

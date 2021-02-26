@@ -14,35 +14,36 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import sid.org.Page.RestResponsePage;
-import sid.org.classe.Chat;
+import sid.org.classe.Message;
 import sid.org.config.RequestFactory;
 
 @Service
-public class ChatServiceImpl implements ChatService {
+public class MessageServiceImpl implements MessageService {
+
 	@Value("${api.url}")
 	private String url;
-	private static final Logger logger = LoggerFactory.getLogger(ChatServiceImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(MessageServiceImpl.class);
 
 	private final RequestFactory requestFactory;
 
 	@Autowired
-	public ChatServiceImpl(RequestFactory requestFactory) {
+	public MessageServiceImpl(RequestFactory requestFactory) {
 		this.requestFactory = requestFactory;
 	}
 
 	@Override
-	public Page<Chat> getChatUser(Long idUser, int page, int size) {
+	public Page<Message> getMessagesChats(Long idChat, int page, int size) {
 
 		RestTemplate rt = requestFactory.getRestTemplate();
 		HttpHeaders headers = new HttpHeaders();
-		ParameterizedTypeReference<RestResponsePage<Chat>> responseType = new ParameterizedTypeReference<RestResponsePage<Chat>>() {
+		ParameterizedTypeReference<RestResponsePage<Message>> responseType = new ParameterizedTypeReference<RestResponsePage<Message>>() {
 		};
-		String uri = url + "/compagny-chat_batch/chats?idUser=" + idUser + "&page=" + page + "&size=" + size;
-		String uri1 = "http://localhost:8089/compagny-chat_batch/chats?idUser=1&page=0&size=2";
-		ResponseEntity<RestResponsePage<Chat>> result = rt.exchange(uri, HttpMethod.GET, new HttpEntity<>(headers),
+		String uri = url + "/compagny-chat_batch/messages?idChat=" + idChat + "&page=" + page + "&size=" + size;
+
+		ResponseEntity<RestResponsePage<Message>> result = rt.exchange(uri, HttpMethod.GET, new HttpEntity<>(headers),
 				responseType);
-		Page<Chat> chatPage = result.getBody();
-		return chatPage;
+		Page<Message> messagePage = result.getBody();
+		return messagePage;
 
 	}
 

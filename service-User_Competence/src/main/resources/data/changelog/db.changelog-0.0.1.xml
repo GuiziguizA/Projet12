@@ -19,10 +19,10 @@
     <changeSet author="guali (generated)" id="1608715943376-2">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="roles"/>
+                <tableExists tableName="role"/>
             </not>
         </preConditions>
-        <createTable tableName="roles">
+        <createTable tableName="role">
             <column autoIncrement="true" name="code_role" type="BIGINT">
                 <constraints primaryKey="true"/>
             </column>
@@ -44,7 +44,7 @@
             <column name="mail" type="VARCHAR(255)"/>
             <column name="password" type="VARCHAR(255)"/>
             <column name="username" type="VARCHAR(255)"/>
-            <column name="id_roles" type="BIGINT"/>
+            <column name="id_role" type="BIGINT"/>
         </createTable>
     </changeSet>
     <changeSet author="guali (generated)" id="1608715943376-4">
@@ -59,7 +59,7 @@
     <changeSet author="guali (generated)" id="1608715943376-5">
 
         <createIndex indexName="FKa79hm2k2nfrpjf27h052e8r1d" tableName="users">
-            <column name="id_roles"/>
+            <column name="id_role"/>
         </createIndex>
     </changeSet>
 

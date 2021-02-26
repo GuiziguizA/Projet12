@@ -14,7 +14,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.sid.classe.Competence;
-import org.sid.classe.Roles;
+import org.sid.classe.Role;
 import org.sid.classe.Users;
 import org.sid.dao.CompetenceRepository;
 import org.sid.dto.CompetenceDto;
@@ -39,7 +39,7 @@ class CompetenceServiceTest {
 
 	@Test
 	void createCompetenceTest() throws EntityAlreadyExistException {
-		Roles role = new Roles("user");
+		Role role = new Role("user");
 		Users user = new Users(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
 		Competence competence = new Competence(1L, "changer un pneu", "mecanique",
 				"j'ai une machine permettant de changer les pneus d'une voiture", user);
@@ -55,7 +55,7 @@ class CompetenceServiceTest {
 
 	@Test
 	void createCompetenceTestEntityAlreadyExist() throws EntityAlreadyExistException {
-		Roles role = new Roles("user");
+		Role role = new Role("user");
 		Users user = new Users(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
 		Competence competence = new Competence(1L, "changer un pneu", "mecanique",
 				"j'ai une machine permettant de changer les pneus d'une voiture", user);
@@ -79,7 +79,7 @@ class CompetenceServiceTest {
 
 	@Test
 	void deleteCompetence() throws ResultNotFoundException {
-		Roles role = new Roles("user");
+		Role role = new Role("user");
 		Users user = new Users(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
 		Competence competence = new Competence(1L, "changer un pneu", "mecanique",
 				"j'ai une machine permettant de changer les pneus d'une voiture", user);
@@ -95,7 +95,7 @@ class CompetenceServiceTest {
 
 	@Test
 	void deleteCompetenceException() throws ResultNotFoundException {
-		Roles role = new Roles("user");
+		Role role = new Role("user");
 		Users user = new Users(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
 		Competence competence = new Competence(1L, "changer un pneu", "mecanique",
 				"j'ai une machine permettant de changer les pneus d'une voiture", user);

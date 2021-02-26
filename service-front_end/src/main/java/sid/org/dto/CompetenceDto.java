@@ -1,11 +1,17 @@
 package sid.org.dto;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+
 import sid.org.classe.Users;
 
 public class CompetenceDto {
-
+	@Valid
+	@NotBlank(message = "le champ nom ne peut pas etre vide")
 	private String nom;
+	@NotBlank(message = "le champ nom ne peut pas etre vide")
 	private String type;
+	@NotBlank(message = "le champ nom ne peut pas etre vide")
 	private String description;
 
 	private Users user;
@@ -15,12 +21,14 @@ public class CompetenceDto {
 		// TODO Auto-generated constructor stub
 	}
 
-	public CompetenceDto(String nom, String type, String description, Users user) {
+	public CompetenceDto(@NotBlank(message = "le champ nom ne peut pas etre vide") String nom,
+			@NotBlank(message = "le champ nom ne peut pas etre vide") String type,
+			@NotBlank(message = "le champ nom ne peut pas etre vide") String description, Users user) {
 		super();
 		this.nom = nom;
 		this.type = type;
 		this.description = description;
-
+		this.user = user;
 	}
 
 	public String getNom() {

@@ -36,12 +36,12 @@ public class Users {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Collection<Competence> competences;
 	@ManyToOne
-	@JoinColumn(name = "ID_ROLES")
-	private Roles roles;
+	@JoinColumn(name = "ID_ROLE")
+	private Role roles;
 
 	public Users(Long codeUtilisateur, String username, String mail, String adresse, String password,
 			@Size(min = 5, max = 5, message = "le code postal doit etre a 5 chiffres") String codePostal,
-			Collection<Competence> competences, Roles roles) {
+			Collection<Competence> competences, Role roles) {
 		super();
 		this.codeUtilisateur = codeUtilisateur;
 		this.username = username;
@@ -114,11 +114,11 @@ public class Users {
 		this.competences = competences;
 	}
 
-	public Roles getRoles() {
+	public Role getRoles() {
 		return roles;
 	}
 
-	public void setRoles(Roles roles) {
+	public void setRoles(Role roles) {
 		this.roles = roles;
 	}
 

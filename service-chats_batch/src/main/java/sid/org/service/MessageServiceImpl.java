@@ -100,10 +100,14 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
-	public Page<Message> getMessages(Long idUser) throws APiUSerAndCompetenceException {
-		userConnect.getUser(idUser);
-		Pageable pageable = PageRequest.of(0, 2);
-		Page<Message> messages = messageRepository.findByIdUser(idUser, pageable);
+	public Page<Message> getMessages(Long idChat, int page, int size) throws ResultNotFoundException {
+		Optional<Chat> chat = chatRepository.findById(idChat);
+		if (!chat.isPresent()) {
+			throw new ResultNotFoundException("chat introuvable");
+		}
+
+		Pageable pageable = PageRequest.of(page, size);
+		Page<Message> messages = messageRepository.findByChat(chat.get(), pageable);
 
 		return messages;
 

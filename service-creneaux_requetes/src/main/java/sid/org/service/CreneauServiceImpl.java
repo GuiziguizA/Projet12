@@ -84,7 +84,7 @@ public class CreneauServiceImpl implements CreneauService {
 			throw new ForbiddenException("Vous n'etes pas autorisé a valider le creneaux");
 		}
 		creneau.get().setStatut("valide");
-
+		creneauRepository.save(creneau.get());
 	}
 
 	@Override

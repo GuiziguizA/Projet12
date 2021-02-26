@@ -38,9 +38,9 @@ public class MesageController {
 	}
 
 	@GetMapping("/messages")
-	public Page<Message> getMessages(@RequestParam Long idUser)
+	public Page<Message> getMessages(@RequestParam Long idChat, @RequestParam int page, @RequestParam int size)
 			throws ResultNotFoundException, APiUSerAndCompetenceException {
-		Page<Message> messages = messageService.getMessages(idUser);
+		Page<Message> messages = messageService.getMessages(idChat, page, size);
 		return messages;
 
 	}

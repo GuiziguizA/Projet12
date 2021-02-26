@@ -1,5 +1,7 @@
 package org.sid.controller;
 
+import javax.validation.Valid;
+
 import org.sid.classe.Competence;
 import org.sid.dto.CompetenceDto;
 import org.sid.exception.EntityAlreadyExistException;
@@ -32,7 +34,8 @@ public class CompetenceController {
 	}
 
 	@PostMapping("/competence")
-	public Competence createCompetence(@RequestBody CompetenceDto competenceDto) throws EntityAlreadyExistException {
+	public Competence createCompetence(@Valid @RequestBody CompetenceDto competenceDto)
+			throws EntityAlreadyExistException {
 
 		Competence competence = competenceService.createCompetence(competenceDto);
 		return competence;

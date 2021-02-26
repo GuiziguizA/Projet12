@@ -46,7 +46,7 @@ public class ChatServiceImpl implements ChatService {
 		chat1.setIdRequete(idRequete);
 		chat1.setCompetenceName(requete.getCompetenceNom());
 		chat1.setUsername(requete.getUsername());
-
+		chat1.setIdComp(requete.getIdComp());
 		chatRepository.saveAndFlush(chat1);
 		return chat1;
 

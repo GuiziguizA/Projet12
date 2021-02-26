@@ -17,6 +17,6 @@ public interface MessageService {
 	public Message getMessage(Long id, Long idUser)
 			throws ResultNotFoundException, APiUSerAndCompetenceException, ForbiddenException;
 
-	public Page<Message> getMessages(Long idUser) throws APiUSerAndCompetenceException;
+	public Page<Message> getMessages(Long idChat, int page, int size) throws ResultNotFoundException;
 
 }

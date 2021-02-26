@@ -3,7 +3,7 @@ package org.sid.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.sid.classe.Roles;
+import org.sid.classe.Role;
 import org.sid.classe.Users;
 import org.sid.dao.CompetenceRepository;
 import org.sid.dao.RolesRepository;
@@ -26,10 +26,12 @@ public class UserServiceImpl implements UserService {
 	UsersRepository userRepository;
 	@Autowired
 	CompetenceRepository competenceRepository;
+	@Autowired
+	KeycloakService keycloakService;
 
 	@Override
 	public Users createUser(UserDto userDto) throws ResultNotFoundException, EntityAlreadyExistException {
-		Optional<Roles> role = rolesRepository.findByNom("user");
+		Optional<Role> role = rolesRepository.findByNom("user");
 		if (!role.isPresent()) {
 			throw new ResultNotFoundException("role doesn't exist");
 		}
@@ -47,6 +49,7 @@ public class UserServiceImpl implements UserService {
 		user.setPassword(passwordcryptage(userDto.getMotDePasse()));
 		user.setUsername(userDto.getNom());
 		user.setRoles(role.get());
+		keycloakService.createUserKeycloak(userDto.getNom(), userDto.getMail(), userDto.getMotDePasse());
 		userRepository.saveAndFlush(user);
 		return user;
 	}
@@ -110,7 +113,7 @@ public class UserServiceImpl implements UserService {
 		if (!rol.isPresent()) {
 			rol = Optional.of("user");
 		}
-		Optional<Roles> role = rolesRepository.findByNom(rol.get());
+		Optional<Role> role = rolesRepository.findByNom(rol.get());
 		if (!role.isPresent()) {
 			throw new ResultNotFoundException("role doesn't exist");
 

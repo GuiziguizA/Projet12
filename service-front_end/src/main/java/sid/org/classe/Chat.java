@@ -12,6 +12,9 @@ public class Chat {
 	private Long idUser1;
 	private Long idComp;
 	private Collection<Message> messages;
+	private String username;
+	private String username1;
+	private String competenceName;
 
 	public Chat(Long id, String statut, Long idRequete, Long idUser, Long idUser1, Long idComp) {
 		super();
@@ -83,6 +86,30 @@ public class Chat {
 
 	public void setMessages(Collection<Message> messages) {
 		this.messages = messages;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getUsername1() {
+		return username1;
+	}
+
+	public void setUsername1(String username1) {
+		this.username1 = username1;
+	}
+
+	public String getCompetenceName() {
+		return competenceName;
+	}
+
+	public void setCompetenceName(String competenceName) {
+		this.competenceName = competenceName;
 	}
 
 }

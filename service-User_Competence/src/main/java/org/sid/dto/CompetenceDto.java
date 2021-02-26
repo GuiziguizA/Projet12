@@ -5,7 +5,9 @@ import org.sid.classe.Users;
 public class CompetenceDto {
 
 	private String nom;
+
 	private String type;
+
 	private String description;
 
 	private Users user;

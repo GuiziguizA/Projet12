@@ -27,7 +27,7 @@
     </div>
     <div class="container">
 
-     <form th:action="@{/competence}" th:object="${competenceDto}" method="post">
+     <form action="#" th:action="@{/competence}" th:object="${competenceDto}" method="post">
         <br>
         <input type="text" th:field="*{nom}" id="nom" class="form-control" placeholder="nom">
         <div th:if="${#fields.hasErrors('nom')}" class="alert alert-danger" role="alert"><span class="alert alert-primary" th:errors="*{nom}"></span></div>
@@ -44,7 +44,8 @@
     
 </form>
   
-
+<div class="alert alert-danger"th:if="${error}"th:text="${error}" role="alert">
+</div>
 
 </div>
 </div>
