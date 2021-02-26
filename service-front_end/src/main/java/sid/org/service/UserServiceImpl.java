@@ -2,7 +2,6 @@ package sid.org.service;
 
 import java.util.List;
 
-import org.keycloak.adapters.springsecurity.client.KeycloakRestTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -25,16 +24,16 @@ public class UserServiceImpl implements UserService {
 	@Value("${api.url}")
 	private String url;
 	@Autowired
-	KeycloakRestTemplate keycloakRestTemplate;
+	HeadersService headersService;
 
 	@Override
-	public void createUser(UserDto userDto) throws APiUSerAndCompetenceException {
+	public void createUser(UserDto userDto, String username, String password) throws APiUSerAndCompetenceException {
 		String uri = url + "/compagny-user_competence/user/";
-
+		HttpHeaders headers = headersService.createTokenHeaders(username, password);
 		RestTemplate rt = new RestTemplate();
 
 		try {
-			keycloakRestTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(userDto), Users.class);
+			rt.exchange(uri, HttpMethod.POST, new HttpEntity<>(userDto, headers), Users.class);
 
 		} catch (HttpStatusCodeException e) {
 			throw new APiUSerAndCompetenceException(e.getMessage());
@@ -42,15 +41,33 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<Users> getUsers() throws APiUSerAndCompetenceException {
+	public List<Users> getUsers(String username, String password) throws APiUSerAndCompetenceException {
 		String uri = url + "/compagny-user_competence/users";
-		HttpHeaders headers = new HttpHeaders();
+
 		RestTemplate rt = new RestTemplate();
+		HttpHeaders headers = headersService.createTokenHeaders(username, password);
 		ParameterizedTypeReference<RestResponsePage<Requete>> responseType = new ParameterizedTypeReference<RestResponsePage<Requete>>() {
 		};
 		try {
-			ResponseEntity<List> users = keycloakRestTemplate.exchange(uri, HttpMethod.GET, new HttpEntity<>(headers),
-					List.class);
+			ResponseEntity<List> users = rt.exchange(uri, HttpMethod.GET, new HttpEntity<>(headers), List.class);
+			return users.getBody();
+		} catch (HttpStatusCodeException e) {
+			throw new APiUSerAndCompetenceException(
+					"l'api getUsers ne marche pas et l'erreure est : " + e.getMessage());
+		}
+
+	}
+
+	@Override
+	public Users getUser(String username, String password) throws APiUSerAndCompetenceException {
+		String uri = url + "/compagny-user_competence/user";
+
+		RestTemplate rt = new RestTemplate();
+		HttpHeaders headers = headersService.createTokenHeaders(username, password);
+		ParameterizedTypeReference<RestResponsePage<Requete>> responseType = new ParameterizedTypeReference<RestResponsePage<Requete>>() {
+		};
+		try {
+			ResponseEntity<Users> users = rt.exchange(uri, HttpMethod.GET, new HttpEntity<>(headers), Users.class);
 			return users.getBody();
 		} catch (HttpStatusCodeException e) {
 			throw new APiUSerAndCompetenceException(

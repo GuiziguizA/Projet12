@@ -4,8 +4,10 @@ import java.util.ArrayList;
 
 import org.sid.classe.TokenKeycloak;
 import org.sid.classe.Userkeycloak;
+import org.sid.config.RequestFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -22,6 +24,9 @@ import org.springframework.web.client.RestTemplate;
 public class KeycloakServiceImpl implements KeycloakService {
 
 	private static final Logger logger = LoggerFactory.getLogger(KeycloakServiceImpl.class);
+
+	@Autowired
+	RequestFactory requestFactory;
 
 	@Override
 	public String RecupTokenAdmin(String username, String password, String clientId) {
@@ -54,7 +59,7 @@ public class KeycloakServiceImpl implements KeycloakService {
 
 	@Override
 	public void createUserKeycloak(String name, String mail, String password) {
-		RestTemplate restTemplate = new RestTemplate();
+		RestTemplate restTemplate = requestFactory.getRestTemplate();
 		String url = "http://localhost:8080/auth/admin/realms/SocialAppRealm/users";
 		String accessToken = RecupTokenAdmin("admin", "admin", "admin-cli");
 		HttpHeaders headers = new HttpHeaders();
@@ -75,7 +80,7 @@ public class KeycloakServiceImpl implements KeycloakService {
 
 	@Override
 	public String UserGetId(String mail) {
-		RestTemplate restTemplate = new RestTemplate();
+		RestTemplate restTemplate = requestFactory.getRestTemplate();
 		String url = "http://localhost:8080/auth/admin/realms/SocialAppRealm/users";
 		String accessToken = RecupTokenAdmin("admin", "admin", "admin-cli");
 		HttpHeaders headers = new HttpHeaders();

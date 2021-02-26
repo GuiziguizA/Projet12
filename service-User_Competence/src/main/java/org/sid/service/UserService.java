@@ -22,4 +22,6 @@ public interface UserService {
 
 	public List<Users> getUsers() throws ResultNotFoundException;
 
+	public Users getUserName(String name) throws ResultNotFoundException;
+
 }

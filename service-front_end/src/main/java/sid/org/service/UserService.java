@@ -8,8 +8,10 @@ import sid.org.exception.APiUSerAndCompetenceException;
 
 public interface UserService {
 
-	public void createUser(UserDto userDto) throws APiUSerAndCompetenceException;
+	public void createUser(UserDto userDto, String username, String password) throws APiUSerAndCompetenceException;
 
-	public List<Users> getUsers() throws APiUSerAndCompetenceException;
+	public List<Users> getUsers(String username, String password) throws APiUSerAndCompetenceException;
+
+	public Users getUser(String username, String password) throws APiUSerAndCompetenceException;
 
 }

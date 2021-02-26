@@ -5,6 +5,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -31,11 +34,14 @@ public class RequeteController {
 	UserService userService;
 
 	@PostMapping("/requete")
-	public String addRequete(Model model, @RequestParam Long idComp) {
+	public String addRequete(Model model, @RequestParam Long idComp, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		String name = (String) session.getAttribute("username");
+		String password = (String) session.getAttribute("password");
 		Long idUser = 2L;
 		try {
 			requeteService.createRequete(idComp, idUser);
-			Competence comp = competenceService.getCompetence(idComp);
+			Competence comp = competenceService.getCompetence(idComp, name, password);
 			model.addAttribute("competence", comp);
 			return "competence";
 
@@ -78,13 +84,16 @@ public class RequeteController {
 
 	@GetMapping("/requetes")
 	public String getRequetes(Model model, @RequestParam(required = false) Optional<Integer> size,
-			@RequestParam(required = false) Optional<Integer> page) {
+			@RequestParam(required = false) Optional<Integer> page, HttpServletRequest request) {
 		Long idUserComp = 1L;
 		int currentPage = page.orElse(0);
 		int pageSize = size.orElse(2);
+		HttpSession session = request.getSession();
+		String name = (String) session.getAttribute("username");
+		String password = (String) session.getAttribute("password");
 		try {
 			Page<Requete> requetePage = requeteService.getRequetes(idUserComp, currentPage, pageSize);
-			List<Users> users = userService.getUsers();
+			List<Users> users = userService.getUsers(name, password);
 			model.addAttribute("users", users);
 			model.addAttribute("requetePage", requetePage);
 

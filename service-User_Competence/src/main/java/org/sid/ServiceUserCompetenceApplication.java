@@ -16,16 +16,18 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @EnableDiscoveryClient
 @SpringBootApplication
 public class ServiceUserCompetenceApplication implements CommandLineRunner {
-	@Autowired
-	private UserService userService;
-	@Autowired
-	RolesRepository rolesRepository;
+
 	@Autowired
 	KeycloakService keycloakService;
 	@Autowired
 	CompetenceRepository competenceRepository;
 	@Autowired
 	UsersRepository usersRepository;
+	@Autowired
+	RolesRepository rolesRepository;
+	@Autowired
+	UserService userService;
+
 	private static final Logger logger = LoggerFactory.getLogger(ServiceUserCompetenceApplication.class);
 
 	public static void main(String[] args) {
@@ -37,18 +39,22 @@ public class ServiceUserCompetenceApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 
 		/*
-		 * Role role = new Role("user"); rolesRepository.save(role); List<Competence>
-		 * listComp = new ArrayList<Competence>(); UserDto userDto = new UserDto("boba",
-		 * "boba@gmail.com", "3 rue du cerisier", "boba", "45125"); Users user =
-		 * userService.createUser(userDto); competenceRepository.save(new Competence(1L,
-		 * "gateau chocolat", "cuisine", "gateau", user)); competenceRepository.save(new
-		 * Competence(2L, "gateau chocolat", "cuisine", "gateau", user));
+		 * Role role = new Role("user"); rolesRepository.save(role);
 		 */
-
+		/*
+		 * List<Competence> listComp = new ArrayList<Competence>(); UserDto userDto =
+		 * new UserDto("kamel", "kamel@gmail.com", "3 rue du cerisier", "frere",
+		 * "45125"); Users user = userService.createUser(userDto);
+		 * competenceRepository.save(new Competence(1L, "gateau chocolat", "cuisine",
+		 * "gateau", user)); competenceRepository.save(new Competence(2L,
+		 * "gateau chocolat", "cuisine", "gateau", user));
+		 */
 		/*
 		 * keycloakService.RecupTokenAdmin("admin", "admin", "admin-cli");
-		 * keycloakService.createUserKeycloak("kamel", "kamel@gmail.com", "frere");
 		 * 
+		 * keycloakService.createUserKeycloak("kamel", "kamel@gmail.com", "frere");
+		 */
+		/*
 		 * String id = keycloakService.UserGetId("kamel@gmail.com");
 		 * System.out.println(id);
 		 */

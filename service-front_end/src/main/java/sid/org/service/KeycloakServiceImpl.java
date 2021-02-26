@@ -2,7 +2,6 @@ package sid.org.service;
 
 import java.util.ArrayList;
 
-import org.keycloak.adapters.springsecurity.client.KeycloakClientRequestFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
@@ -84,8 +83,7 @@ public class KeycloakServiceImpl implements KeycloakService {
 	}
 
 	@Override
-	public void createUserKeycloak(String name, String mail, String password,
-			KeycloakClientRequestFactory keycloakClientRequestFactory) {
+	public void createUserKeycloak(String name, String mail, String password) {
 		RestTemplate restTemplate = new RestTemplate();
 
 		String url = "http://localhost:8080/auth/admin/realms/SocialAppRealm/users";
@@ -137,12 +135,6 @@ public class KeycloakServiceImpl implements KeycloakService {
 		map.add("temporary", false);
 
 		return map;
-	}
-
-	@Override
-	public void createUserKeycloak(String name, String mail, String password) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

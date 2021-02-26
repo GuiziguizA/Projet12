@@ -2,34 +2,20 @@ package sid.org.service;
 
 import java.util.Optional;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.keycloak.KeycloakPrincipal;
-import org.keycloak.KeycloakSecurityContext;
-import org.keycloak.adapters.springsecurity.client.KeycloakRestTemplate;
-import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
-import org.keycloak.representations.AccessToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -51,30 +37,26 @@ public class CompetenceServiceImpl implements CompetenceService {
 	private static final Logger logger = LoggerFactory.getLogger(ServiceFrontEndApplication.class);
 
 	private final RequestFactory requestFactory;
+
 	@Autowired
-	KeycloakService kc;
+	HeadersService headersService;
 
 	@Autowired
 	public CompetenceServiceImpl(RequestFactory requestFactory) {
 		this.requestFactory = requestFactory;
 	}
 
-	@Autowired
-	KeycloakRestTemplate keycloakRestTemplate;
-
 	@Override
-	public Page<Competence> searchCompetence(Optional<String> recherche, int size, int page) {
-		String tok = kc.RecupTokenClient("guiliom", "tarot1994", "service-front_end");
-		RestTemplate rt = requestFactory.getRestTemplate();
-		AccessToken accessToken = getAccessToken();
+	public Page<Competence> searchCompetence(Optional<String> recherche, int size, int page, String username,
+			String password) {
 
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.set("Authorization", "Bearer " + tok);
+		RestTemplate rt = requestFactory.getRestTemplate();
+		HttpHeaders headers = headersService.createTokenHeaders(username, password);
+
 		ParameterizedTypeReference<RestResponsePage<Competence>> responseType = new ParameterizedTypeReference<RestResponsePage<Competence>>() {
 		};
 		final String uri = url + "/compagny-user_competence/search?page=" + page + "&size=" + size;
-		final String url1 = "http://localhost:8082/search?page=0&size=2";
+
 		CompetenceCriteria critere = new CompetenceCriteria(null, recherche.get(), null);
 		logger.info(critere.getType());
 		/*
@@ -85,7 +67,7 @@ public class CompetenceServiceImpl implements CompetenceService {
 		mapper.convertValue(critere, CompetenceCriteria.class);
 		String registrationBody = mapper.toString();
 		logger.info(registrationBody.toString());
-		ResponseEntity<RestResponsePage<Competence>> result = rt.exchange(url1, HttpMethod.GET,
+		ResponseEntity<RestResponsePage<Competence>> result = rt.exchange(uri, HttpMethod.GET,
 				new HttpEntity<Object>(critere, headers), responseType);
 
 		Page<Competence> competencePage = result.getBody();
@@ -96,10 +78,9 @@ public class CompetenceServiceImpl implements CompetenceService {
 
 	@PreAuthorize("isAuthenticated ()")
 	@Override
-	public Page<Competence> getCompetencesUser(Long idUser, int size, int page) {
-		HttpHeaders headers = new HttpHeaders();
+	public Page<Competence> getCompetencesUser(Long idUser, int size, int page, String username, String password) {
+		HttpHeaders headers = headersService.createTokenHeaders(username, password);
 		RestTemplate rt = requestFactory.getRestTemplate();
-		logger.info(getAccessToken().toString() + "yollllllllllllllllllllllllllllllllllllllllllllllllllll");
 
 		ParameterizedTypeReference<RestResponsePage<Competence>> responseType = new ParameterizedTypeReference<RestResponsePage<Competence>>() {
 		};
@@ -110,8 +91,8 @@ public class CompetenceServiceImpl implements CompetenceService {
 		 * ResponseEntity<RestResponsePage<Competence>> result = rt.exchange(uri,
 		 * HttpMethod.GET, new HttpEntity<>(headers), responseType);
 		 */
-		ResponseEntity<RestResponsePage<Competence>> result = keycloakRestTemplate.exchange(uri, HttpMethod.GET, null,
-				responseType);
+		ResponseEntity<RestResponsePage<Competence>> result = rt.exchange(uri, HttpMethod.GET,
+				new HttpEntity<Object>(headers), responseType);
 
 		Page<Competence> competencePage = result.getBody();
 		return competencePage;
@@ -133,13 +114,13 @@ public class CompetenceServiceImpl implements CompetenceService {
 	}
 
 	@Override
-	public Competence getCompetence(Long id) {
-
+	public Competence getCompetence(Long id, String username, String password) {
+		HttpHeaders headers = headersService.createTokenHeaders(username, password);
 		RestTemplate rt = requestFactory.getRestTemplate();
 
 		final String uri = url + "/compagny-user_competence/competence/" + id;
 
-		ResponseEntity<Competence> competence = keycloakRestTemplate.exchange(uri, HttpMethod.GET, null,
+		ResponseEntity<Competence> competence = rt.exchange(uri, HttpMethod.GET, new HttpEntity<>(headers),
 				Competence.class);
 
 		Competence comp = competence.getBody();
@@ -148,25 +129,21 @@ public class CompetenceServiceImpl implements CompetenceService {
 	}
 
 	@Override
-	public void createComp(CompetenceDto competenceDto, Long idUser) throws APiUSerAndCompetenceException {
+	public void createComp(CompetenceDto competenceDto, Long idUser, String username, String password)
+			throws APiUSerAndCompetenceException {
 		String uri = url + "/compagny-user_competence/competence";
 		RestTemplate rt = new RestTemplate();
-		AccessToken accessToken = getAccessToken();
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.set("Authorization", "Bearer " + accessToken);
+		/* AccessToken accessToken = getAccessToken(); */
+		HttpHeaders headers = headersService.createTokenHeaders(username, password);
 
 		try {
 
 			Users user = new Users();
 			user.setCodeUtilisateur(idUser);
 			competenceDto.setUser(user);
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.convertValue(competenceDto, CompetenceDto.class);
-			String registrationBody = mapper.toString();
-			logger.info(registrationBody);
+
 			ResponseEntity<Competence> result = rt.exchange(uri, HttpMethod.POST,
-					new HttpEntity<String>(registrationBody, headers), Competence.class);
+					new HttpEntity<>(competenceDto, headers), Competence.class);
 
 		} catch (HttpStatusCodeException e) {
 			throw new APiUSerAndCompetenceException(e.getMessage());
@@ -174,21 +151,23 @@ public class CompetenceServiceImpl implements CompetenceService {
 
 	}
 
-	@Bean
-	@Scope(scopeName = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
-	public AccessToken getAccessToken() {
-
-		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
-				.getRequest();
-		@SuppressWarnings("rawtypes")
-		KeycloakAuthenticationToken token = (KeycloakAuthenticationToken) request.getUserPrincipal();
-		logger.info(token.toString());
-		KeycloakPrincipal principal = (KeycloakPrincipal) token.getPrincipal();
-		logger.info(principal.toString());
-		KeycloakSecurityContext session = principal.getKeycloakSecurityContext();
-		AccessToken accessToken = session.getToken();
-
-		return accessToken;
-	}
+	/*
+	 * @Bean
+	 * 
+	 * @Scope(scopeName = WebApplicationContext.SCOPE_REQUEST, proxyMode =
+	 * ScopedProxyMode.TARGET_CLASS) public AccessToken getAccessToken() {
+	 * 
+	 * HttpServletRequest request = ((ServletRequestAttributes)
+	 * RequestContextHolder.currentRequestAttributes()) .getRequest();
+	 * 
+	 * @SuppressWarnings("rawtypes") KeycloakAuthenticationToken token =
+	 * (KeycloakAuthenticationToken) request.getUserPrincipal();
+	 * logger.info(token.toString()); KeycloakPrincipal principal =
+	 * (KeycloakPrincipal) token.getPrincipal(); logger.info(principal.toString());
+	 * KeycloakSecurityContext session = principal.getKeycloakSecurityContext();
+	 * AccessToken accessToken = session.getToken();
+	 * 
+	 * return accessToken; }
+	 */
 
 }

@@ -1,5 +1,8 @@
 package sid.org.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,11 +29,20 @@ public class UserController {
 		return "formulaireUser";
 	}
 
-	@PostMapping("/user")
-	public String createBook(UserDto userDto, Model model) throws APiUSerAndCompetenceException {
+	@GetMapping("/login")
+	public String afficherLogin() {
 
+		return "login";
+	}
+
+	@PostMapping("/user")
+	public String createBook(UserDto userDto, Model model, HttpServletRequest request)
+			throws APiUSerAndCompetenceException {
+		HttpSession session = request.getSession();
+		String name = (String) session.getAttribute("username");
+		String password = (String) session.getAttribute("password");
 		try {
-			userService.createUser(userDto);
+			userService.createUser(userDto, name, password);
 			String succes = "Vous  êtes inscris";
 			model.addAttribute("succes", succes);
 			return "home";

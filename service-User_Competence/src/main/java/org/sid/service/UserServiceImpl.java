@@ -49,7 +49,10 @@ public class UserServiceImpl implements UserService {
 		user.setPassword(passwordcryptage(userDto.getMotDePasse()));
 		user.setUsername(userDto.getNom());
 		user.setRoles(role.get());
-		keycloakService.createUserKeycloak(userDto.getNom(), userDto.getMail(), userDto.getMotDePasse());
+		/*
+		 * keycloakService.createUserKeycloak(userDto.getNom(), userDto.getMail(),
+		 * userDto.getMotDePasse());
+		 */
 		userRepository.saveAndFlush(user);
 		return user;
 	}
@@ -75,6 +78,16 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Users getUser(Long id) throws ResultNotFoundException {
 		Optional<Users> user = userRepository.findById(id);
+
+		if (!user.isPresent()) {
+			throw new ResultNotFoundException("user doesn't exist");
+		}
+		return user.get();
+	}
+
+	@Override
+	public Users getUserName(String name) throws ResultNotFoundException {
+		Optional<Users> user = userRepository.findByUsername(name);
 
 		if (!user.isPresent()) {
 			throw new ResultNotFoundException("user doesn't exist");

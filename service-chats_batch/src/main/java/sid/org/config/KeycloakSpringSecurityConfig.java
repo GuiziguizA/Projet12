@@ -1,8 +1,7 @@
-package org.sid.config;
+package sid.org.config;
 
 import org.keycloak.adapters.springsecurity.KeycloakConfiguration;
 import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.session.SessionRegistryImpl;
@@ -30,9 +29,7 @@ public class KeycloakSpringSecurityConfig extends KeycloakWebSecurityConfigurerA
 
 		super.configure(http);
 
-		http.csrf().disable().authorizeRequests().antMatchers("/**").hasAuthority("user").and().authorizeRequests()
-				.antMatchers(HttpMethod.POST, "/**").hasAuthority("user").and().authorizeRequests()
-				.antMatchers(HttpMethod.POST, "/user").permitAll();
+		http.csrf().disable().authorizeRequests().antMatchers("/**").hasAuthority("user");
 
 	}
 

@@ -11,6 +11,8 @@ import sid.org.service.ChatService;
 import sid.org.service.CompetenceService;
 import sid.org.service.CreneauService;
 import sid.org.service.DateService;
+import sid.org.service.HeadersService;
+import sid.org.service.KeycloakService;
 import sid.org.service.RequeteService;
 
 @SpringBootApplication
@@ -32,6 +34,10 @@ public class ServiceFrontEndApplication implements CommandLineRunner {
 	CreneauService creneauService;
 	@Autowired
 	DateService dateService;
+	@Autowired
+	KeycloakService keycloakService;
+	@Autowired
+	HeadersService headersService;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -47,7 +53,24 @@ public class ServiceFrontEndApplication implements CommandLineRunner {
 		 * DateDto dateDto = new DateDto("10:00:00", "10", "10", "1994");
 		 * dateService.createDate(dateDto); creneauService.createCreneau(chat, dateDto);
 		 */
-
+		/*
+		 * RestTemplate rt = new RestTemplate(); String token =
+		 * keycloakService.RecupTokenClient("kamel", "frere", "service-front_end");
+		 * 
+		 * Sessions sessions = new Sessions(); sessions.setToken(token); HttpHeaders
+		 * headers = headersService.createTokenHeaders("kamel", "frere",
+		 * "service-front_end");
+		 * 
+		 * final String uri =
+		 * "http://localhost:8089/compagny-user_competence/user?name=kamel";
+		 * keycloakService.RecupTokenClient("kamel", "frere", "service-front_end");
+		 * ResponseEntity<Users> user = rt.exchange(uri, HttpMethod.GET, new
+		 * HttpEntity<>(headers), Users.class); Users utilisateur = user.getBody();
+		 */
+		/*
+		 * Page<Competence> page = competenceService.searchCompetence(null, 2, 0);
+		 * System.out.println(page.getSize() + "ddddddddddddddddddddd");
+		 */
 	}
 
 }

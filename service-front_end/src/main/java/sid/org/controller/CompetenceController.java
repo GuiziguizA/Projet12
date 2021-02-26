@@ -5,6 +5,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,12 +36,16 @@ public class CompetenceController {
 	@GetMapping("/competences")
 	public String getCompetencesSearch(Model model, @RequestParam(required = false) Optional<String> recherche,
 			@RequestParam(required = false) Optional<Integer> size,
-			@RequestParam(required = false) Optional<Integer> page) {
+			@RequestParam(required = false) Optional<Integer> page, HttpServletRequest request) {
 
 		int currentPage = page.orElse(0);
 		int pageSize = size.orElse(2);
+		HttpSession session = request.getSession();
+		String name = (String) session.getAttribute("username");
+		String password = (String) session.getAttribute("password");
 		try {
-			Page<Competence> competencePage = competenceService.searchCompetence(recherche, pageSize, currentPage);
+			Page<Competence> competencePage = competenceService.searchCompetence(recherche, pageSize, currentPage, name,
+					password);
 			model.addAttribute("competencePage", competencePage);
 			int totalPages = competencePage.getTotalPages();
 			if (totalPages > 0) {
@@ -59,13 +65,18 @@ public class CompetenceController {
 
 	@GetMapping("/home")
 	public String getCompetencesUser(Model model, @RequestParam(required = false) Optional<Integer> size,
-			@RequestParam(required = false) Optional<Integer> page) {
+			@RequestParam(required = false) Optional<Integer> page, HttpServletRequest request) {
 		Long idUser = 1L;
 		int currentPage = page.orElse(0);
 		int pageSize = size.orElse(2);
+		HttpSession session = request.getSession();
+		String name = (String) session.getAttribute("username");
+		String password = (String) session.getAttribute("password");
 
 		try {
-			Page<Competence> competencePage = competenceService.getCompetencesUser(idUser, pageSize, currentPage);
+
+			Page<Competence> competencePage = competenceService.getCompetencesUser(idUser, pageSize, currentPage, name,
+					password);
 			model.addAttribute("competencePage", competencePage);
 			int totalPages = competencePage.getTotalPages();
 			if (totalPages > 0) {
@@ -84,10 +95,12 @@ public class CompetenceController {
 	}
 
 	@GetMapping("/competence/{id}")
-	public String getCompetence(Model model, @PathVariable Long id) {
-
+	public String getCompetence(Model model, @PathVariable Long id, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		String name = (String) session.getAttribute("username");
+		String password = (String) session.getAttribute("password");
 		try {
-			Competence competence = competenceService.getCompetence(id);
+			Competence competence = competenceService.getCompetence(id, name, password);
 			model.addAttribute("competence", competence);
 
 			return "competence";
@@ -104,17 +117,20 @@ public class CompetenceController {
 	}
 
 	@PostMapping("/competence")
-	public String createcompetence(@Valid CompetenceDto competenceDto, BindingResult result, Model model)
-			throws APiUSerAndCompetenceException {
+	public String createcompetence(@Valid CompetenceDto competenceDto, BindingResult result, Model model,
+			HttpServletRequest request) throws APiUSerAndCompetenceException {
+
 		Long idUser = 1L;
 		if (result.hasErrors()) {
 			return "formulaireCompetence";
 
 		}
-
+		HttpSession session = request.getSession();
+		String name = (String) session.getAttribute("username");
+		String password = (String) session.getAttribute("password");
 		try {
-			competenceService.createComp(competenceDto, idUser);
-			getCompetencesUser(model, Optional.of(2), Optional.of(0));
+			competenceService.createComp(competenceDto, idUser, name, password);
+			getCompetencesUser(model, Optional.of(2), Optional.of(0), request);
 			String succes = "Votre competence a ete ajoute";
 			model.addAttribute("succes", succes);
 			return "home";
