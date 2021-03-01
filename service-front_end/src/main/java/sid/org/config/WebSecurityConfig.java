@@ -21,9 +21,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http.addFilterBefore(new TwoFactorAuthenticationFilter((authenticationManagerBean())),
 				UsernamePasswordAuthenticationFilter.class).authorizeRequests()
-				.antMatchers("/css/**", "/js/**", "/webjars/**", "/user/form").permitAll()
-				.antMatchers(HttpMethod.GET, "/users/form").permitAll().antMatchers(HttpMethod.POST, "/users")
-				.permitAll().anyRequest().authenticated().and().formLogin().loginPage("/login").permitAll()
+				.antMatchers("/css/**", "/js/**", "/webjars/**", "/userForm").permitAll()
+				.antMatchers(HttpMethod.GET, "/userForm").permitAll().antMatchers(HttpMethod.POST, "/user").permitAll()
+				.anyRequest().authenticated().and().formLogin().loginPage("/login").permitAll()
 				.defaultSuccessUrl("/home").and().logout().logoutSuccessUrl("/login");
 
 	}

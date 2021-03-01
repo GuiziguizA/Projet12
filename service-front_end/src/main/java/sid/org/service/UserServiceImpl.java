@@ -28,12 +28,12 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void createUser(UserDto userDto, String username, String password) throws APiUSerAndCompetenceException {
-		String uri = url + "/compagny-user_competence/user/";
+		String uri = url + "/compagny-user_competence/user";
 		HttpHeaders headers = headersService.createTokenHeaders(username, password);
 		RestTemplate rt = new RestTemplate();
 
 		try {
-			rt.exchange(uri, HttpMethod.POST, new HttpEntity<>(userDto, headers), Users.class);
+			rt.exchange(uri, HttpMethod.POST, new HttpEntity<>(userDto), Users.class);
 
 		} catch (HttpStatusCodeException e) {
 			throw new APiUSerAndCompetenceException(e.getMessage());

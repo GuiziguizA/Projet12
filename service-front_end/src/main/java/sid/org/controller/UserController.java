@@ -45,7 +45,7 @@ public class UserController {
 			userService.createUser(userDto, name, password);
 			String succes = "Vous  êtes inscris";
 			model.addAttribute("succes", succes);
-			return "home";
+			return "redirect:/login";
 		} catch (HttpStatusCodeException e) {
 			String error = httpService.traiterLesExceptionsApi(e);
 			model.addAttribute("error", error);

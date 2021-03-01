@@ -62,7 +62,7 @@
 						<td th:text="${competence.nom}"></td>
 							<td th:text="${competence.user.username}"></td>
 							<td th:text="${competence.type}"></td>
-							<td><a th:href="@{/competence/{id}(id=${competence.codeCompetence})}"><input type="button"  id="${competence.codeCompetence}" class="btn btn-primary" value="Consulter" /></a></td>
+							<td><a  th:href="@{/competence(id=${competence.codeCompetence})}"><input type="button"  id="${competence.codeCompetence}" class="btn btn-primary" value="Consulter" /></a></td>
 					
 				</tr>
 		

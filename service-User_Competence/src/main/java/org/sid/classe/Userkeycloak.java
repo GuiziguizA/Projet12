@@ -1,6 +1,6 @@
 package org.sid.classe;
 
-import org.springframework.util.MultiValueMap;
+import java.util.List;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +14,6 @@ public class Userkeycloak {
 	private String email;
 	private String enabled = "true";
 	private String username;
-	private MultiValueMap<String, Object> credentials;
+	private List<Credentials> credentials;
 
 }

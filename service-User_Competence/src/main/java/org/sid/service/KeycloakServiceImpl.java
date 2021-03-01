@@ -1,7 +1,9 @@
 package org.sid.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import org.sid.classe.Credentials;
 import org.sid.classe.TokenKeycloak;
 import org.sid.classe.Userkeycloak;
 import org.sid.config.RequestFactory;
@@ -67,6 +69,7 @@ public class KeycloakServiceImpl implements KeycloakService {
 		headers.set("Authorization", "Bearer " + accessToken);
 
 		Userkeycloak userkeycloak = new Userkeycloak();
+		List<MultiValueMap> credentials = new ArrayList<MultiValueMap>();
 		userkeycloak.setEmail(mail);
 		userkeycloak.setFirstName(name);
 		userkeycloak.setUsername(name);
@@ -101,14 +104,21 @@ public class KeycloakServiceImpl implements KeycloakService {
 
 	}
 
-	public MultiValueMap<String, Object> createMapPasswortd(String password) {
+	public List<Credentials> createMapPasswortd(String password) {
+
+		Credentials cred = new Credentials();
+		List<Credentials> listcred = new ArrayList<Credentials>();
+		cred.setType("password");
+		cred.setTemporary(false);
+		cred.setValue(password);
+		listcred.add(cred);
 
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
 		map.add("type", "password");
 		map.add("value", password);
 		map.add("temporary", false);
 
-		return map;
+		return listcred;
 	}
 
 }

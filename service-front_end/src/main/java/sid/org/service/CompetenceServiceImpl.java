@@ -141,9 +141,7 @@ public class CompetenceServiceImpl implements CompetenceService {
 			Users user = new Users();
 			user.setCodeUtilisateur(idUser);
 			competenceDto.setUser(user);
-
-			ResponseEntity<Competence> result = rt.exchange(uri, HttpMethod.POST,
-					new HttpEntity<>(competenceDto, headers), Competence.class);
+			rt.exchange(uri, HttpMethod.POST, new HttpEntity<>(competenceDto, headers), Competence.class);
 
 		} catch (HttpStatusCodeException e) {
 			throw new APiUSerAndCompetenceException(e.getMessage());

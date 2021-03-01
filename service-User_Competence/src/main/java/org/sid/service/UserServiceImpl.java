@@ -49,11 +49,10 @@ public class UserServiceImpl implements UserService {
 		user.setPassword(passwordcryptage(userDto.getMotDePasse()));
 		user.setUsername(userDto.getNom());
 		user.setRoles(role.get());
-		/*
-		 * keycloakService.createUserKeycloak(userDto.getNom(), userDto.getMail(),
-		 * userDto.getMotDePasse());
-		 */
+
 		userRepository.saveAndFlush(user);
+		keycloakService.createUserKeycloak(userDto.getNom(), userDto.getMail(), userDto.getMotDePasse());
+
 		return user;
 	}
 
