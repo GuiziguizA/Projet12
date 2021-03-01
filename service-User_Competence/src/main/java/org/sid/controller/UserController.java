@@ -11,6 +11,7 @@ import org.sid.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,6 +38,13 @@ public class UserController {
 	@PostMapping("/user/identity")
 	public Users getUserController(@RequestParam String name) throws ResultNotFoundException {
 		Users user = userService.getUserName(name);
+
+		return user;
+	}
+
+	@GetMapping("/user/{id}")
+	public Users getUserController1(@PathVariable Long id) throws ResultNotFoundException {
+		Users user = userService.getUserId(id);
 
 		return user;
 	}

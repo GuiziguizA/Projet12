@@ -10,14 +10,15 @@ import sid.org.exception.APiUSerAndCompetenceException;
 
 public interface CompetenceService {
 
-	public Competence getCompetence(Long id, String username, String password);
+	public Competence getCompetence(Long id, String username, String password) throws APiUSerAndCompetenceException;
 
 	public Page<Competence> searchCompetence(Optional<String> recherche, int size, int page, String username,
-			String password);
+			String password) throws APiUSerAndCompetenceException;
 
 	public void createComp(CompetenceDto competenceDto, Long idUser, String username, String password)
 			throws APiUSerAndCompetenceException;
 
-	public Page<Competence> getCompetencesUser(Long idUser, int size, int page, String username, String password);
+	public Page<Competence> getCompetencesUser(Long idUser, int size, int page, String username, String password)
+			throws APiUSerAndCompetenceException;
 
 }

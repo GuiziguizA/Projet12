@@ -154,4 +154,13 @@ public class UserServiceImpl implements UserService {
 		return password1;
 	}
 
+	@Override
+	public Users getUserId(Long id) throws ResultNotFoundException {
+		Optional<Users> user = userRepository.findById(id);
+
+		if (!user.isPresent()) {
+			throw new ResultNotFoundException("user doesn't exist");
+		}
+		return user.get();
+	}
 }

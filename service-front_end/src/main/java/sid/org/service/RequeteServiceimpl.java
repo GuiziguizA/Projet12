@@ -11,7 +11,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import sid.org.ServiceFrontEndApplication;
@@ -34,6 +33,9 @@ public class RequeteServiceimpl implements RequeteService {
 		this.requestFactory = requestFactory;
 	}
 
+	@Autowired
+	HeadersService headersService;
+
 	@Override
 	public void createRequete(Long idComp, Long idUser) throws APiUSerAndCompetenceException {
 
@@ -42,21 +44,16 @@ public class RequeteServiceimpl implements RequeteService {
 		HttpHeaders headers = new HttpHeaders();
 		RestTemplate rt = new RestTemplate();
 
-		try {
-			RequeteDto requeteDto = new RequeteDto();
-			requeteDto.setIdComp(idComp);
-			logger.info(requeteDto.getIdComp().toString());
+		RequeteDto requeteDto = new RequeteDto();
+		requeteDto.setIdComp(idComp);
+		logger.info(requeteDto.getIdComp().toString());
 
-			requeteDto.setIdUser(idUser);
-			logger.info(requeteDto.getIdUser().toString());
-			requeteDto.setStatut("demande");
-			ResponseEntity<Requete> requete = rt.exchange(uri, HttpMethod.POST, new HttpEntity<>(requeteDto, headers),
-					Requete.class);
+		requeteDto.setIdUser(idUser);
+		logger.info(requeteDto.getIdUser().toString());
+		requeteDto.setStatut("demande");
+		ResponseEntity<Requete> requete = rt.exchange(uri, HttpMethod.POST, new HttpEntity<>(requeteDto, headers),
+				Requete.class);
 
-		} catch (HttpStatusCodeException e) {
-			throw new APiUSerAndCompetenceException(
-					"l'api createUser ne marche pas et l'erreure est : " + e.getMessage());
-		}
 	}
 
 	@Override
@@ -66,20 +63,16 @@ public class RequeteServiceimpl implements RequeteService {
 		RestTemplate rt = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
 
-		try {
-			ResponseEntity<Long> requete = rt.exchange(uri, HttpMethod.POST, new HttpEntity<>(headers), Long.class);
+		ResponseEntity<Long> requete = rt.exchange(uri, HttpMethod.POST, new HttpEntity<>(headers), Long.class);
 
-		} catch (HttpStatusCodeException e) {
-			throw new APiUSerAndCompetenceException(
-					"l'api validerRequete ne marche pas et l'erreure est : " + e.getMessage());
-		}
 	}
 
 	@Override
-	public Page<Requete> getRequetes(Long idUserComp, int page, int size) throws APiUSerAndCompetenceException {
+	public Page<Requete> getRequetes(Long idUserComp, int page, int size, String username, String password)
+			throws APiUSerAndCompetenceException {
 
 		RestTemplate rt = requestFactory.getRestTemplate();
-		HttpHeaders headers = new HttpHeaders();
+		HttpHeaders headers = headersService.createTokenHeaders(username, password);
 		ParameterizedTypeReference<RestResponsePage<Requete>> responseType = new ParameterizedTypeReference<RestResponsePage<Requete>>() {
 		};
 		String uri = url + "/compagny-creneaux_requetes/requetes?idUserComp=" + idUserComp + "&page=" + page + "&size="

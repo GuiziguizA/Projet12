@@ -24,4 +24,6 @@ public interface UserService {
 
 	public Users getUserName(String name) throws ResultNotFoundException;
 
+	public Users getUserId(Long id) throws ResultNotFoundException;
+
 }

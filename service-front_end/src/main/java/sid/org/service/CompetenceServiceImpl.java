@@ -14,7 +14,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,7 +25,6 @@ import sid.org.classe.CompetenceCriteria;
 import sid.org.classe.Users;
 import sid.org.config.RequestFactory;
 import sid.org.dto.CompetenceDto;
-import sid.org.exception.APiUSerAndCompetenceException;
 
 @Component
 
@@ -59,19 +57,15 @@ public class CompetenceServiceImpl implements CompetenceService {
 
 		CompetenceCriteria critere = new CompetenceCriteria(null, recherche.get(), null);
 		logger.info(critere.getType());
-		/*
-		 * ResponseEntity<RestResponsePage<Competence>> result = rt.exchange(uri,
-		 * HttpMethod.GET, new HttpEntity<>(critere), responseType);
-		 */
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.convertValue(critere, CompetenceCriteria.class);
 		String registrationBody = mapper.toString();
 		logger.info(registrationBody.toString());
+
 		ResponseEntity<RestResponsePage<Competence>> result = rt.exchange(uri, HttpMethod.GET,
 				new HttpEntity<Object>(critere, headers), responseType);
 
 		Page<Competence> competencePage = result.getBody();
-
 		return competencePage;
 
 	}
@@ -86,11 +80,6 @@ public class CompetenceServiceImpl implements CompetenceService {
 		};
 		final String uri = url + "/compagny-user_competence/competences?idUser=" + idUser + "&page=" + page + "&size="
 				+ size;
-
-		/*
-		 * ResponseEntity<RestResponsePage<Competence>> result = rt.exchange(uri,
-		 * HttpMethod.GET, new HttpEntity<>(headers), responseType);
-		 */
 		ResponseEntity<RestResponsePage<Competence>> result = rt.exchange(uri, HttpMethod.GET,
 				new HttpEntity<Object>(headers), responseType);
 
@@ -122,50 +111,23 @@ public class CompetenceServiceImpl implements CompetenceService {
 
 		ResponseEntity<Competence> competence = rt.exchange(uri, HttpMethod.GET, new HttpEntity<>(headers),
 				Competence.class);
-
 		Competence comp = competence.getBody();
 		return comp;
 
 	}
 
 	@Override
-	public void createComp(CompetenceDto competenceDto, Long idUser, String username, String password)
-			throws APiUSerAndCompetenceException {
+	public void createComp(CompetenceDto competenceDto, Long idUser, String username, String password) {
 		String uri = url + "/compagny-user_competence/competence";
 		RestTemplate rt = new RestTemplate();
-		/* AccessToken accessToken = getAccessToken(); */
+
 		HttpHeaders headers = headersService.createTokenHeaders(username, password);
 
-		try {
-
-			Users user = new Users();
-			user.setCodeUtilisateur(idUser);
-			competenceDto.setUser(user);
-			rt.exchange(uri, HttpMethod.POST, new HttpEntity<>(competenceDto, headers), Competence.class);
-
-		} catch (HttpStatusCodeException e) {
-			throw new APiUSerAndCompetenceException(e.getMessage());
-		}
+		Users user = new Users();
+		user.setCodeUtilisateur(idUser);
+		competenceDto.setUser(user);
+		rt.exchange(uri, HttpMethod.POST, new HttpEntity<>(competenceDto, headers), Competence.class);
 
 	}
-
-	/*
-	 * @Bean
-	 * 
-	 * @Scope(scopeName = WebApplicationContext.SCOPE_REQUEST, proxyMode =
-	 * ScopedProxyMode.TARGET_CLASS) public AccessToken getAccessToken() {
-	 * 
-	 * HttpServletRequest request = ((ServletRequestAttributes)
-	 * RequestContextHolder.currentRequestAttributes()) .getRequest();
-	 * 
-	 * @SuppressWarnings("rawtypes") KeycloakAuthenticationToken token =
-	 * (KeycloakAuthenticationToken) request.getUserPrincipal();
-	 * logger.info(token.toString()); KeycloakPrincipal principal =
-	 * (KeycloakPrincipal) token.getPrincipal(); logger.info(principal.toString());
-	 * KeycloakSecurityContext session = principal.getKeycloakSecurityContext();
-	 * AccessToken accessToken = session.getToken();
-	 * 
-	 * return accessToken; }
-	 */
 
 }

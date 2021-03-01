@@ -35,7 +35,8 @@ public class CompetenceController {
 	@GetMapping("/competences")
 	public String getCompetencesSearch(Model model, @RequestParam(required = false) Optional<String> recherche,
 			@RequestParam(required = false) Optional<Integer> size,
-			@RequestParam(required = false) Optional<Integer> page, HttpServletRequest request) {
+			@RequestParam(required = false) Optional<Integer> page, HttpServletRequest request)
+			throws APiUSerAndCompetenceException {
 
 		int currentPage = page.orElse(0);
 		int pageSize = size.orElse(2);
@@ -64,7 +65,8 @@ public class CompetenceController {
 
 	@GetMapping("/home")
 	public String getCompetencesUser(Model model, @RequestParam(required = false) Optional<Integer> size,
-			@RequestParam(required = false) Optional<Integer> page, HttpServletRequest request) {
+			@RequestParam(required = false) Optional<Integer> page, HttpServletRequest request)
+			throws APiUSerAndCompetenceException {
 		Long idUser = 1L;
 		int currentPage = page.orElse(0);
 		int pageSize = size.orElse(2);
@@ -94,7 +96,8 @@ public class CompetenceController {
 	}
 
 	@GetMapping("/competence")
-	public String getCompetence(Model model, @RequestParam Long id, HttpServletRequest request) {
+	public String getCompetence(Model model, @RequestParam Long id, HttpServletRequest request)
+			throws APiUSerAndCompetenceException {
 		HttpSession session = request.getSession();
 		String name = (String) session.getAttribute("username");
 		String password = (String) session.getAttribute("password");

@@ -55,14 +55,17 @@ public class RequeteController {
 	}
 
 	@PostMapping("/valideRequete")
-	public String valideRequete(Model model, @RequestParam Long idRequete) {
+	public String valideRequete(Model model, @RequestParam Long idRequete, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		String name = (String) session.getAttribute("username");
+		String password = (String) session.getAttribute("password");
 		Long idUserComp = 1L;
 		try {
 			requeteService.validerRequete(idRequete, idUserComp);
 			int currentPage = 0;
 			int pageSize = 2;
 
-			Page<Requete> requetePage = requeteService.getRequetes(idUserComp, currentPage, pageSize);
+			Page<Requete> requetePage = requeteService.getRequetes(idUserComp, currentPage, pageSize, name, password);
 
 			model.addAttribute("requetePage", requetePage);
 
@@ -92,7 +95,7 @@ public class RequeteController {
 		String name = (String) session.getAttribute("username");
 		String password = (String) session.getAttribute("password");
 		try {
-			Page<Requete> requetePage = requeteService.getRequetes(idUserComp, currentPage, pageSize);
+			Page<Requete> requetePage = requeteService.getRequetes(idUserComp, currentPage, pageSize, name, password);
 			List<Users> users = userService.getUsers(name, password);
 			model.addAttribute("users", users);
 			model.addAttribute("requetePage", requetePage);
@@ -105,7 +108,6 @@ public class RequeteController {
 			return "requetes";
 
 		} catch (APiUSerAndCompetenceException e) {
-			// TODO Auto-generated catch block
 
 			String error = e.getMessage();
 			model.addAttribute("error", error);
