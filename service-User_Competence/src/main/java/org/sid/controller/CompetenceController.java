@@ -35,7 +35,7 @@ public class CompetenceController {
 
 	@PostMapping("/competence")
 	public Competence createCompetence(@Valid @RequestBody CompetenceDto competenceDto)
-			throws EntityAlreadyExistException {
+			throws EntityAlreadyExistException, ResultNotFoundException {
 
 		Competence competence = competenceService.createCompetence(competenceDto);
 		return competence;
@@ -66,9 +66,9 @@ public class CompetenceController {
 	}
 
 	@GetMapping("/competences")
-	public Page<Competence> getcompetencesUser(@RequestParam Long idUser, @RequestParam int page,
-			@RequestParam int size) throws ResultNotFoundException {
-		Page<Competence> competences = competenceService.getCompetencesUser(idUser, page, size);
+	public Page<Competence> getcompetencesUser(@RequestParam String nom, @RequestParam int page, @RequestParam int size)
+			throws ResultNotFoundException {
+		Page<Competence> competences = competenceService.getCompetencesUser(nom, page, size);
 		return competences;
 	}
 

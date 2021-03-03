@@ -22,7 +22,6 @@ import sid.org.ServiceFrontEndApplication;
 import sid.org.Page.RestResponsePage;
 import sid.org.classe.Competence;
 import sid.org.classe.CompetenceCriteria;
-import sid.org.classe.Users;
 import sid.org.config.RequestFactory;
 import sid.org.dto.CompetenceDto;
 
@@ -72,14 +71,13 @@ public class CompetenceServiceImpl implements CompetenceService {
 
 	@PreAuthorize("isAuthenticated ()")
 	@Override
-	public Page<Competence> getCompetencesUser(Long idUser, int size, int page, String username, String password) {
+	public Page<Competence> getCompetencesUser(String nom, int size, int page, String username, String password) {
 		HttpHeaders headers = headersService.createTokenHeaders(username, password);
 		RestTemplate rt = requestFactory.getRestTemplate();
 
 		ParameterizedTypeReference<RestResponsePage<Competence>> responseType = new ParameterizedTypeReference<RestResponsePage<Competence>>() {
 		};
-		final String uri = url + "/compagny-user_competence/competences?idUser=" + idUser + "&page=" + page + "&size="
-				+ size;
+		final String uri = url + "/compagny-user_competence/competences?nom=" + nom + "&page=" + page + "&size=" + size;
 		ResponseEntity<RestResponsePage<Competence>> result = rt.exchange(uri, HttpMethod.GET,
 				new HttpEntity<Object>(headers), responseType);
 
@@ -123,9 +121,7 @@ public class CompetenceServiceImpl implements CompetenceService {
 
 		HttpHeaders headers = headersService.createTokenHeaders(username, password);
 
-		Users user = new Users();
-		user.setCodeUtilisateur(idUser);
-		competenceDto.setUser(user);
+		competenceDto.setNomUser(username);
 		rt.exchange(uri, HttpMethod.POST, new HttpEntity<>(competenceDto, headers), Competence.class);
 
 	}

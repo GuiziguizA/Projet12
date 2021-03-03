@@ -24,6 +24,7 @@ public class Users {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long codeUtilisateur;
+
 	private String username;
 	@Column(unique = true)
 	private String mail;
@@ -39,11 +40,11 @@ public class Users {
 	@JoinColumn(name = "ID_ROLE")
 	private Role roles;
 
-	public Users(Long codeUtilisateur, String username, String mail, String adresse, String password,
+	public Users(String username, String mail, String adresse, String password,
 			@Size(min = 5, max = 5, message = "le code postal doit etre a 5 chiffres") String codePostal,
 			Collection<Competence> competences, Role roles) {
 		super();
-		this.codeUtilisateur = codeUtilisateur;
+
 		this.username = username;
 		this.mail = mail;
 		this.adresse = adresse;

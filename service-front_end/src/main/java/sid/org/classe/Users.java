@@ -17,10 +17,10 @@ public class Users {
 
 	private Roles roles;
 
-	public Users(Long codeUtilisateur, String username, String mail, String adresse, String password, String codePostal,
+	public Users(String username, String mail, String adresse, String password, String codePostal,
 			Collection<Competence> competences, Roles roles) {
 		super();
-		this.codeUtilisateur = codeUtilisateur;
+
 		this.username = username;
 		this.mail = mail;
 		this.adresse = adresse;

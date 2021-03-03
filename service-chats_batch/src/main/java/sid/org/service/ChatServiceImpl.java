@@ -3,6 +3,7 @@ package sid.org.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -12,12 +13,10 @@ import org.springframework.stereotype.Service;
 
 import sid.org.api.RequeteConnect;
 import sid.org.classe.Chat;
-import sid.org.classe.Requete;
+import sid.org.config.MessagingConfig;
 import sid.org.dao.ChatRepository;
 import sid.org.dto.ChatDto;
-import sid.org.exception.APiUSerAndCompetenceException;
 import sid.org.exception.EntityAlreadyExistException;
-import sid.org.exception.ForbiddenException;
 import sid.org.exception.ResultNotFoundException;
 
 @Service
@@ -27,15 +26,17 @@ public class ChatServiceImpl implements ChatService {
 	@Autowired
 	RequeteConnect requeteConnect;
 
-	@Override
-	public Chat creerUnChat(ChatDto chatDto, Long idRequete, Long CodeMicroservice, Long idUser)
-			throws EntityAlreadyExistException, APiUSerAndCompetenceException, ForbiddenException {
-		Requete requete = requeteConnect.getRequete(idRequete, idUser);
+	@RabbitListener(queues = MessagingConfig.QUEUE1)
+	public Chat creerUnChat(ChatDto chatDto) throws EntityAlreadyExistException {
 
+		System.out.println("LLLLLLLLLLLLLLLLL" + chatDto.toString());
 		Optional<Chat> chat = chatRepository.findByUserAndUser(chatDto.getIdUser(), chatDto.getIdUser1());
 		Optional<Chat> chat2 = chatRepository.findByUserAndUser(chatDto.getIdUser1(), chatDto.getIdUser());
 
-		if (chat.isPresent() || chat2.isPresent()) {
+		if (chat.isPresent()) {
+			throw new EntityAlreadyExistException("chat existe deja");
+		}
+		if (chat2.isPresent()) {
 			throw new EntityAlreadyExistException("chat existe deja");
 		}
 
@@ -43,10 +44,10 @@ public class ChatServiceImpl implements ChatService {
 		chat1.setIdUser(chatDto.getIdUser());
 		chat1.setIdUser1(chatDto.getIdUser1());
 		chat1.setStatut("enMarche");
-		chat1.setIdRequete(idRequete);
-		chat1.setCompetenceName(requete.getCompetenceNom());
-		chat1.setUsername(requete.getUsername());
-		chat1.setIdComp(requete.getIdComp());
+		chat1.setIdRequete(chatDto.getIdRequete());
+		chat1.setCompetenceName(chatDto.getCompetenceNom());
+		chat1.setUsername(chatDto.getUsername());
+		chat1.setIdComp(chatDto.getIdComp());
 		chatRepository.saveAndFlush(chat1);
 		return chat1;
 

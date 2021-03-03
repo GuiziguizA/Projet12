@@ -11,6 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import sid.org.ServiceFrontEndApplication;
+import sid.org.service.HeadersService;
 import sid.org.service.KeycloakService;
 
 public class TwoFactorAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -28,6 +29,12 @@ public class TwoFactorAuthenticationFilter extends UsernamePasswordAuthenticatio
 		// idk why I have to do this, otherwise it's null
 		super.setAuthenticationManager(authenticationManager);
 	}
+
+	@Autowired
+	HeadersService headersService;
+
+	@Value("${api.url}")
+	private String apiUrl;
 
 	@Override
 	protected String obtainUsername(HttpServletRequest request) {

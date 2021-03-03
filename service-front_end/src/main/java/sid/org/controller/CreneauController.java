@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -30,15 +33,17 @@ public class CreneauController {
 	ChatService chatService;
 
 	@PostMapping("/creneau")
-	public String createCreneau(Model model, @RequestBody DateDto dateDto, @RequestParam Chat chat)
-			throws ForbiddenException {
-
-		creneauService.createCreneau(chat, dateDto);
+	public String createCreneau(Model model, @RequestBody DateDto dateDto, @RequestParam Chat chat,
+			HttpServletRequest request) throws ForbiddenException {
+		HttpSession session = request.getSession();
+		String name = (String) session.getAttribute("username");
+		String password = (String) session.getAttribute("password");
+		creneauService.createCreneau(chat, dateDto, name, password);
 		Long idUser = 1L;
 		int currentPage = 0;
 		int pageSize = 2;
 
-		Page<Chat> pageChat = chatService.getChatUser(idUser, currentPage, pageSize);
+		Page<Chat> pageChat = chatService.getChatUser(idUser, currentPage, pageSize, name, password);
 		model.addAttribute("pageChat", pageChat);
 		int totalPages = pageChat.getTotalPages();
 		if (totalPages > 0) {
@@ -50,12 +55,15 @@ public class CreneauController {
 	}
 
 	@GetMapping("/creneaux")
-	public String getlistCreneau(Model model) throws ForbiddenException, APiUSerAndCompetenceException {
-
+	public String getlistCreneau(Model model, HttpServletRequest request)
+			throws ForbiddenException, APiUSerAndCompetenceException {
+		HttpSession session = request.getSession();
+		String name = (String) session.getAttribute("username");
+		String password = (String) session.getAttribute("password");
 		Long idUser = 1L;
 		int currentPage = 0;
 		int pageSize = 2;
-		Page<Creneau> pageCreneau = creneauService.getCreneauxUser(idUser, currentPage, pageSize);
+		Page<Creneau> pageCreneau = creneauService.getCreneauxUser(idUser, currentPage, pageSize, name, password);
 
 		model.addAttribute("pageCreneau", pageCreneau);
 		int totalPages = pageCreneau.getTotalPages();

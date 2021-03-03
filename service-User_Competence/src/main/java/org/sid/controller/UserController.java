@@ -49,6 +49,13 @@ public class UserController {
 		return user;
 	}
 
+	@GetMapping("/user")
+	public Users getUserController1(@RequestParam String name) throws ResultNotFoundException {
+		Users user = userService.getUserName(name);
+
+		return user;
+	}
+
 	@GetMapping("/users")
 	public List<Users> getUsersController() throws ResultNotFoundException {
 		List<Users> users = userService.getUsers();

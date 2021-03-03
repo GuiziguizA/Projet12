@@ -1,7 +1,5 @@
 package org.sid.dto;
 
-import org.sid.classe.Users;
-
 public class CompetenceDto {
 
 	private String nom;
@@ -10,19 +8,19 @@ public class CompetenceDto {
 
 	private String description;
 
-	private Users user;
+	private String nomUser;
 
 	public CompetenceDto() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public CompetenceDto(String nom, String type, String description, Users user) {
+	public CompetenceDto(String nom, String type, String description, String nomUser) {
 		super();
 		this.nom = nom;
 		this.type = type;
 		this.description = description;
-
+		this.nomUser = nomUser;
 	}
 
 	public String getNom() {
@@ -49,12 +47,12 @@ public class CompetenceDto {
 		this.description = description;
 	}
 
-	public Users getUser() {
-		return user;
+	public String getNomUser() {
+		return nomUser;
 	}
 
-	public void setUser(Users user) {
-		this.user = user;
+	public void setNomUser(String nomUser) {
+		this.nomUser = nomUser;
 	}
 
 }

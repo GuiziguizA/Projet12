@@ -26,10 +26,14 @@ public class CompetenceServiceImpl implements CompetenceService {
 	UsersRepository usersRepository;
 
 	@Override
-	public Competence createCompetence(CompetenceDto competenceDto) throws EntityAlreadyExistException {
+	public Competence createCompetence(CompetenceDto competenceDto)
+			throws EntityAlreadyExistException, ResultNotFoundException {
+		Optional<Users> user = usersRepository.findByUsername(competenceDto.getNomUser());
 
-		Optional<Competence> competence = competenceRepository.findByUserAndNom(competenceDto.getUser(),
-				competenceDto.getNom());
+		if (!user.isPresent()) {
+			throw new ResultNotFoundException("l'utilisateur nexiste pas");
+		}
+		Optional<Competence> competence = competenceRepository.findByUserAndNom(user.get(), competenceDto.getNom());
 		if (competence.isPresent()) {
 			throw new EntityAlreadyExistException("la competence existe deja pour cette utilisateur");
 		}
@@ -38,7 +42,7 @@ public class CompetenceServiceImpl implements CompetenceService {
 		competence1.setNom(competenceDto.getNom());
 		competence1.setDescription(competenceDto.getDescription());
 		competence1.setType(competenceDto.getType());
-		competence1.setUser(competenceDto.getUser());
+		competence1.setUser(user.get());
 		competenceRepository.saveAndFlush(competence1);
 
 		return competence1;
@@ -89,10 +93,10 @@ public class CompetenceServiceImpl implements CompetenceService {
 	}
 
 	@Override
-	public Page<Competence> getCompetencesUser(Long idUser, int page, int size) throws ResultNotFoundException {
+	public Page<Competence> getCompetencesUser(String nom, int page, int size) throws ResultNotFoundException {
 
 		Pageable pageable = PageRequest.of(page, size);
-		Optional<Users> user = usersRepository.findById(idUser);
+		Optional<Users> user = usersRepository.findByUsername(nom);
 		if (!user.isPresent()) {
 			throw new ResultNotFoundException("user introuvable");
 		}
@@ -105,10 +109,10 @@ public class CompetenceServiceImpl implements CompetenceService {
 	@Override
 	public CompetenceDto getCompetenceDto() {
 		Role role = new Role("user");
-		Users user = new Users(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
+		Users user = new Users("bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
 
 		CompetenceDto competenceDto = new CompetenceDto("changer un pneu", "mecanique",
-				"j'ai une machine permettant de changer les pneus d'une voiture", user);
+				"j'ai une machine permettant de changer les pneus d'une voiture", user.getUsername());
 		return competenceDto;
 
 	}

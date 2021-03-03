@@ -37,11 +37,13 @@ public class RequeteServiceimpl implements RequeteService {
 	HeadersService headersService;
 
 	@Override
-	public void createRequete(Long idComp, Long idUser) throws APiUSerAndCompetenceException {
+	public void createRequete(Long idComp, Long idUser, String username, String password)
+			throws APiUSerAndCompetenceException {
 
 		String uri = url + "/compagny-creneaux_requetes/requete/";
 
-		HttpHeaders headers = new HttpHeaders();
+		HttpHeaders headers = headersService.createTokenHeaders(username, password);
+
 		RestTemplate rt = new RestTemplate();
 
 		RequeteDto requeteDto = new RequeteDto();
@@ -57,11 +59,12 @@ public class RequeteServiceimpl implements RequeteService {
 	}
 
 	@Override
-	public void validerRequete(Long idRequete, Long idUser) throws APiUSerAndCompetenceException {
+	public void validerRequete(Long idRequete, Long idUser, String username, String password)
+			throws APiUSerAndCompetenceException {
 		logger.info(idRequete.toString() + idUser.toString());
 		String uri = url + "/compagny-creneaux_requetes/validateRequete?idRequete=" + idRequete + "&idUser1=" + idUser;
 		RestTemplate rt = new RestTemplate();
-		HttpHeaders headers = new HttpHeaders();
+		HttpHeaders headers = headersService.createTokenHeaders(username, password);
 
 		ResponseEntity<Long> requete = rt.exchange(uri, HttpMethod.POST, new HttpEntity<>(headers), Long.class);
 

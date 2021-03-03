@@ -23,6 +23,7 @@ import sid.org.exception.APiUSerAndCompetenceException;
 import sid.org.service.CompetenceService;
 import sid.org.service.RequeteService;
 import sid.org.service.UserService;
+import sid.org.service.UserSession;
 
 @Controller
 public class RequeteController {
@@ -32,15 +33,19 @@ public class RequeteController {
 	CompetenceService competenceService;
 	@Autowired
 	UserService userService;
+	@Autowired
+	UserSession userSession;
 
 	@PostMapping("/requete")
 	public String addRequete(Model model, @RequestParam Long idComp, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		String name = (String) session.getAttribute("username");
 		String password = (String) session.getAttribute("password");
-		Long idUser = 2L;
+		userSession.loadUserInSession(request, name, password);
+		Users user = (Users) session.getAttribute("user");
+		Long idUser = user.getCodeUtilisateur();
 		try {
-			requeteService.createRequete(idComp, idUser);
+			requeteService.createRequete(idComp, idUser, name, password);
 			Competence comp = competenceService.getCompetence(idComp, name, password);
 			model.addAttribute("competence", comp);
 			return "competence";
@@ -59,9 +64,11 @@ public class RequeteController {
 		HttpSession session = request.getSession();
 		String name = (String) session.getAttribute("username");
 		String password = (String) session.getAttribute("password");
-		Long idUserComp = 1L;
+		userSession.loadUserInSession(request, name, password);
+		Users user = (Users) session.getAttribute("user");
+		Long idUserComp = user.getCodeUtilisateur();
 		try {
-			requeteService.validerRequete(idRequete, idUserComp);
+			requeteService.validerRequete(idRequete, idUserComp, name, password);
 			int currentPage = 0;
 			int pageSize = 2;
 
@@ -88,12 +95,15 @@ public class RequeteController {
 	@GetMapping("/requetes")
 	public String getRequetes(Model model, @RequestParam(required = false) Optional<Integer> size,
 			@RequestParam(required = false) Optional<Integer> page, HttpServletRequest request) {
-		Long idUserComp = 1L;
+
 		int currentPage = page.orElse(0);
 		int pageSize = size.orElse(2);
 		HttpSession session = request.getSession();
 		String name = (String) session.getAttribute("username");
 		String password = (String) session.getAttribute("password");
+		userSession.loadUserInSession(request, name, password);
+		Users user = (Users) session.getAttribute("user");
+		Long idUserComp = user.getCodeUtilisateur();
 		try {
 			Page<Requete> requetePage = requeteService.getRequetes(idUserComp, currentPage, pageSize, name, password);
 			List<Users> users = userService.getUsers(name, password);

@@ -33,7 +33,8 @@ public class CreneauServiceImpl implements CreneauService {
 	private static final Logger logger = LoggerFactory.getLogger(ServiceFrontEndApplication.class);
 	@Autowired
 	private DateService dateService;
-
+	@Autowired
+	private HeadersService headersService;
 	private final RequestFactory requestFactory;
 
 	@Autowired
@@ -42,12 +43,11 @@ public class CreneauServiceImpl implements CreneauService {
 	}
 
 	@Override
-	public void createCreneau(Chat chat, DateDto dateDto) throws ForbiddenException {
+	public void createCreneau(Chat chat, DateDto dateDto, String username, String password) throws ForbiddenException {
 
 		String uri = url + "/compagny-creneaux_requetes/creneau?&idRequete=" + chat.getIdRequete();
-
-		HttpHeaders headers = new HttpHeaders();
 		RestTemplate rt = new RestTemplate();
+		HttpHeaders headers = headersService.createTokenHeaders(username, password);
 		Date date = dateService.createDate(dateDto);
 		try {
 			CreneauDto creneauDto = new CreneauDto();
@@ -64,10 +64,11 @@ public class CreneauServiceImpl implements CreneauService {
 	}
 
 	@Override
-	public Page<Creneau> getCreneauxUser(Long idUser, int page, int size) throws APiUSerAndCompetenceException {
+	public Page<Creneau> getCreneauxUser(Long idUser, int page, int size, String username, String password)
+			throws APiUSerAndCompetenceException {
 
 		RestTemplate rt = requestFactory.getRestTemplate();
-		HttpHeaders headers = new HttpHeaders();
+		HttpHeaders headers = headersService.createTokenHeaders(username, password);
 		ParameterizedTypeReference<RestResponsePage<Creneau>> responseType = new ParameterizedTypeReference<RestResponsePage<Creneau>>() {
 		};
 		String uri = url + "/compagny-creneaux_requetes/creneaux?idUser=" + idUser + "&page=" + page + "&size=" + size;

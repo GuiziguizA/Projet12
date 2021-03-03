@@ -47,6 +47,7 @@ public class CompetenceController {
 			Page<Competence> competencePage = competenceService.searchCompetence(recherche, pageSize, currentPage, name,
 					password);
 			model.addAttribute("competencePage", competencePage);
+			model.addAttribute("name", name);
 			int totalPages = competencePage.getTotalPages();
 			if (totalPages > 0) {
 				List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
@@ -67,7 +68,7 @@ public class CompetenceController {
 	public String getCompetencesUser(Model model, @RequestParam(required = false) Optional<Integer> size,
 			@RequestParam(required = false) Optional<Integer> page, HttpServletRequest request)
 			throws APiUSerAndCompetenceException {
-		Long idUser = 1L;
+
 		int currentPage = page.orElse(0);
 		int pageSize = size.orElse(2);
 		HttpSession session = request.getSession();
@@ -76,7 +77,7 @@ public class CompetenceController {
 
 		try {
 
-			Page<Competence> competencePage = competenceService.getCompetencesUser(idUser, pageSize, currentPage, name,
+			Page<Competence> competencePage = competenceService.getCompetencesUser(name, pageSize, currentPage, name,
 					password);
 			model.addAttribute("competencePage", competencePage);
 			int totalPages = competencePage.getTotalPages();

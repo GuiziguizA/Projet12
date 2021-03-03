@@ -18,7 +18,6 @@ public interface CompetenceService {
 	public void createComp(CompetenceDto competenceDto, Long idUser, String username, String password)
 			throws APiUSerAndCompetenceException;
 
-	public Page<Competence> getCompetencesUser(Long idUser, int size, int page, String username, String password)
-			throws APiUSerAndCompetenceException;
+	public Page<Competence> getCompetencesUser(String nom, int size, int page, String username, String password);
 
 }

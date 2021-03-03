@@ -38,13 +38,13 @@ class CompetenceServiceTest {
 	}
 
 	@Test
-	void createCompetenceTest() throws EntityAlreadyExistException {
+	void createCompetenceTest() throws EntityAlreadyExistException, ResultNotFoundException {
 		Role role = new Role("user");
-		Users user = new Users(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
+		Users user = new Users("bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
 		Competence competence = new Competence(1L, "changer un pneu", "mecanique",
 				"j'ai une machine permettant de changer les pneus d'une voiture", user);
 		CompetenceDto competenceDto = new CompetenceDto("changer un pneu", "mecanique",
-				"j'ai une machine permettant de changer les pneus d'une voiture", user);
+				"j'ai une machine permettant de changer les pneus d'une voiture", user.getUsername());
 
 		Mockito.when(competenceRepository.findByUserAndNom(Mockito.any(Users.class), Mockito.anyString()))
 				.thenReturn(Optional.empty());
@@ -56,11 +56,11 @@ class CompetenceServiceTest {
 	@Test
 	void createCompetenceTestEntityAlreadyExist() throws EntityAlreadyExistException {
 		Role role = new Role("user");
-		Users user = new Users(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
+		Users user = new Users("bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
 		Competence competence = new Competence(1L, "changer un pneu", "mecanique",
 				"j'ai une machine permettant de changer les pneus d'une voiture", user);
 		CompetenceDto competenceDto = new CompetenceDto("changer un pneu", "mecanique",
-				"j'ai une machine permettant de changer les pneus d'une voiture", user);
+				"j'ai une machine permettant de changer les pneus d'une voiture", user.getUsername());
 
 		Mockito.when(competenceRepository.findByUserAndNom(Mockito.any(Users.class), Mockito.anyString()))
 				.thenReturn(Optional.of(competence));
@@ -80,11 +80,11 @@ class CompetenceServiceTest {
 	@Test
 	void deleteCompetence() throws ResultNotFoundException {
 		Role role = new Role("user");
-		Users user = new Users(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
+		Users user = new Users("bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
 		Competence competence = new Competence(1L, "changer un pneu", "mecanique",
 				"j'ai une machine permettant de changer les pneus d'une voiture", user);
 		CompetenceDto competenceDto = new CompetenceDto("changer un pneu", "mecanique",
-				"j'ai une machine permettant de changer les pneus d'une voiture", user);
+				"j'ai une machine permettant de changer les pneus d'une voiture", user.getUsername());
 
 		Mockito.when(competenceRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(competence));
 		Mockito.doNothing().when(competenceRepository).delete(Mockito.any(Competence.class));
@@ -96,11 +96,11 @@ class CompetenceServiceTest {
 	@Test
 	void deleteCompetenceException() throws ResultNotFoundException {
 		Role role = new Role("user");
-		Users user = new Users(1L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
+		Users user = new Users("bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
 		Competence competence = new Competence(1L, "changer un pneu", "mecanique",
 				"j'ai une machine permettant de changer les pneus d'une voiture", user);
 		CompetenceDto competenceDto = new CompetenceDto("changer un pneu", "mecanique",
-				"j'ai une machine permettant de changer les pneus d'une voiture", user);
+				"j'ai une machine permettant de changer les pneus d'une voiture", user.getUsername());
 
 		Mockito.when(competenceRepository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
 

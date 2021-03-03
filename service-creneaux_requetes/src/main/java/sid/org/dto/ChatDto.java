@@ -5,12 +5,16 @@ public class ChatDto {
 	private Long idUser;
 	private Long idUser1;
 	private Long idComp;
+	private Long idRequete;
+	private String username;
+	private String competenceNom;
 
-	public ChatDto(Long idUser, Long idUser1, Long idComp) {
+	public ChatDto(Long idUser, Long idUser1, Long idComp, Long idRequete) {
 		super();
 		this.idUser = idUser;
 		this.idUser1 = idUser1;
-		this.setIdComp(idComp);
+		this.idComp = idComp;
+		this.idRequete = idRequete;
 	}
 
 	public ChatDto() {
@@ -40,6 +44,30 @@ public class ChatDto {
 
 	public void setIdComp(Long idComp) {
 		this.idComp = idComp;
+	}
+
+	public Long getIdRequete() {
+		return idRequete;
+	}
+
+	public void setIdRequete(Long idRequete) {
+		this.idRequete = idRequete;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getCompetenceNom() {
+		return competenceNom;
+	}
+
+	public void setCompetenceNom(String competenceNom) {
+		this.competenceNom = competenceNom;
 	}
 
 }

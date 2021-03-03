@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +21,7 @@ import sid.org.api.UserConnect;
 import sid.org.classe.Competence;
 import sid.org.classe.Requete;
 import sid.org.classe.Users;
+import sid.org.config.MessagingConfig;
 import sid.org.dao.RequeteRepository;
 import sid.org.dto.ChatDto;
 import sid.org.dto.RequeteDto;
@@ -38,6 +40,8 @@ public class RequeteServiceImpl implements RequeteService {
 	CompetenceApi competenceApi;
 	@Autowired
 	UserConnect userConnect;
+	@Autowired
+	public RabbitTemplate template;
 
 	private static final Logger logger = LoggerFactory.getLogger(RequeteServiceImpl.class);
 
@@ -83,18 +87,29 @@ public class RequeteServiceImpl implements RequeteService {
 		Competence competence = competenceApi.getCompetence(requete.get().getIdComp());
 		if (idUser1 == competence.getUser().getCodeUtilisateur()) {
 
-			try {
-				chatConnect.getChat(requete.get().getIdUser(), idUser1);
-				throw new EntityAlreadyExistException("le chat existe deja");
+			/*
+			 * try { chatConnect.getChat(requete.get().getIdUser(), idUser1); throw new
+			 * EntityAlreadyExistException("le chat existe deja");
+			 * 
+			 * } catch (HttpStatusCodeException e) {
+			 */
+			ChatDto chatDto = new ChatDto();
+			chatDto.setIdUser(requete.get().getIdUser());
+			chatDto.setIdUser1(idUser1);
+			chatDto.setIdComp(requete.get().getIdComp());
+			chatDto.setIdRequete(id);
+			chatDto.setUsername(requete.get().getUsername());
+			chatDto.setCompetenceNom(requete.get().getCompetenceNom());
 
-			} catch (APiUSerAndCompetenceException e) {
-				ChatDto chatDto = new ChatDto(requete.get().getIdUser(), idUser1, requete.get().getIdComp());
-				chatConnect.createChat(chatDto, id);
-				requete.get().setStatut("valide");
-				requeteRepository.saveAndFlush(requete.get());
-			}
+			template.convertAndSend(MessagingConfig.EXCHANGE, MessagingConfig.ROUTIN_KEY, chatDto);
+			/* chatConnect.createChat(chatDto, id); */
+			requete.get().setStatut("valide");
+			requeteRepository.saveAndFlush(requete.get());
+			/* } */
 
-		} else {
+		} else
+
+		{
 			throw new ForbiddenException("action interdite");
 		}
 

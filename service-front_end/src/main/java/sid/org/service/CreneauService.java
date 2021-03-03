@@ -10,8 +10,9 @@ import sid.org.exception.ForbiddenException;
 
 public interface CreneauService {
 
-	public void createCreneau(Chat chat, DateDto dateDto) throws ForbiddenException;
+	public void createCreneau(Chat chat, DateDto dateDto, String username, String password) throws ForbiddenException;
 
-	Page<Creneau> getCreneauxUser(Long idUser, int page, int size) throws APiUSerAndCompetenceException;
+	public Page<Creneau> getCreneauxUser(Long idUser, int page, int size, String username, String password)
+			throws APiUSerAndCompetenceException;
 
 }

@@ -15,22 +15,14 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MessagingConfig {
 
-	public static final String QUEUE = "service_queue";
-	public static final String QUEUE1 = "service_chat";
-	public static final String EXCHANGE = "service_exchange";
-	public static final String EXCHANGE1 = "service_exchangeChat";
-	public static final String ROUTIN_KEY = "service_routingKey";
-	public static final String ROUTIN_KEY1 = "service_routingKeyChat";
+	public static final String QUEUE = "service_chat";
+	public static final String EXCHANGE = "service_exchangeChat";
+	public static final String ROUTIN_KEY = "service_routingKeyChat";
 
 	@Bean
 	public Queue queue() {
 
 		return new Queue(QUEUE);
-	}
-
-	@Bean
-	Queue queue1() {
-		return new Queue(QUEUE1);
 	}
 
 	@Bean
@@ -40,21 +32,9 @@ public class MessagingConfig {
 	}
 
 	@Bean
-	public TopicExchange exchange1() {
-
-		return new TopicExchange(EXCHANGE1);
-	}
-
-	@Bean
 	public Binding binding(Queue queue, TopicExchange exchange) {
 
 		return BindingBuilder.bind(queue).to(exchange).with(ROUTIN_KEY);
-	}
-
-	@Bean
-	public Binding binding1(Queue queue, TopicExchange exchange) {
-
-		return BindingBuilder.bind(queue).to(exchange).with(ROUTIN_KEY1);
 	}
 
 	@Bean

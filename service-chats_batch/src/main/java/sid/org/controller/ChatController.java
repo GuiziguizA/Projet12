@@ -4,16 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import sid.org.classe.Chat;
-import sid.org.dto.ChatDto;
-import sid.org.exception.APiUSerAndCompetenceException;
-import sid.org.exception.EntityAlreadyExistException;
-import sid.org.exception.ForbiddenException;
 import sid.org.exception.ResultNotFoundException;
 import sid.org.service.ChatService;
 
@@ -41,15 +35,17 @@ public class ChatController {
 
 	}
 
-	@PostMapping("/chat")
-	public Chat creerChat(@RequestBody ChatDto chatDto, @RequestParam Long idRequete,
-			@RequestParam Long codeMicroservice, @RequestParam Long idUser)
-			throws EntityAlreadyExistException, APiUSerAndCompetenceException, ForbiddenException {
-		Chat chat = chatService.creerUnChat(chatDto, idRequete, codeMicroservice, idUser);
-		return chat;
-
-	}
-
+	/*
+	 * @PostMapping("/chat") public Chat creerChat(@RequestBody ChatDto
+	 * chatDto, @RequestParam Long idRequete,
+	 * 
+	 * @RequestParam Long codeMicroservice, @RequestParam Long idUser) throws
+	 * EntityAlreadyExistException, APiUSerAndCompetenceException,
+	 * ForbiddenException { Chat chat = chatService.creerUnChat(chatDto, idRequete,
+	 * codeMicroservice, idUser); return chat;
+	 * 
+	 * }
+	 */
 	@DeleteMapping("/chat")
 	public void supprimerChat(@RequestParam Long id, @RequestParam Long codeMicroservice)
 			throws ResultNotFoundException {

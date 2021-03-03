@@ -9,7 +9,8 @@ import org.springframework.data.domain.Page;
 
 public interface CompetenceService {
 
-	public Competence createCompetence(CompetenceDto competenceDto) throws EntityAlreadyExistException;
+	public Competence createCompetence(CompetenceDto competenceDto)
+			throws EntityAlreadyExistException, ResultNotFoundException;
 
 	public void deleteCompetence(Long id) throws ResultNotFoundException;
 
@@ -22,6 +23,6 @@ public interface CompetenceService {
 
 	public Competence getCompetence(Long id) throws ResultNotFoundException;
 
-	public Page<Competence> getCompetencesUser(Long idUser, int page, int size) throws ResultNotFoundException;
+	public Page<Competence> getCompetencesUser(String nom, int page, int size) throws ResultNotFoundException;
 
 }

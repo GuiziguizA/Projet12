@@ -24,6 +24,8 @@ public class ChatServiceImpl implements ChatService {
 	private static final Logger logger = LoggerFactory.getLogger(ChatServiceImpl.class);
 
 	private final RequestFactory requestFactory;
+	@Autowired
+	private HeadersService headersService;
 
 	@Autowired
 	public ChatServiceImpl(RequestFactory requestFactory) {
@@ -31,14 +33,14 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
-	public Page<Chat> getChatUser(Long idUser, int page, int size) {
+	public Page<Chat> getChatUser(Long idUser, int page, int size, String username, String password) {
 
 		RestTemplate rt = requestFactory.getRestTemplate();
-		HttpHeaders headers = new HttpHeaders();
+		HttpHeaders headers = headersService.createTokenHeaders(username, password);
 		ParameterizedTypeReference<RestResponsePage<Chat>> responseType = new ParameterizedTypeReference<RestResponsePage<Chat>>() {
 		};
 		String uri = url + "/compagny-chat_batch/chats?idUser=" + idUser + "&page=" + page + "&size=" + size;
-		String uri1 = "http://localhost:8089/compagny-chat_batch/chats?idUser=1&page=0&size=2";
+
 		ResponseEntity<RestResponsePage<Chat>> result = rt.exchange(uri, HttpMethod.GET, new HttpEntity<>(headers),
 				responseType);
 		Page<Chat> chatPage = result.getBody();
