@@ -61,6 +61,11 @@ public class RequeteServiceImpl implements RequeteService {
 			throw new ForbiddenException("un utilisateur ne peut pas s'envoyer une requete a lui même");
 		}
 
+		if (chatConnect.getChat(requeteDto.getIdUser(), competence.getUser().getCodeUtilisateur()) == 1) {
+			throw new EntityAlreadyExistException("le chat existe deja");
+
+		}
+
 		Requete requete1 = new Requete();
 
 		requete1.setIdComp(requeteDto.getIdComp());
@@ -87,29 +92,25 @@ public class RequeteServiceImpl implements RequeteService {
 		Competence competence = competenceApi.getCompetence(requete.get().getIdComp());
 		if (idUser1 == competence.getUser().getCodeUtilisateur()) {
 
-			/*
-			 * try { chatConnect.getChat(requete.get().getIdUser(), idUser1); throw new
-			 * EntityAlreadyExistException("le chat existe deja");
-			 * 
-			 * } catch (HttpStatusCodeException e) {
-			 */
+			if (chatConnect.getChat(requete.get().getIdUser(), idUser1) == 1) {
+				throw new EntityAlreadyExistException("le chat existe deja");
+
+			}
+
 			ChatDto chatDto = new ChatDto();
 			chatDto.setIdUser(requete.get().getIdUser());
 			chatDto.setIdUser1(idUser1);
 			chatDto.setIdComp(requete.get().getIdComp());
 			chatDto.setIdRequete(id);
 			chatDto.setUsername(requete.get().getUsername());
+			chatDto.setUsername1(competence.getUser().getUsername());
 			chatDto.setCompetenceNom(requete.get().getCompetenceNom());
 
 			template.convertAndSend(MessagingConfig.EXCHANGE, MessagingConfig.ROUTIN_KEY, chatDto);
 			/* chatConnect.createChat(chatDto, id); */
 			requete.get().setStatut("valide");
 			requeteRepository.saveAndFlush(requete.get());
-			/* } */
-
-		} else
-
-		{
+		} else {
 			throw new ForbiddenException("action interdite");
 		}
 

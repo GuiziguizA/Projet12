@@ -13,7 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import sid.org.classe.Chat;
@@ -33,8 +32,8 @@ public class CreneauController {
 	ChatService chatService;
 
 	@PostMapping("/creneau")
-	public String createCreneau(Model model, @RequestBody DateDto dateDto, @RequestParam Chat chat,
-			HttpServletRequest request) throws ForbiddenException {
+	public String createCreneau(Model model, DateDto dateDto, @RequestParam Chat chat, HttpServletRequest request)
+			throws ForbiddenException {
 		HttpSession session = request.getSession();
 		String name = (String) session.getAttribute("username");
 		String password = (String) session.getAttribute("password");

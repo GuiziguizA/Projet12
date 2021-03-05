@@ -16,7 +16,6 @@ import sid.org.classe.Chat;
 import sid.org.config.MessagingConfig;
 import sid.org.dao.ChatRepository;
 import sid.org.dto.ChatDto;
-import sid.org.exception.EntityAlreadyExistException;
 import sid.org.exception.ResultNotFoundException;
 
 @Service
@@ -27,19 +26,17 @@ public class ChatServiceImpl implements ChatService {
 	RequeteConnect requeteConnect;
 
 	@RabbitListener(queues = MessagingConfig.QUEUE1)
-	public Chat creerUnChat(ChatDto chatDto) throws EntityAlreadyExistException {
+	public void creerUnChat(ChatDto chatDto) {
 
 		System.out.println("LLLLLLLLLLLLLLLLL" + chatDto.toString());
 		Optional<Chat> chat = chatRepository.findByUserAndUser(chatDto.getIdUser(), chatDto.getIdUser1());
 		Optional<Chat> chat2 = chatRepository.findByUserAndUser(chatDto.getIdUser1(), chatDto.getIdUser());
 
-		if (chat.isPresent()) {
-			throw new EntityAlreadyExistException("chat existe deja");
-		}
-		if (chat2.isPresent()) {
-			throw new EntityAlreadyExistException("chat existe deja");
-		}
-
+		/*
+		 * if (chat.isPresent()) { throw new
+		 * EntityAlreadyExistException("chat existe deja"); } if (chat2.isPresent()) {
+		 * throw new EntityAlreadyExistException("chat existe deja"); }
+		 */
 		Chat chat1 = new Chat();
 		chat1.setIdUser(chatDto.getIdUser());
 		chat1.setIdUser1(chatDto.getIdUser1());
@@ -49,7 +46,6 @@ public class ChatServiceImpl implements ChatService {
 		chat1.setUsername(chatDto.getUsername());
 		chat1.setIdComp(chatDto.getIdComp());
 		chatRepository.saveAndFlush(chat1);
-		return chat1;
 
 	}
 

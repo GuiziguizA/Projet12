@@ -28,7 +28,7 @@ public class ChatConnectImpl implements ChatConnect {
 	private HeadersService headersService;
 
 	@Override
-	public Chat getChat(Long idUser, Long idUser1) {
+	public int getChat(Long idUser, Long idUser1) throws HttpStatusCodeException {
 		String uri = url + "/compagny-chat_batch/chat?idUser1=" + idUser1 + "&idUser=" + idUser;
 		RecupToken token = new RecupToken();
 		TokenString tok = token.tokenString();
@@ -37,10 +37,11 @@ public class ChatConnectImpl implements ChatConnect {
 
 		try {
 			ResponseEntity<Chat> chat = rt.exchange(uri, HttpMethod.GET, new HttpEntity<>(headers), Chat.class);
-			return chat.getBody();
+
+			return 1;
 		} catch (HttpStatusCodeException e) {
-			e.getMessage();
-			return null;
+			return 0;
+
 		}
 
 	}

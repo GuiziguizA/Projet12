@@ -1,7 +1,5 @@
 package sid.org.service;
 
-import java.util.Date;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +29,7 @@ public class CreneauServiceImpl implements CreneauService {
 	@Value("${api.url}")
 	private String url;
 	private static final Logger logger = LoggerFactory.getLogger(ServiceFrontEndApplication.class);
-	@Autowired
-	private DateService dateService;
+
 	@Autowired
 	private HeadersService headersService;
 	private final RequestFactory requestFactory;
@@ -48,13 +45,13 @@ public class CreneauServiceImpl implements CreneauService {
 		String uri = url + "/compagny-creneaux_requetes/creneau?&idRequete=" + chat.getIdRequete();
 		RestTemplate rt = new RestTemplate();
 		HttpHeaders headers = headersService.createTokenHeaders(username, password);
-		Date date = dateService.createDate(dateDto);
+
 		try {
 			CreneauDto creneauDto = new CreneauDto();
 			creneauDto.setIdUser(chat.getIdUser());
 			creneauDto.setIdUser1(chat.getIdUser1());
 			creneauDto.setIdComp(chat.getIdComp());
-			creneauDto.setDate(date);
+			creneauDto.setDate(dateDto.getDate());
 			rt.exchange(uri, HttpMethod.POST, new HttpEntity<>(creneauDto, headers), Creneau.class);
 
 		} catch (HttpStatusCodeException e) {

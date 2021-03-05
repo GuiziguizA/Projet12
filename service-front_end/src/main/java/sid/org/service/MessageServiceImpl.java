@@ -16,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import sid.org.Page.RestResponsePage;
 import sid.org.classe.Message;
 import sid.org.config.RequestFactory;
+import sid.org.dto.MessageDto;
 
 @Service
 public class MessageServiceImpl implements MessageService {
@@ -23,6 +24,8 @@ public class MessageServiceImpl implements MessageService {
 	@Value("${api.url}")
 	private String url;
 	private static final Logger logger = LoggerFactory.getLogger(MessageServiceImpl.class);
+	@Autowired
+	HeadersService headersService;
 
 	private final RequestFactory requestFactory;
 
@@ -32,10 +35,10 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
-	public Page<Message> getMessagesChats(Long idChat, int page, int size) {
-
+	public Page<Message> getMessagesChats(Long idChat, int page, int size, String username, String password) {
+		HttpHeaders headers = headersService.createTokenHeaders(username, password);
 		RestTemplate rt = requestFactory.getRestTemplate();
-		HttpHeaders headers = new HttpHeaders();
+
 		ParameterizedTypeReference<RestResponsePage<Message>> responseType = new ParameterizedTypeReference<RestResponsePage<Message>>() {
 		};
 		String uri = url + "/compagny-chat_batch/messages?idChat=" + idChat + "&page=" + page + "&size=" + size;
@@ -44,6 +47,19 @@ public class MessageServiceImpl implements MessageService {
 				responseType);
 		Page<Message> messagePage = result.getBody();
 		return messagePage;
+
+	}
+
+	@Override
+	public void postMessagesChats(Long idChat, Long idUser, String username, String password, MessageDto message) {
+
+		logger.info("idChat" + idChat + "idUser" + idUser + "message" + message.getContent());
+		HttpHeaders headers = headersService.createTokenHeaders(username, password);
+		RestTemplate rt = requestFactory.getRestTemplate();
+
+		String uri = url + "/compagny-chat_batch/message?idUser=" + idUser + "&idChat=" + 1;
+
+		rt.exchange(uri, HttpMethod.POST, new HttpEntity<>(message, headers), String.class);
 
 	}
 

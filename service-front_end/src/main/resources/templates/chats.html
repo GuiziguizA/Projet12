@@ -4,11 +4,20 @@
 
 <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
 	<script type="text/javascript" src="webjars/jquery/3.5.1/jquery.min.js"></script>
 	<script type="text/javascript" src="webjars/bootstrap/4.5.3/js/bootstrap.min.js"></script>
 	<script type="text/javascript" th:src="@{js/main.js}" src="../static/js/main.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+
 
 	<link rel="stylesheet" href="webjars/bootstrap/4.5.3/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
 </head>
 
 <body>
@@ -36,29 +45,26 @@
 										<h4 class="modal-title">Supprimer</h4>
 									</div>
 									<div class="modal-body">
-										<p class="alert alert-danger">Etes-vous sûr de vouloir supprimer ce prêt en
-											Attente</p>
+										<p class="alert alert-success">Demande de creneau</p>
 									</div>
 									<div class="modal-footer">
 									 <form th:action="@{/creneau?(chat=${chat})}" th:object="${dateDto}" method="post">
-        <br>
-        <input type="text" th:field="*{jour}" id="jour" class="form-control" placeholder="jour de la semaine">
-        <div th:if="${#fields.hasErrors('jour')}" class="alert alert-danger" role="alert"><span class="alert alert-primary" th:errors="*{jour}"></span></div>
-   <br>
-    <input type="text" th:field="*{mois}" id="mois" class="form-control" placeholder="mois de l'année">
-     <div  th:if="${#fields.hasErrors('mois')}" class="alert alert-danger" role="alert"><span class="alert alert-primary" th:errors="*{mois}"></span></div>
-      <br>
-    <input type="text" th:field="*{annee}" id="annee" class="form-control" placeholder="annee">
-   <div  th:if="${#fields.hasErrors('annee')}" class="alert alert-danger" role="alert"> <span class="alert alert-primary" th:errors="*{annee}"></span></div>
-  
-<br>
- <input type="text" th:field="*{heure}" id="heure" class="form-control" placeholder="heure">
-   <div  th:if="${#fields.hasErrors('heure')}" class="alert alert-danger" role="alert"> <span class="alert alert-primary" th:errors="*{heure}"></span></div>
-  
-<br>
+  <div class="form-group">
+		<div class="input-group">
+		<input type="text" class= "form-control" id="datetimepicker">
+		<span class= "input-group-addon"><span class= "glyphicon glyphicon-calendar"></span></span>
+		 <button type="submit" class="btn btn-primary">Submit</button>
+			<script type = "text/javascript">
+			$(function(){
+				$('#datetimepicker').datetimepicker();
+			});
+			
+			</script>
+		</div>
+		</div>
    
-     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-     <button type="submit" class="btn btn-primary">Submit</button>
+    
+    
    
     
 </form>
@@ -83,6 +89,7 @@
 						<tr>
 							<th scope="col">Competence</th>
 							<th scope="col">utilisateur</th>
+							<th scope="col">utilisateur1</th>
 							<th scope="col">Statut</th>
 							<th scope="col"></th>
 							<th scope="col"></th>
@@ -90,7 +97,8 @@
 						</tr>
 						<tr th:each="chat:${pageChat}">
 						<td th:text="${chat.competenceName}"></td>
-							<td th:text="${chat.username}"></td>
+						<td th:text="${chat.username}"></td>
+							<td th:text="${chat.username1}"></td>
 							<td th:text="${chat.statut}"></td>
 								<td>	
 								<input type="submit" class="btn btn-danger delBtn"  id="delBtn" value="Demande de creneau">

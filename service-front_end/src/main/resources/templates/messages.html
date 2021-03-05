@@ -28,6 +28,8 @@
 				</div>
 		
 				<div class="border rounded" >
+				
+					
 					<table class="table table-striped">
 						<tr>
 							
@@ -47,6 +49,23 @@
 		</table>
 		
 </div>
+<br>
+		<div>
+		<form th:action="@{/messages(idChat=${idChat})}"  th:object="${messageDto}" method="post">
+
+	<br>
+					 <input type="text" th:field="*{content}" id="content"  placeholder="message">
+							
+
+						</div>
+						<br>
+
+						<input type="submit" class="btn btn-primary" value="envoyer">
+						<br>
+						<br>
+
+					</form>
+					</div>
 <div>
 <div th:if="${pageMessage.totalPages > 0}"
     th:each="pageNumber : ${pageNumbers}" class="btn-group btn-group-toggle">

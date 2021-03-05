@@ -10,7 +10,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import sid.org.service.ChatService;
 import sid.org.service.CompetenceService;
 import sid.org.service.CreneauService;
-import sid.org.service.DateService;
 import sid.org.service.HeadersService;
 import sid.org.service.KeycloakService;
 import sid.org.service.RequeteService;
@@ -32,8 +31,7 @@ public class ServiceFrontEndApplication implements CommandLineRunner {
 	ChatService chatService;
 	@Autowired
 	CreneauService creneauService;
-	@Autowired
-	DateService dateService;
+
 	@Autowired
 	KeycloakService keycloakService;
 	@Autowired
