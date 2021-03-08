@@ -13,13 +13,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import sid.org.ServiceFrontEndApplication;
 import sid.org.service.HeadersService;
 import sid.org.service.KeycloakService;
+import sid.org.service.UserSession;
 
 public class TwoFactorAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
 	AuthenticationManager authenticationManager;
 	@Autowired
 	KeycloakService keycloakService;
-
+	@Autowired
+	UserSession userSession;
 	private static final Logger log = LoggerFactory.getLogger(ServiceFrontEndApplication.class);
 	@Value("${keycloak.resource}")
 	private String client;

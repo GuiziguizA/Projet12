@@ -25,7 +25,7 @@ public class KeycloakServiceImpl implements KeycloakService {
 	private static final Logger logger = LoggerFactory.getLogger(KeycloakServiceImpl.class);
 
 	@Override
-	public String RecupTokenAdmin(String username, String password, String clientId) {
+	public String RecupTokenAdmin(String username, String password, String clientId) throws HttpStatusCodeException {
 
 		MultiValueMap<String, String> token = null;
 		RestTemplate restTemplate = new RestTemplate();
@@ -54,7 +54,7 @@ public class KeycloakServiceImpl implements KeycloakService {
 	}
 
 	@Override
-	public String RecupTokenClient(String username, String password, String clientId) {
+	public String RecupTokenClient(String username, String password, String clientId) throws HttpStatusCodeException {
 
 		MultiValueMap<String, String> token = null;
 		RestTemplate restTemplate = new RestTemplate();
@@ -83,7 +83,7 @@ public class KeycloakServiceImpl implements KeycloakService {
 	}
 
 	@Override
-	public void createUserKeycloak(String name, String mail, String password) {
+	public void createUserKeycloak(String name, String mail, String password) throws HttpStatusCodeException {
 		RestTemplate restTemplate = new RestTemplate();
 
 		String url = "http://localhost:8080/auth/admin/realms/SocialAppRealm/users";
@@ -105,7 +105,7 @@ public class KeycloakServiceImpl implements KeycloakService {
 	}
 
 	@Override
-	public String UserGetId(String mail) {
+	public String UserGetId(String mail) throws HttpStatusCodeException {
 		RestTemplate restTemplate = new RestTemplate();
 		String url = "http://localhost:8080/auth/admin/realms/SocialAppRealm/users";
 		String accessToken = RecupTokenAdmin("admin", "admin", "admin-cli");

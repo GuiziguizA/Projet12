@@ -24,6 +24,7 @@ import sid.org.classe.Message;
 import sid.org.classe.Users;
 import sid.org.dto.DateDto;
 import sid.org.dto.MessageDto;
+import sid.org.service.HttpService;
 import sid.org.service.MessageService;
 
 @Controller
@@ -31,6 +32,8 @@ public class MessageController {
 
 	@Autowired
 	MessageService messageService;
+	@Autowired
+	HttpService httpService;
 
 	private static final Logger logger = LoggerFactory.getLogger(MessageController.class);
 
@@ -50,7 +53,7 @@ public class MessageController {
 		int currentPage = page.orElse(0);
 		int pageSize = size.orElse(2);
 		try {
-			Page<Message> pageMessage = messageService.getMessagesChats(idChat, currentPage, pageSize, name, password);
+			Page<Message> pageMessage = messageService.getMessagesChats(idChat, currentPage, pageSize, request);
 			model.addAttribute("pageMessage", pageMessage);
 			model.addAttribute("idChat", idChat);
 			int totalPages = pageMessage.getTotalPages();
@@ -59,13 +62,15 @@ public class MessageController {
 				model.addAttribute("pageNumbers", pageNumbers);
 			}
 			return "messages";
-		} catch (
+		} catch (HttpStatusCodeException e) {
+			String error = httpService.traiterLesExceptionsApi(e);
+			if (error == "error") {
+				return "redirect:/logout";
+			} else {
+				model.addAttribute("error", error);
+				return "error";
+			}
 
-		HttpStatusCodeException e) {
-
-			String error = e.getMessage();
-			model.addAttribute("error", error);
-			return "error";
 		}
 	}
 
@@ -80,17 +85,16 @@ public class MessageController {
 		/* Long idChat = (Long) model.getAttribute("idChat"); */
 
 		try {
-			messageService.postMessagesChats(idChat, idUser, name, password, messageDto);
+			messageService.postMessagesChats(idChat, idUser, request, messageDto);
 
 			return "redirect:/messages?idChat=" + idChat + "&idUser=" + idUser;
 
-		} catch (
+		} catch (HttpStatusCodeException e) {
+			String error = httpService.traiterLesExceptionsApi(e);
 
-		HttpStatusCodeException e) {
-
-			String error = e.getMessage();
 			model.addAttribute("error", error);
 			return "error";
+
 		}
 	}
 

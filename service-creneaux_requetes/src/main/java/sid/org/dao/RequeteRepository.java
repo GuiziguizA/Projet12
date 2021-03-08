@@ -14,4 +14,6 @@ public interface RequeteRepository extends JpaRepository<Requete, Long> {
 
 	Page<Requete> findByIdUserComp(Long idUserComp, Pageable pageable);
 
+	Page<Requete> findByIdUser(Long idUser, Pageable pageable);
+
 }

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.HttpStatusCodeException;
 
 import sid.org.classe.Competence;
+import sid.org.classe.Users;
 import sid.org.dto.CompetenceDto;
 import sid.org.exception.APiUSerAndCompetenceException;
 import sid.org.service.CompetenceService;
@@ -42,10 +43,10 @@ public class CompetenceController {
 		int pageSize = size.orElse(2);
 		HttpSession session = request.getSession();
 		String name = (String) session.getAttribute("username");
-		String password = (String) session.getAttribute("password");
+
 		try {
-			Page<Competence> competencePage = competenceService.searchCompetence(recherche, pageSize, currentPage, name,
-					password);
+			Page<Competence> competencePage = competenceService.searchCompetence(recherche, pageSize, currentPage,
+					request);
 			model.addAttribute("competencePage", competencePage);
 			model.addAttribute("name", name);
 			int totalPages = competencePage.getTotalPages();
@@ -57,28 +58,30 @@ public class CompetenceController {
 
 		} catch (HttpStatusCodeException e) {
 
-			String error = e.getMessage();
-			model.addAttribute("error", error);
-			return "error";
+			String error = httpService.traiterLesExceptionsApi(e);
+			if (error == "error") {
+				return "redirect:/logout";
+			} else {
+				model.addAttribute("error", error);
+				return "error";
+			}
 		}
 
 	}
 
 	@GetMapping("/home")
 	public String getCompetencesUser(Model model, @RequestParam(required = false) Optional<Integer> size,
-			@RequestParam(required = false) Optional<Integer> page, HttpServletRequest request)
-			throws APiUSerAndCompetenceException {
+			@RequestParam(required = false) Optional<Integer> page, HttpServletRequest request) {
 
 		int currentPage = page.orElse(0);
 		int pageSize = size.orElse(2);
 		HttpSession session = request.getSession();
 		String name = (String) session.getAttribute("username");
-		String password = (String) session.getAttribute("password");
 
 		try {
 
-			Page<Competence> competencePage = competenceService.getCompetencesUser(name, pageSize, currentPage, name,
-					password);
+			Page<Competence> competencePage = competenceService.getCompetencesUser(name, pageSize, currentPage,
+					request);
 			model.addAttribute("competencePage", competencePage);
 			int totalPages = competencePage.getTotalPages();
 			if (totalPages > 0) {
@@ -88,22 +91,22 @@ public class CompetenceController {
 			return "home";
 
 		} catch (HttpStatusCodeException e) {
-
-			String error = e.getMessage();
-			model.addAttribute("error", error);
-			return "error";
+			String error = httpService.traiterLesExceptionsApi(e);
+			if (error == "error") {
+				return "redirect:/logout";
+			} else {
+				model.addAttribute("error", error);
+				return "error";
+			}
 		}
 
 	}
 
 	@GetMapping("/competence")
-	public String getCompetence(Model model, @RequestParam Long id, HttpServletRequest request)
-			throws APiUSerAndCompetenceException {
-		HttpSession session = request.getSession();
-		String name = (String) session.getAttribute("username");
-		String password = (String) session.getAttribute("password");
+	public String getCompetence(Model model, @RequestParam Long id, HttpServletRequest request) {
+
 		try {
-			Competence competence = competenceService.getCompetence(id, name, password);
+			Competence competence = competenceService.getCompetence(id, request);
 			model.addAttribute("competence", competence);
 
 			return "competence";
@@ -112,36 +115,44 @@ public class CompetenceController {
 
 		HttpStatusCodeException e) {
 
-			String error = e.getMessage();
-			model.addAttribute("error", error);
-			return "error";
+			String error = httpService.traiterLesExceptionsApi(e);
+			if (error == "error") {
+				return "redirect:/logout";
+			} else {
+				model.addAttribute("error", error);
+				return "error";
+			}
 		}
 
 	}
 
 	@PostMapping("/competence")
 	public String createcompetence(@Valid CompetenceDto competenceDto, BindingResult result, Model model,
-			HttpServletRequest request) throws APiUSerAndCompetenceException {
-
-		Long idUser = 1L;
+			HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		Users user = (Users) session.getAttribute("user");
+		Long idUser = user.getCodeUtilisateur();
 		if (result.hasErrors()) {
 			return "formulaireCompetence";
 
 		}
-		HttpSession session = request.getSession();
-		String name = (String) session.getAttribute("username");
-		String password = (String) session.getAttribute("password");
+
 		try {
-			competenceService.createComp(competenceDto, idUser, name, password);
+			competenceService.createComp(competenceDto, idUser, request);
+
 			getCompetencesUser(model, Optional.of(2), Optional.of(0), request);
+
 			String succes = "Votre competence a ete ajoute";
 			model.addAttribute("succes", succes);
 			return "home";
 		} catch (HttpStatusCodeException e) {
 			String error = httpService.traiterLesExceptionsApi(e);
-
-			model.addAttribute("error", error);
-			return "formulaireCompetence";
+			if (error == "error") {
+				return "redirect:/logout";
+			} else {
+				model.addAttribute("error", error);
+				return "error";
+			}
 		}
 
 	}

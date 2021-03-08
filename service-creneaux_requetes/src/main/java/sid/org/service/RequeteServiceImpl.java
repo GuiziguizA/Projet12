@@ -146,6 +146,15 @@ public class RequeteServiceImpl implements RequeteService {
 	}
 
 	@Override
+	public Page<Requete> getRequetesComp(Long idUser, int page, int size) throws APiUSerAndCompetenceException {
+		Pageable pageable = PageRequest.of(page, size);
+		userConnect.getUser(idUser);
+		Page<Requete> requete = requeteRepository.findByIdUser(idUser, pageable);
+		return requete;
+
+	}
+
+	@Override
 	public void deleteRequete(Long id, Long idUser)
 			throws ResultNotFoundException, APiUSerAndCompetenceException, ForbiddenException {
 		Optional<Requete> requete = requeteRepository.findById(id);

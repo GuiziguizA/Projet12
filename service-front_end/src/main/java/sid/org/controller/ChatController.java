@@ -18,8 +18,9 @@ import org.springframework.web.client.HttpStatusCodeException;
 
 import sid.org.classe.Chat;
 import sid.org.classe.Users;
-import sid.org.dto.DateDto;
+import sid.org.dto.ChatDateDtoObject;
 import sid.org.service.ChatService;
+import sid.org.service.HttpService;
 import sid.org.service.UserSession;
 
 @Controller
@@ -28,10 +29,13 @@ public class ChatController {
 	ChatService chatService;
 	@Autowired
 	UserSession userSession;
+	@Autowired
+	HttpService httpService;
 
 	@GetMapping("/chats")
-	public String getChatsUser(Model model, Chat chat, @RequestParam(required = false) Optional<Integer> page,
-			@RequestParam(required = false) Optional<Integer> size, DateDto dateDto, HttpServletRequest request) {
+	public String getChatsUser(Model model, ChatDateDtoObject chatDateDtoObject,
+			@RequestParam(required = false) Optional<Integer> page,
+			@RequestParam(required = false) Optional<Integer> size, HttpServletRequest request) {
 
 		HttpSession session = request.getSession();
 		String name = (String) session.getAttribute("username");
@@ -43,18 +47,24 @@ public class ChatController {
 		int pageSize = size.orElse(2);
 
 		try {
-			Page<Chat> pageChat = chatService.getChatUser(idUser, currentPage, pageSize, name, password);
+			Page<Chat> pageChat = chatService.getChatUser(idUser, currentPage, pageSize, request);
 			model.addAttribute("pageChat", pageChat);
 			int totalPages = pageChat.getTotalPages();
 			if (totalPages > 0) {
 				List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
 				model.addAttribute("pageNumbers", pageNumbers);
+
 			}
 			return "chats";
 		} catch (HttpStatusCodeException e) {
-			String error = e.getMessage();
-			model.addAttribute("error", error);
-			return "error";
+
+			String error = httpService.traiterLesExceptionsApi(e);
+			if (error == "error") {
+				return "redirect:/logout";
+			} else {
+				model.addAttribute("error", error);
+				return "error";
+			}
 		}
 
 	}

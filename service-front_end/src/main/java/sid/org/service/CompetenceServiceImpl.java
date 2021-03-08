@@ -2,6 +2,9 @@ package sid.org.service;
 
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +17,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -44,11 +48,11 @@ public class CompetenceServiceImpl implements CompetenceService {
 	}
 
 	@Override
-	public Page<Competence> searchCompetence(Optional<String> recherche, int size, int page, String username,
-			String password) {
+	public Page<Competence> searchCompetence(Optional<String> recherche, int size, int page, HttpServletRequest request)
+			throws HttpStatusCodeException {
 
 		RestTemplate rt = requestFactory.getRestTemplate();
-		HttpHeaders headers = headersService.createTokenHeaders(username, password);
+		HttpHeaders headers = headersService.createTokenHeaders(request);
 
 		ParameterizedTypeReference<RestResponsePage<Competence>> responseType = new ParameterizedTypeReference<RestResponsePage<Competence>>() {
 		};
@@ -71,8 +75,9 @@ public class CompetenceServiceImpl implements CompetenceService {
 
 	@PreAuthorize("isAuthenticated ()")
 	@Override
-	public Page<Competence> getCompetencesUser(String nom, int size, int page, String username, String password) {
-		HttpHeaders headers = headersService.createTokenHeaders(username, password);
+	public Page<Competence> getCompetencesUser(String nom, int size, int page, HttpServletRequest request)
+			throws HttpStatusCodeException {
+		HttpHeaders headers = headersService.createTokenHeaders(request);
 		RestTemplate rt = requestFactory.getRestTemplate();
 
 		ParameterizedTypeReference<RestResponsePage<Competence>> responseType = new ParameterizedTypeReference<RestResponsePage<Competence>>() {
@@ -101,8 +106,8 @@ public class CompetenceServiceImpl implements CompetenceService {
 	}
 
 	@Override
-	public Competence getCompetence(Long id, String username, String password) {
-		HttpHeaders headers = headersService.createTokenHeaders(username, password);
+	public Competence getCompetence(Long id, HttpServletRequest request) throws HttpStatusCodeException {
+		HttpHeaders headers = headersService.createTokenHeaders(request);
 		RestTemplate rt = requestFactory.getRestTemplate();
 
 		final String uri = url + "/compagny-user_competence/competence/" + id;
@@ -115,13 +120,16 @@ public class CompetenceServiceImpl implements CompetenceService {
 	}
 
 	@Override
-	public void createComp(CompetenceDto competenceDto, Long idUser, String username, String password) {
+	public void createComp(CompetenceDto competenceDto, Long idUser, HttpServletRequest request)
+			throws HttpStatusCodeException {
 		String uri = url + "/compagny-user_competence/competence";
 		RestTemplate rt = new RestTemplate();
 
-		HttpHeaders headers = headersService.createTokenHeaders(username, password);
+		HttpHeaders headers = headersService.createTokenHeaders(request);
+		HttpSession session = request.getSession();
+		String name = (String) session.getAttribute("username");
 
-		competenceDto.setNomUser(username);
+		competenceDto.setNomUser(name);
 		rt.exchange(uri, HttpMethod.POST, new HttpEntity<>(competenceDto, headers), Competence.class);
 
 	}

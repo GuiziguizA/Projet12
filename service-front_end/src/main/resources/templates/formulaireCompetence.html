@@ -30,13 +30,13 @@
      <form action="#" th:action="@{/competence}" th:object="${competenceDto}" method="post">
         <br>
         <input type="text" th:field="*{nom}" id="nom" class="form-control" placeholder="nom">
-        <div th:if="${#fields.hasErrors('nom')}" class="alert alert-danger" role="alert"><span class="alert alert-primary" th:errors="*{nom}"></span></div>
+        <div th:if="${#fields.hasErrors('nom')}" class="alert alert-danger" role="alert"><span  th:errors="*{nom}"></span></div>
    <br>
     <input type="text" th:field="*{type}" id="type" class="form-control" placeholder="type de la competence">
-     <div  th:if="${#fields.hasErrors('type')}" class="alert alert-danger" role="alert"><span class="alert alert-primary" th:errors="*{type}"></span></div>
+     <div  th:if="${#fields.hasErrors('type')}" class="alert alert-danger" role="alert"><span th:errors="*{type}"></span></div>
       <br>
     <input type="text" th:field="*{description}" id="description" class="form-control" placeholder="description">
-   <div  th:if="${#fields.hasErrors('description')}" class="alert alert-danger" role="alert"> <span class="alert alert-primary" th:errors="*{description}"></span></div>
+   <div  th:if="${#fields.hasErrors('description')}" class="alert alert-danger" role="alert"> <span th:errors="*{description}"></span></div>
   
 <br>
    

@@ -53,8 +53,8 @@ public class UserDetailsImpl implements UserDetailsService {
 		logger.info(username);
 		String motDePasse = split[1];
 		logger.info(motDePasse);
-		String token = keycloakService.RecupTokenClient(username, motDePasse, client);
-		HttpHeaders headers = headersService.createTokenHeaders(username, motDePasse);
+
+		HttpHeaders headers = headersService.createTokenHeaders1(username, motDePasse);
 
 		ResponseEntity<Users> user = rt.exchange(uri, HttpMethod.POST, new HttpEntity<>(headers), Users.class);
 		Users utilisateur = user.getBody();

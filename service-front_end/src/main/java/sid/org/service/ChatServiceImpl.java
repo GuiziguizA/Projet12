@@ -1,5 +1,7 @@
 package sid.org.service;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import sid.org.Page.RestResponsePage;
@@ -33,10 +36,11 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
-	public Page<Chat> getChatUser(Long idUser, int page, int size, String username, String password) {
+	public Page<Chat> getChatUser(Long idUser, int page, int size, HttpServletRequest request)
+			throws HttpStatusCodeException {
 
 		RestTemplate rt = requestFactory.getRestTemplate();
-		HttpHeaders headers = headersService.createTokenHeaders(username, password);
+		HttpHeaders headers = headersService.createTokenHeaders(request);
 		ParameterizedTypeReference<RestResponsePage<Chat>> responseType = new ParameterizedTypeReference<RestResponsePage<Chat>>() {
 		};
 		String uri = url + "/compagny-chat_batch/chats?idUser=" + idUser + "&page=" + page + "&size=" + size;

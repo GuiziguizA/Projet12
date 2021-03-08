@@ -48,10 +48,11 @@
 										<p class="alert alert-success">Demande de creneau</p>
 									</div>
 									<div class="modal-footer">
-									 <form th:action="@{/creneau?(chat=${chat})}" th:object="${dateDto}" method="post">
+									 <form th:action="@{/creneau}" th:object="${chatDateDtoObject}" method="post">
   <div class="form-group">
 		<div class="input-group">
-		<input type="text" class= "form-control" id="datetimepicker">
+		<input type="text" class= "form-control"th:field="*{dateDto}" id="datetimepicker">
+		
 		<span class= "input-group-addon"><span class= "glyphicon glyphicon-calendar"></span></span>
 		 <button type="submit" class="btn btn-primary">Submit</button>
 			<script type = "text/javascript">

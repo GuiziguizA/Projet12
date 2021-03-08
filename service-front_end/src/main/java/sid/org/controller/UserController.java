@@ -1,11 +1,11 @@
 package sid.org.controller;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.client.HttpStatusCodeException;
@@ -36,13 +36,11 @@ public class UserController {
 	}
 
 	@PostMapping("/user")
-	public String createBook(UserDto userDto, Model model, HttpServletRequest request)
+	public String createUser(UserDto userDto, Model model, BindingResult result, HttpServletRequest request)
 			throws APiUSerAndCompetenceException {
-		HttpSession session = request.getSession();
-		String name = (String) session.getAttribute("username");
-		String password = (String) session.getAttribute("password");
+
 		try {
-			userService.createUser(userDto, name, password);
+			userService.createUser(userDto, request);
 			String succes = "Vous  êtes inscris";
 			model.addAttribute("succes", succes);
 			return "redirect:/login";

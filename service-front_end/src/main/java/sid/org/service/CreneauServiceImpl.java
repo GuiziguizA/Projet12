@@ -1,5 +1,7 @@
 package sid.org.service;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +18,10 @@ import org.springframework.web.client.RestTemplate;
 
 import sid.org.ServiceFrontEndApplication;
 import sid.org.Page.RestResponsePage;
-import sid.org.classe.Chat;
 import sid.org.classe.Creneau;
 import sid.org.config.RequestFactory;
+import sid.org.dto.ChatDateDtoObject;
 import sid.org.dto.CreneauDto;
-import sid.org.dto.DateDto;
-import sid.org.exception.APiUSerAndCompetenceException;
-import sid.org.exception.ForbiddenException;
 
 @Service
 public class CreneauServiceImpl implements CreneauService {
@@ -40,18 +39,20 @@ public class CreneauServiceImpl implements CreneauService {
 	}
 
 	@Override
-	public void createCreneau(Chat chat, DateDto dateDto, String username, String password) throws ForbiddenException {
+	public void createCreneau(ChatDateDtoObject chatDateDtoObject, HttpServletRequest request)
+			throws HttpStatusCodeException {
 
-		String uri = url + "/compagny-creneaux_requetes/creneau?&idRequete=" + chat.getIdRequete();
+		String uri = url + "/compagny-creneaux_requetes/creneau?&idRequete="
+				+ chatDateDtoObject.getChat().getIdRequete();
 		RestTemplate rt = new RestTemplate();
-		HttpHeaders headers = headersService.createTokenHeaders(username, password);
+		HttpHeaders headers = headersService.createTokenHeaders(request);
 
 		try {
 			CreneauDto creneauDto = new CreneauDto();
-			creneauDto.setIdUser(chat.getIdUser());
-			creneauDto.setIdUser1(chat.getIdUser1());
-			creneauDto.setIdComp(chat.getIdComp());
-			creneauDto.setDate(dateDto.getDate());
+			creneauDto.setIdUser(chatDateDtoObject.getChat().getIdUser());
+			creneauDto.setIdUser1(chatDateDtoObject.getChat().getIdUser1());
+			creneauDto.setIdComp(chatDateDtoObject.getChat().getIdComp());
+			creneauDto.setDate(chatDateDtoObject.getDateDto());
 			rt.exchange(uri, HttpMethod.POST, new HttpEntity<>(creneauDto, headers), Creneau.class);
 
 		} catch (HttpStatusCodeException e) {
@@ -61,11 +62,11 @@ public class CreneauServiceImpl implements CreneauService {
 	}
 
 	@Override
-	public Page<Creneau> getCreneauxUser(Long idUser, int page, int size, String username, String password)
-			throws APiUSerAndCompetenceException {
+	public Page<Creneau> getCreneauxUser(Long idUser, int page, int size, HttpServletRequest request)
+			throws HttpStatusCodeException {
 
 		RestTemplate rt = requestFactory.getRestTemplate();
-		HttpHeaders headers = headersService.createTokenHeaders(username, password);
+		HttpHeaders headers = headersService.createTokenHeaders(request);
 		ParameterizedTypeReference<RestResponsePage<Creneau>> responseType = new ParameterizedTypeReference<RestResponsePage<Creneau>>() {
 		};
 		String uri = url + "/compagny-creneaux_requetes/creneaux?idUser=" + idUser + "&page=" + page + "&size=" + size;

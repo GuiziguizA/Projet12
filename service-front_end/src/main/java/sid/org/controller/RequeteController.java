@@ -15,12 +15,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.HttpStatusCodeException;
 
 import sid.org.classe.Competence;
 import sid.org.classe.Requete;
 import sid.org.classe.Users;
-import sid.org.exception.APiUSerAndCompetenceException;
 import sid.org.service.CompetenceService;
+import sid.org.service.HttpService;
 import sid.org.service.RequeteService;
 import sid.org.service.UserService;
 import sid.org.service.UserSession;
@@ -35,6 +36,8 @@ public class RequeteController {
 	UserService userService;
 	@Autowired
 	UserSession userSession;
+	@Autowired
+	HttpService httpService;
 
 	@PostMapping("/requete")
 	public String addRequete(Model model, @RequestParam Long idComp, HttpServletRequest request) {
@@ -45,17 +48,17 @@ public class RequeteController {
 		Users user = (Users) session.getAttribute("user");
 		Long idUser = user.getCodeUtilisateur();
 		try {
-			requeteService.createRequete(idComp, idUser, name, password);
-			Competence comp = competenceService.getCompetence(idComp, name, password);
+			requeteService.createRequete(idComp, idUser, request);
+			Competence comp = competenceService.getCompetence(idComp, request);
 			model.addAttribute("competence", comp);
 			return "competence";
 
-		} catch (APiUSerAndCompetenceException e) {
-			// TODO Auto-generated catch block
+		} catch (HttpStatusCodeException e) {
+			String error = httpService.traiterLesExceptionsApi(e);
 
-			String error = e.getMessage();
 			model.addAttribute("error", error);
-			return "error";
+			return "redirect:/competence?id=" + idComp;
+
 		}
 	}
 
@@ -68,11 +71,11 @@ public class RequeteController {
 		Users user = (Users) session.getAttribute("user");
 		Long idUserComp = user.getCodeUtilisateur();
 		try {
-			requeteService.validerRequete(idRequete, idUserComp, name, password);
+			requeteService.validerRequete(idRequete, idUserComp, request);
 			int currentPage = 0;
 			int pageSize = 2;
 
-			Page<Requete> requetePage = requeteService.getRequetes(idUserComp, currentPage, pageSize, name, password);
+			Page<Requete> requetePage = requeteService.getRequetes(idUserComp, currentPage, pageSize, request);
 
 			model.addAttribute("requetePage", requetePage);
 
@@ -83,12 +86,12 @@ public class RequeteController {
 			}
 			return "requetes";
 
-		} catch (APiUSerAndCompetenceException e) {
-			// TODO Auto-generated catch block
+		} catch (HttpStatusCodeException e) {
+			String error = httpService.traiterLesExceptionsApi(e);
 
-			String error = e.getMessage();
 			model.addAttribute("error", error);
 			return "error";
+
 		}
 	}
 
@@ -105,11 +108,12 @@ public class RequeteController {
 		Users user = (Users) session.getAttribute("user");
 		Long idUserComp = user.getCodeUtilisateur();
 		try {
-			Page<Requete> requetePage = requeteService.getRequetes(idUserComp, currentPage, pageSize, name, password);
-			List<Users> users = userService.getUsers(name, password);
+			Page<Requete> requetePage = requeteService.getRequetes(idUserComp, currentPage, pageSize, request);
+			Page<Requete> requetePage1 = requeteService.getRequetesU(idUserComp, currentPage, pageSize, request);
+			List<Users> users = userService.getUsers(request);
 			model.addAttribute("users", users);
 			model.addAttribute("requetePage", requetePage);
-
+			model.addAttribute("requetePage1", requetePage1);
 			int totalPages = requetePage.getTotalPages();
 			if (totalPages > 0) {
 				List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
@@ -117,11 +121,15 @@ public class RequeteController {
 			}
 			return "requetes";
 
-		} catch (APiUSerAndCompetenceException e) {
+		} catch (HttpStatusCodeException e) {
+			String error = httpService.traiterLesExceptionsApi(e);
+			if (error == "error") {
+				return "redirect:/logout";
+			} else {
+				model.addAttribute("error", error);
+				return "error";
+			}
 
-			String error = e.getMessage();
-			model.addAttribute("error", error);
-			return "error";
 		}
 	}
 

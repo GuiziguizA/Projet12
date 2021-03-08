@@ -1,5 +1,7 @@
 package sid.org.service;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import sid.org.Page.RestResponsePage;
@@ -35,8 +38,9 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
-	public Page<Message> getMessagesChats(Long idChat, int page, int size, String username, String password) {
-		HttpHeaders headers = headersService.createTokenHeaders(username, password);
+	public Page<Message> getMessagesChats(Long idChat, int page, int size, HttpServletRequest request)
+			throws HttpStatusCodeException {
+		HttpHeaders headers = headersService.createTokenHeaders(request);
 		RestTemplate rt = requestFactory.getRestTemplate();
 
 		ParameterizedTypeReference<RestResponsePage<Message>> responseType = new ParameterizedTypeReference<RestResponsePage<Message>>() {
@@ -51,10 +55,11 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
-	public void postMessagesChats(Long idChat, Long idUser, String username, String password, MessageDto message) {
+	public void postMessagesChats(Long idChat, Long idUser, HttpServletRequest request, MessageDto message)
+			throws HttpStatusCodeException {
 
 		logger.info("idChat" + idChat + "idUser" + idUser + "message" + message.getContent());
-		HttpHeaders headers = headersService.createTokenHeaders(username, password);
+		HttpHeaders headers = headersService.createTokenHeaders(request);
 		RestTemplate rt = requestFactory.getRestTemplate();
 
 		String uri = url + "/compagny-chat_batch/message?idUser=" + idUser + "&idChat=" + 1;

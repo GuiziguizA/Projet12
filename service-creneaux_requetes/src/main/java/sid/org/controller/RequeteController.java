@@ -60,6 +60,15 @@ public class RequeteController {
 		return requetes;
 	}
 
+	@GetMapping("/requetesU")
+	public Page<Requete> getRequetesComp(@RequestParam Long idUser, @RequestParam int page, @RequestParam int size)
+			throws APiUSerAndCompetenceException {
+
+		Page<Requete> requetes = requeteService.getRequetesComp(idUser, page, size);
+
+		return requetes;
+	}
+
 	@DeleteMapping("/requete")
 	public void deleteRequetes(@RequestParam Long id, @RequestParam Long idUser)
 			throws ResultNotFoundException, APiUSerAndCompetenceException, ForbiddenException {

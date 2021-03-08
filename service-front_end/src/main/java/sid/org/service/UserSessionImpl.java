@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import sid.org.classe.Users;
@@ -23,17 +24,16 @@ public class UserSessionImpl implements UserSession {
 	HeadersService headersService;
 
 	@Override
-	public void loadUserInSession(HttpServletRequest request, String username, String password) {
+	public void loadUserInSession(HttpServletRequest request, String username, String password)
+			throws HttpStatusCodeException {
 		HttpSession session = request.getSession();
 
-		Users user1 = (Users) session.getAttribute("user");
-
-		if (user1 == null) {
+		if ((Users) session.getAttribute("user") == null) {
 
 			RestTemplate rt = new RestTemplate();
 			final String uri = apiUrl + "/compagny-user_competence/user/identity?name=" + username;
 
-			HttpHeaders headers = headersService.createTokenHeaders(username, password);
+			HttpHeaders headers = headersService.createTokenHeaders(request);
 
 			ResponseEntity<Users> user = rt.exchange(uri, HttpMethod.POST, new HttpEntity<>(headers), Users.class);
 			Users utilisateur = user.getBody();

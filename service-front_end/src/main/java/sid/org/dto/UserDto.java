@@ -1,14 +1,20 @@
 package sid.org.dto;
 
+import javax.validation.constraints.NotBlank;
+
 import sid.org.classe.Roles;
 
 public class UserDto {
 
+	@NotBlank(message = "le champ nom ne peut pas etre vide")
 	private String nom;
+	@NotBlank(message = "le champ nom ne peut pas etre vide")
 	private String mail;
+	@NotBlank(message = "le champ nom ne peut pas etre vide")
 	private String adresse;
+	@NotBlank(message = "le champ nom ne peut pas etre vide")
 	private String motDePasse;
-
+	@NotBlank(message = "le champ nom ne peut pas etre vide")
 	private String codePostal;
 	private Roles roles;
 

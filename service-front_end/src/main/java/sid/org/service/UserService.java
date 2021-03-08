@@ -2,16 +2,19 @@ package sid.org.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.web.client.HttpStatusCodeException;
+
 import sid.org.classe.Users;
 import sid.org.dto.UserDto;
-import sid.org.exception.APiUSerAndCompetenceException;
 
 public interface UserService {
 
-	public void createUser(UserDto userDto, String username, String password) throws APiUSerAndCompetenceException;
+	public void createUser(UserDto userDto, HttpServletRequest request) throws HttpStatusCodeException;
 
-	public List<Users> getUsers(String username, String password) throws APiUSerAndCompetenceException;
+	public List<Users> getUsers(HttpServletRequest request) throws HttpStatusCodeException;
 
-	public Users getUser(String username, String password) throws APiUSerAndCompetenceException;
+	public Users getUser(HttpServletRequest request) throws HttpStatusCodeException;
 
 }
