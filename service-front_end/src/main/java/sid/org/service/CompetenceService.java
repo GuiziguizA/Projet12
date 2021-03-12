@@ -23,4 +23,6 @@ public interface CompetenceService {
 	public Page<Competence> getCompetencesUser(String nom, int size, int page, HttpServletRequest request)
 			throws HttpStatusCodeException;
 
+	public void deleteComp(Long id, HttpServletRequest request) throws HttpStatusCodeException;
+
 }

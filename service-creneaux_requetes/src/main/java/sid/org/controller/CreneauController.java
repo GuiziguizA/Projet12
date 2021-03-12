@@ -30,7 +30,7 @@ public class CreneauController {
 			throws EntityAlreadyExistException, APiUSerAndCompetenceException, ForbiddenException,
 			ResultNotFoundException {
 
-		Creneau creneau = creneauService.createCreneau(CreneauDto, idRequete);
+		Creneau creneau = creneauService.createCreneau(CreneauDto, idRequete, CreneauDto.getIdUserDemande());
 		return creneau;
 
 	}

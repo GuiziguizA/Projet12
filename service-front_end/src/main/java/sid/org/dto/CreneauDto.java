@@ -6,6 +6,7 @@ public class CreneauDto {
 
 	private Long idUser;
 	private Long idUser1;
+	private Long idUserDemande;
 	private Long idComp;
 	private String statut;
 	private Date date;
@@ -62,6 +63,14 @@ public class CreneauDto {
 
 	public void setDate(Date date) {
 		this.date = date;
+	}
+
+	public Long getIdUserDemande() {
+		return idUserDemande;
+	}
+
+	public void setIdUserDemande(Long idUserDemande) {
+		this.idUserDemande = idUserDemande;
 	}
 
 }

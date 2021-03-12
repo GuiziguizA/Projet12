@@ -21,6 +21,8 @@ public class HeadersServiceImpl implements HeadersService {
 	KeycloakService kc;
 	@Value("${keycloak.resource}")
 	private String clientid;
+	@Autowired
+	UserSession userSession;
 
 	private static final Logger logger = LoggerFactory.getLogger(HeadersServiceImpl.class);
 
@@ -29,6 +31,7 @@ public class HeadersServiceImpl implements HeadersService {
 		HttpSession session = request.getSession();
 		String username = (String) session.getAttribute("username");
 		String password = (String) session.getAttribute("password");
+		userSession.loadUserInSession(request, username, password);
 		HttpHeaders headers = new HttpHeaders();
 		String token;
 		if (session.getAttribute("token") == null) {

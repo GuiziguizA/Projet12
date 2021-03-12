@@ -37,24 +37,30 @@ public class CreneauServiceImpl implements CreneauService {
 	RequeteRepository requeteRepository;
 
 	@Override
-	public Creneau createCreneau(CreneauDto creneauDto, Long idRequete) throws EntityAlreadyExistException,
-			APiUSerAndCompetenceException, ForbiddenException, ResultNotFoundException {
+	public Creneau createCreneau(CreneauDto creneauDto, Long idRequete, Long idUserDemande)
+			throws EntityAlreadyExistException, APiUSerAndCompetenceException, ForbiddenException,
+			ResultNotFoundException {
 
 		Optional<Creneau> creneau = creneauRepository.findByIdUserAndIdUser1AndIdComp(creneauDto.getIdUser(),
 				creneauDto.getIdUser1(), creneauDto.getIdComp());
 		Optional<Creneau> creneau2 = creneauRepository.findByIdUserAndIdUser1AndIdComp(creneauDto.getIdUser1(),
 				creneauDto.getIdUser(), creneauDto.getIdComp());
 
-		if (creneau.isPresent() || creneau2.isPresent()) {
-			throw new EntityAlreadyExistException("le creneau existe deja");
+		if (creneau.isPresent()) {
+			if (creneau.get().getStatut() == "valide") {
+				throw new EntityAlreadyExistException("Un creneau a deja été reservé");
+			}
+		}
+		if (creneau2.isPresent()) {
+			if (creneau2.get().getStatut() == "valide") {
+				throw new EntityAlreadyExistException("Un creneau a deja été reservé");
+			}
 		}
 		Optional<Requete> requete = requeteRepository.findById(idRequete);
 
 		if (!requete.isPresent()) {
 			throw new ResultNotFoundException("la requete est introuvable");
 		}
-
-		Competence competence = competenceApi.getCompetence(requete.get().getIdComp());
 
 		// chatConnect verifie si le chat existe
 
@@ -65,6 +71,7 @@ public class CreneauServiceImpl implements CreneauService {
 		creneau1.setDate(new Date());
 		creneau1.setIdUser(creneauDto.getIdUser());
 		creneau1.setIdUser1(creneauDto.getIdUser1());
+		creneau1.setIdUserDemande(idUserDemande);
 		creneau1.setStatut("demande");
 		creneau1.setDate(creneauDto.getDate());
 		creneauRepository.saveAndFlush(creneau1);
@@ -80,7 +87,7 @@ public class CreneauServiceImpl implements CreneauService {
 			throw new ResultNotFoundException("creneau introuvable");
 		}
 
-		if (creneau.get().getIdUser1() != idUser) {
+		if (creneau.get().getIdUserDemande() == idUser) {
 			throw new ForbiddenException("Vous n'etes pas autorisé a valider le creneaux");
 		}
 		creneau.get().setStatut("valide");
@@ -114,7 +121,7 @@ public class CreneauServiceImpl implements CreneauService {
 	public Page<Creneau> getCreneauxUser1(Long idUser1) throws APiUSerAndCompetenceException {
 
 		Pageable pageable = PageRequest.of(0, 2);
-		Page<Creneau> creneaux = creneauRepository.findByIdUser(idUser1, pageable);
+		Page<Creneau> creneaux = creneauRepository.findByIdUser1(idUser1, pageable);
 
 		return creneaux;
 

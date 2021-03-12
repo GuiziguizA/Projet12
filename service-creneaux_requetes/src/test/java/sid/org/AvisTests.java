@@ -78,37 +78,38 @@ class AvisTests {
 
 	}
 
-	@Test
-	public void getAvisTest() throws ResultNotFoundException, ForbiddenException {
-		Creneau creneau = new Creneau(new Date(), 1L, 2L, 3L);
-		Avis avis = new Avis(3, "insufisant", creneau);
-
-		Mockito.when(avisRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(avis));
-
-		Avis avis1 = avisService.getAvis(1L, 2L);
-
-		assertEquals(avis.getCommentaire(), avis1.getCommentaire());
-	}
-
-	@Test
-	public void getAvisTestResultNotFoundException() {
-		Creneau creneau = new Creneau(new Date(), 1L, 2L, 3L);
-		Avis avis = new Avis(3, "insufisant", creneau);
-		AvisDto avisDto = new AvisDto(3, "insufisant", creneau);
-
-		Mockito.when(avisRepository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
-
-		ResultNotFoundException exception = assertThrows(ResultNotFoundException.class, () -> {
-			avisService.getAvis(1L, 1L);
-
-		});
-
-		String expectedMessage = "avis introuvable";
-		String actualMessage = exception.getMessage();
-
-		assertTrue(actualMessage.contains(expectedMessage));
-
-	}
+	/*
+	 * @Test public void getAvisTest() throws ResultNotFoundException,
+	 * ForbiddenException { Creneau creneau = new Creneau(new Date(), 1L, 2L, 3L);
+	 * Avis avis = new Avis(3, "insufisant", creneau);
+	 * 
+	 * Mockito.when(avisRepository.findById(Mockito.anyLong())).thenReturn(Optional.
+	 * of(avis));
+	 * 
+	 * Avis avis1 = avisService.getAvis(1L, 2L);
+	 * 
+	 * assertEquals(avis.getCommentaire(), avis1.getCommentaire()); }
+	 * 
+	 * @Test public void getAvisTestResultNotFoundException() { Creneau creneau =
+	 * new Creneau(new Date(), 1L, 2L, 3L); Avis avis = new Avis(3, "insufisant",
+	 * creneau); AvisDto avisDto = new AvisDto(3, "insufisant", creneau);
+	 * 
+	 * Mockito.when(avisRepository.findById(Mockito.anyLong())).thenReturn(Optional.
+	 * empty());
+	 * 
+	 * ResultNotFoundException exception =
+	 * assertThrows(ResultNotFoundException.class, () -> { avisService.getAvis(1L,
+	 * 1L);
+	 * 
+	 * });
+	 * 
+	 * String expectedMessage = "avis introuvable"; String actualMessage =
+	 * exception.getMessage();
+	 * 
+	 * assertTrue(actualMessage.contains(expectedMessage));
+	 * 
+	 * }
+	 */
 
 	/*
 	 * @Test public void getListAvisTest() throws ResultNotFoundException,

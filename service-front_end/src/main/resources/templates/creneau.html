@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://ultraq.net.nz/thymleaf/layout"
+	>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<script type="text/javascript" src="webjars/jquery/3.5.1/jquery.min.js"></script>
+	<script type="text/javascript" src="webjars/bootstrap/4.5.3/js/bootstrap.min.js"></script>
+	<script type="text/javascript" th:src="@{js/main.js}" src="../static/js/main.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
+</head>
+
+<body>
+
+	<div layout:fragment="content">
+		<div class="container pt-3">
+			<div class="form-group">
+				<div class="jumbotron text-center">
+					
+				</div>
+
+				<br>
+				<h2>Creneau</h2>
+				<div>
+				<div class="modal-footer">
+									 <form th:action="@{/creneau(idUser=${idUser},idUser1=${idUser1})}" th:object="${chatDateDtoObject}" method="post">
+  <div class="form-group">
+		<div class="input-group">
+		<input type="text" class= "form-control"th:field="*{dateDto}" id="datetimepicker">
+		
+		<span class= "input-group-addon"><span class= "glyphicon glyphicon-calendar"></span></span>
+		 <button type="submit" class="btn btn-primary">Submit</button>
+			<script type = "text/javascript">
+			$(function(){
+				$('#datetimepicker').datetimepicker();
+			});
+			
+			</script>
+		</div>
+		</div>
+   
+    
+    
+   
+    
+</form>
+										
+									</div>
+				</div>
+				
+				
+			</div>
+		</div>
+	</div>
+
+<div class="alert alert-danger" th:if="${error}" role="alert" th:text="${error}"></div>
+
+</body>
+
+</html>

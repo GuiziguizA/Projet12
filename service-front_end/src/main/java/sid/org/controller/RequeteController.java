@@ -51,7 +51,9 @@ public class RequeteController {
 			requeteService.createRequete(idComp, idUser, request);
 			Competence comp = competenceService.getCompetence(idComp, request);
 			model.addAttribute("competence", comp);
-			return "competence";
+			String succes = "la requete a ete envoyé";
+			model.addAttribute("succes", succes);
+			return "redirect:/competence?id=" + idComp;
 
 		} catch (HttpStatusCodeException e) {
 			String error = httpService.traiterLesExceptionsApi(e);

@@ -3,6 +3,9 @@ package sid.org.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import sid.org.api.UserConnect;
@@ -12,7 +15,6 @@ import sid.org.classe.Users;
 import sid.org.dao.AvisRepository;
 import sid.org.dao.CreneauRepository;
 import sid.org.dto.AvisDto;
-import sid.org.exception.APiUSerAndCompetenceException;
 import sid.org.exception.ForbiddenException;
 import sid.org.exception.ResultNotFoundException;
 
@@ -27,8 +29,7 @@ public class AvisServiceImpl implements AvisService {
 	UserConnect userConnect;
 
 	@Override
-	public Avis createAvis(AvisDto avisDto, Long idUser)
-			throws ResultNotFoundException, APiUSerAndCompetenceException, ForbiddenException {
+	public Avis createAvis(AvisDto avisDto, Long idUser) throws ResultNotFoundException, ForbiddenException {
 
 		Optional<Creneau> creneau = creneauRepository.findById(avisDto.getCreneau().getCodeCreneau());
 		if (!creneau.isPresent()) {
@@ -51,18 +52,12 @@ public class AvisServiceImpl implements AvisService {
 	}
 
 	@Override
-	public Avis getAvis(Long id, Long idUser) throws ResultNotFoundException, ForbiddenException {
+	public Page<Avis> getAvis(Long idComp, Long idUser, int page, int size)
+			throws ResultNotFoundException, ForbiddenException {
+		Pageable pageable = PageRequest.of(page, size);
+		Page<Avis> avis = avisRepository.findByIdComp(idComp, pageable);
 
-		Optional<Avis> avis = avisRepository.findById(id);
-
-		if (!avis.isPresent()) {
-			throw new ResultNotFoundException("avis introuvable");
-		}
-
-		if (idUser != avis.get().getCreneau().getIdUser()) {
-			throw new ForbiddenException("Vous n'estes pas autorisé a consulter cet avis");
-		}
-		return avis.get();
+		return avis;
 
 	}
 

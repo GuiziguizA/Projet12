@@ -20,6 +20,7 @@ public class Creneau {
 	private Date date;
 	private Long idUser;
 	private Long idUser1;
+	private Long idUserDemande;
 	private Long idComp;
 	private String statut;
 
@@ -85,6 +86,14 @@ public class Creneau {
 
 	public void setStatut(String statut) {
 		this.statut = statut;
+	}
+
+	public Long getIdUserDemande() {
+		return idUserDemande;
+	}
+
+	public void setIdUserDemande(Long idUserDemande) {
+		this.idUserDemande = idUserDemande;
 	}
 
 }

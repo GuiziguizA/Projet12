@@ -157,6 +157,25 @@ public class CompetenceController {
 
 	}
 
+	@GetMapping("/deletecompetence")
+	public String deletecompetence(Model model, @RequestParam Long id, HttpServletRequest request) {
+
+		try {
+			competenceService.deleteComp(id, request);
+
+			return "redirect:/home";
+		} catch (HttpStatusCodeException e) {
+			String error = httpService.traiterLesExceptionsApi(e);
+			if (error == "error") {
+				return "redirect:/logout";
+			} else {
+				model.addAttribute("error", error);
+				return "redirect:/home";
+			}
+		}
+
+	}
+
 	@GetMapping(value = "/competenceForm")
 	public String competenceForm(CompetenceDto competenceDto, Model model) {
 

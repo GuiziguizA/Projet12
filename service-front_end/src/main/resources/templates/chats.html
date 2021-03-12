@@ -16,8 +16,8 @@
 
 
 	<link rel="stylesheet" href="webjars/bootstrap/4.5.3/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
+	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css"> -->
 </head>
 
 <body>
@@ -101,9 +101,10 @@
 						<td th:text="${chat.username}"></td>
 							<td th:text="${chat.username1}"></td>
 							<td th:text="${chat.statut}"></td>
-								<td>	
+								<!-- <td>	
 								<input type="submit" class="btn btn-danger delBtn"  id="delBtn" value="Demande de creneau">
-					</td>
+					</td> -->
+					<td><a th:href="@{/creneau(idUser=${chat.idUser},idUser1=${chat.idUser1})}"><input type="button"  id="${chat.id}" class="btn btn-primary" value="Demande de creneau" /></a></td>		
 					<td><a th:href="@{/messages(idChat=${chat.id},page=0,size=2)}"><input type="button"  id="${chat.id}" class="btn btn-primary" value="Messages" /></a></td>		
 				</tr>
 		</table>

@@ -48,7 +48,7 @@ class CreneauTest {
 		Mockito.when(creneauRepository.findByIdUserAndIdUser1AndIdComp(Mockito.anyLong(), Mockito.anyLong(),
 				Mockito.anyLong())).thenReturn(Optional.empty());
 
-		Creneau creneau1 = creneauService.createCreneau(creneauDto, 2L);
+		Creneau creneau1 = creneauService.createCreneau(creneauDto, 2L, 1L);
 
 		assertEquals(creneau.getIdComp(), creneau1.getIdComp());
 
@@ -63,7 +63,7 @@ class CreneauTest {
 				Mockito.anyLong())).thenReturn(Optional.of(creneau));
 
 		EntityAlreadyExistException exception = assertThrows(EntityAlreadyExistException.class, () -> {
-			creneauService.createCreneau(creneauDto, 3L);
+			creneauService.createCreneau(creneauDto, 3L, 1L);
 
 		});
 

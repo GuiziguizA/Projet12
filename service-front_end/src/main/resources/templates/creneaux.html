@@ -38,6 +38,7 @@
 						<tr>
 							
 							<th scope="col">Nom de l'utilisateur </th>
+							<th scope="col">Competence</th>
 							<th scope="col">Date</th>
 							<th scope="col">Statut</th>
 							<th scope="col"></th>
@@ -48,11 +49,12 @@
 						
 						
 							<td th:text="${creneau.idUser1}"></td>
+							<td th:text="${creneau.idComp}"></td>
 							<td th:text="${creneau.date}"></td>
 								<td th:text="${creneau.statut}"></td>
-									<!-- <td th:if="${requete.statut!='valide'}" ><form method="post" th:action="@{/valideRequete(idRequete=${requete.codeRequete})}"  >
-	            <button type="submit" name="submit" value="value" class="btn btn-primary">Reserver</button>
-	        </form> </td> -->
+									<td th:if="${creneau.statut!='valide'}" ><form method="post" th:action="@{/validateCreneau(idCreneau=${creneau.codeCreneau})}"  >
+	            <button type="submit" name="submit" value="value" class="btn btn-primary">Valider</button>
+	        </form> </td>
 				</tr>
 		
 		</table>
@@ -72,6 +74,57 @@
         </nav>
 </div>
 	</div>
+	
+	<br>
+	
+	<br>
+	
+			
+				<div class="border rounded" >
+			
+					<table class="table table-striped">
+						<tr>
+							
+							<th scope="col">Nom de l'utilisateur </th>
+							<th scope="col">Competence</th>
+							<th scope="col">Date</th>
+							<th scope="col">Statut</th>
+							<th scope="col"></th>
+							
+						</tr>
+						
+						<tr th:each="creneau1:${pageCreneau1}">
+						
+						
+							<td th:text="${creneau1.idUser}"></td>
+							<td th:text="${creneau1.idComp}"></td>
+							<td th:text="${creneau1.date}"></td>
+								<td th:text="${creneau1.statut}"></td>
+									<!-- <td th:if="${requete.statut!='valide'}" ><form method="post" th:action="@{/valideRequete(idRequete=${requete.codeRequete})}"  >
+	            <button type="submit" name="submit" value="value" class="btn btn-primary">Reserver</button>
+	        </form> </td> -->
+				</tr>
+		
+		</table>
+		
+</div>
+
+<div>
+<div th:if="${pageCreneau1.totalPages > 0}"
+    th:each="pageNumber1 : ${pageNumbers1}" class="btn-group btn-group-toggle">
+    <nav aria-label="...">
+  <ul class="pagination pagination-sm">
+    <li class="page-item"> <a class="btn btn-secondary" th:href="@{/creneaux(page=${pageNumber1-1},size=${pageCreneau1.size})}"
+        th:text=${pageNumber1}
+        th:class="${pageNumber1==pageCreneau1.number} ? active"></a>
+        </li>
+        </ul>
+        </nav>
+</div>
+	</div>
+	
+	
+	
 	</div>
 	
 	

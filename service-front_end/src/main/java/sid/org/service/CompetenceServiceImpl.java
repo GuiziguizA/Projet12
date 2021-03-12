@@ -134,4 +134,15 @@ public class CompetenceServiceImpl implements CompetenceService {
 
 	}
 
+	@Override
+	public void deleteComp(Long id, HttpServletRequest request) throws HttpStatusCodeException {
+		String uri = url + "/compagny-user_competence/competence?id=" + id;
+		RestTemplate rt = new RestTemplate();
+
+		HttpHeaders headers = headersService.createTokenHeaders(request);
+
+		rt.exchange(uri, HttpMethod.DELETE, new HttpEntity<>(headers), Competence.class);
+
+	}
+
 }

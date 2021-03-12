@@ -33,7 +33,7 @@ public class UserSessionImpl implements UserSession {
 			RestTemplate rt = new RestTemplate();
 			final String uri = apiUrl + "/compagny-user_competence/user/identity?name=" + username;
 
-			HttpHeaders headers = headersService.createTokenHeaders(request);
+			HttpHeaders headers = headersService.createTokenHeaders1(username, password);
 
 			ResponseEntity<Users> user = rt.exchange(uri, HttpMethod.POST, new HttpEntity<>(headers), Users.class);
 			Users utilisateur = user.getBody();

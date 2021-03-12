@@ -39,7 +39,7 @@ public class CreneauServiceImpl implements CreneauService {
 	}
 
 	@Override
-	public void createCreneau(ChatDateDtoObject chatDateDtoObject, HttpServletRequest request)
+	public void createCreneau(ChatDateDtoObject chatDateDtoObject, Long idUser, HttpServletRequest request)
 			throws HttpStatusCodeException {
 
 		String uri = url + "/compagny-creneaux_requetes/creneau?&idRequete="
@@ -51,6 +51,7 @@ public class CreneauServiceImpl implements CreneauService {
 			CreneauDto creneauDto = new CreneauDto();
 			creneauDto.setIdUser(chatDateDtoObject.getChat().getIdUser());
 			creneauDto.setIdUser1(chatDateDtoObject.getChat().getIdUser1());
+			creneauDto.setIdUserDemande(idUser);
 			creneauDto.setIdComp(chatDateDtoObject.getChat().getIdComp());
 			creneauDto.setDate(chatDateDtoObject.getDateDto());
 			rt.exchange(uri, HttpMethod.POST, new HttpEntity<>(creneauDto, headers), Creneau.class);
@@ -75,6 +76,34 @@ public class CreneauServiceImpl implements CreneauService {
 				responseType);
 		Page<Creneau> creneauUserPage = result.getBody();
 		return creneauUserPage;
+	}
+
+	@Override
+	public Page<Creneau> getCreneauxUser1(Long idUser1, int page, int size, HttpServletRequest request)
+			throws HttpStatusCodeException {
+
+		RestTemplate rt = requestFactory.getRestTemplate();
+		HttpHeaders headers = headersService.createTokenHeaders(request);
+		ParameterizedTypeReference<RestResponsePage<Creneau>> responseType = new ParameterizedTypeReference<RestResponsePage<Creneau>>() {
+		};
+		String uri = url + "/compagny-creneaux_requetes/creneaux1?idUser1=" + idUser1 + "&page=" + page + "&size="
+				+ size;
+
+		ResponseEntity<RestResponsePage<Creneau>> result = rt.exchange(uri, HttpMethod.GET, new HttpEntity<>(headers),
+				responseType);
+		Page<Creneau> creneauUserPage = result.getBody();
+		return creneauUserPage;
+	}
+
+	@Override
+	public void validerCreneau(Long idCreneau, Long idUser, HttpServletRequest request) throws HttpStatusCodeException {
+
+		String uri = url + "/compagny-creneaux_requetes/creneau?id=" + idCreneau + "&idUser=" + idUser;
+		RestTemplate rt = new RestTemplate();
+		HttpHeaders headers = headersService.createTokenHeaders(request);
+
+		rt.exchange(uri, HttpMethod.PUT, new HttpEntity<>(headers), Long.class);
+
 	}
 
 }

@@ -10,10 +10,15 @@ import sid.org.dto.ChatDateDtoObject;
 
 public interface CreneauService {
 
-	public void createCreneau(ChatDateDtoObject chatDateDtoObject, HttpServletRequest request)
+	public void createCreneau(ChatDateDtoObject chatDateDtoObject, Long idUser, HttpServletRequest request)
 			throws HttpStatusCodeException;
 
 	public Page<Creneau> getCreneauxUser(Long idUser, int page, int size, HttpServletRequest request)
 			throws HttpStatusCodeException;
+
+	public Page<Creneau> getCreneauxUser1(Long idUser1, int page, int size, HttpServletRequest request)
+			throws HttpStatusCodeException;
+
+	public void validerCreneau(Long idCreneau, Long idUser, HttpServletRequest request) throws HttpStatusCodeException;
 
 }

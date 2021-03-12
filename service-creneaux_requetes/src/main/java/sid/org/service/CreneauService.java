@@ -12,8 +12,9 @@ import sid.org.exception.ResultNotFoundException;
 
 public interface CreneauService {
 
-	public Creneau createCreneau(CreneauDto creneauDto, Long idRequete) throws EntityAlreadyExistException,
-			APiUSerAndCompetenceException, ForbiddenException, ResultNotFoundException;
+	public Creneau createCreneau(CreneauDto creneauDto, Long idRequete, Long idUserDemande)
+			throws EntityAlreadyExistException, APiUSerAndCompetenceException, ForbiddenException,
+			ResultNotFoundException;
 
 	public Creneau getCreneau(Long id, Long idUser, Long idUser1)
 			throws ResultNotFoundException, APiUSerAndCompetenceException;

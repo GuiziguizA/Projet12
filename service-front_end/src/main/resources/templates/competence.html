@@ -51,16 +51,18 @@
 
 					</table>
 
-
-
+		
 				</div>
 				
+				<div class="alert alert-danger" th:if="${error}" role="alert" th:text="${error}"></div>
+		<div class="alert alert-danger" th:if="${succes}" role="alert" th:text="${succes}"></div>
 				
 			</div>
 		</div>
+	
 	</div>
 
-<div class="alert alert-danger" th:if="${error}" role="alert" th:text="${error}"></div>
+
 
 </body>
 

@@ -52,4 +52,16 @@ public class ChatServiceImpl implements ChatService {
 
 	}
 
+	@Override
+	public Chat getChat(HttpServletRequest request, Long idUser, Long idUser1) throws HttpStatusCodeException {
+		String uri = url + "/compagny-chat_batch/chat?idUser1=" + idUser1 + "&idUser=" + idUser;
+
+		RestTemplate rt = new RestTemplate();
+		HttpHeaders headers = headersService.createTokenHeaders(request);
+
+		ResponseEntity<Chat> chat = rt.exchange(uri, HttpMethod.GET, new HttpEntity<>(headers), Chat.class);
+		return chat.getBody();
+
+	}
+
 }

@@ -12,6 +12,7 @@ public class Avis {
 	@GeneratedValue
 	private Long avisId;
 	private Long idUser;
+	private long idComp;
 	private int note;
 	private String commentaire;
 	@ManyToOne
@@ -61,6 +62,22 @@ public class Avis {
 
 	public void setCreneau(Creneau creneau) {
 		this.creneau = creneau;
+	}
+
+	public Long getIdUser() {
+		return idUser;
+	}
+
+	public void setIdUser(Long idUser) {
+		this.idUser = idUser;
+	}
+
+	public long getIdComp() {
+		return idComp;
+	}
+
+	public void setIdComp(long idComp) {
+		this.idComp = idComp;
 	}
 
 }
