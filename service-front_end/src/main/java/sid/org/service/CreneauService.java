@@ -21,4 +21,6 @@ public interface CreneauService {
 
 	public void validerCreneau(Long idCreneau, Long idUser, HttpServletRequest request) throws HttpStatusCodeException;
 
+	public Creneau getCreneau(Long id, HttpServletRequest request) throws HttpStatusCodeException;
+
 }

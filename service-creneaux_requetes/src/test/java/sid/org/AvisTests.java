@@ -49,7 +49,7 @@ class AvisTests {
 	public void createAvisTest() throws ResultNotFoundException, APiUSerAndCompetenceException, ForbiddenException {
 		Creneau creneau = new Creneau(new Date(), 1L, 2L, 3L);
 		Avis avis = new Avis(3, "insufisant", creneau);
-		AvisDto avisDto = new AvisDto(3, "insufisant", creneau);
+		AvisDto avisDto = new AvisDto(3, 2L, 3L, "insufisant", creneau);
 
 		Mockito.when(creneauRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(creneau));
 
@@ -62,7 +62,7 @@ class AvisTests {
 	public void createAvisTestResultNotFoundException() {
 		Creneau creneau = new Creneau(new Date(), 1L, 2L, 3L);
 		Avis avis = new Avis(3, "insufisant", creneau);
-		AvisDto avisDto = new AvisDto(3, "insufisant", creneau);
+		AvisDto avisDto = new AvisDto(3, 2L, 3L, "insufisant", creneau);
 
 		Mockito.when(creneauRepository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
 

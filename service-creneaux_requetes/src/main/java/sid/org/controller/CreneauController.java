@@ -52,6 +52,14 @@ public class CreneauController {
 
 	}
 
+	@GetMapping("/creneau1")
+	public Creneau getCreneau(@RequestParam Long id) throws ResultNotFoundException {
+
+		Creneau creneau = creneauService.getCreneau(id);
+		return creneau;
+
+	}
+
 	@GetMapping("/creneaux")
 	public Page<Creneau> getCreneauxUser(@RequestParam Long idUser)
 			throws ResultNotFoundException, APiUSerAndCompetenceException {

@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Avis {
@@ -12,10 +12,10 @@ public class Avis {
 	@GeneratedValue
 	private Long avisId;
 	private Long idUser;
-	private long idComp;
+	private Long idComp;
 	private int note;
 	private String commentaire;
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name = "ID_CRENEAU")
 	private Creneau creneau;
 
@@ -72,11 +72,11 @@ public class Avis {
 		this.idUser = idUser;
 	}
 
-	public long getIdComp() {
+	public Long getIdComp() {
 		return idComp;
 	}
 
-	public void setIdComp(long idComp) {
+	public void setIdComp(Long idComp) {
 		this.idComp = idComp;
 	}
 

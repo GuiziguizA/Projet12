@@ -11,6 +11,8 @@ import sid.org.classe.Creneau;
 public class AvisDto {
 
 	private int note;
+	private Long idUser;
+	private Long idComp;
 	private String commentaire;
 	private Creneau creneau;
 

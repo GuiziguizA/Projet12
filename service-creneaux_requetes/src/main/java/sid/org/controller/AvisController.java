@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import sid.org.classe.Avis;
 import sid.org.dto.AvisDto;
@@ -14,15 +15,16 @@ import sid.org.exception.ForbiddenException;
 import sid.org.exception.ResultNotFoundException;
 import sid.org.service.AvisService;
 
+@RestController
 public class AvisController {
 	@Autowired
 	AvisService avisService;
 
 	@GetMapping("/avis")
-	public Page<Avis> getAvis(@RequestParam Long idComp, @RequestParam Long idUser, @RequestParam int page,
-			@RequestParam int size) throws ResultNotFoundException, ForbiddenException {
+	public Page<Avis> getAvis(@RequestParam Long idComp, @RequestParam int page, @RequestParam int size)
+			throws ResultNotFoundException, ForbiddenException {
 
-		Page<Avis> avis = avisService.getAvis(idComp, idUser, page, size);
+		Page<Avis> avis = avisService.getAvis(idComp, page, size);
 
 		return avis;
 	}

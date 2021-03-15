@@ -53,6 +53,47 @@
 
 		
 				</div>
+<h2>Avis des utilisateurs</h2>
+
+
+<div class="border rounded" >
+			
+					<table class="table table-striped">
+						<tr>
+							<th scope="col">Utilisateur</th>
+							<th scope="col">Note</th>
+							<th scope="col">Commentaire</th>
+							
+							
+						</tr>
+						
+						<tr th:each="avis:${avisPage}">
+						
+						<td th:text="${avis.idUser}"></td>
+							<td th:text="${avis.note}"></td>
+							<td th:text="${avis.commentaire}"></td>
+							
+									
+				</tr>
+		
+		</table>
+		
+</div>
+
+<div>
+<div th:if="${avisPage.totalPages > 0}"
+    th:each="pageNumber : ${pageNumbers}" class="btn-group btn-group-toggle">
+    <nav aria-label="...">
+  <ul class="pagination pagination-sm">
+    <li class="page-item"> <a class="btn btn-secondary" th:href="@{/avis(idComp=${idComp},page=${pageNumber-1},size=${avisPage.size})}"
+        th:text=${pageNumber}
+        th:class="${pageNumber==avisPage.number} ? active"></a>
+        </li>
+        </ul>
+        </nav>
+</div>
+	</div>
+
 				
 				<div class="alert alert-danger" th:if="${error}" role="alert" th:text="${error}"></div>
 		<div class="alert alert-danger" th:if="${succes}" role="alert" th:text="${succes}"></div>

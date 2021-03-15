@@ -2,6 +2,8 @@ package sid.org.service;
 
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,6 +29,7 @@ public class AvisServiceImpl implements AvisService {
 	CreneauRepository creneauRepository;
 	@Autowired
 	UserConnect userConnect;
+	private static final Logger logger = LoggerFactory.getLogger(AvisServiceImpl.class);
 
 	@Override
 	public Avis createAvis(AvisDto avisDto, Long idUser) throws ResultNotFoundException, ForbiddenException {
@@ -35,25 +38,30 @@ public class AvisServiceImpl implements AvisService {
 		if (!creneau.isPresent()) {
 			throw new ResultNotFoundException("creneau introuvable");
 		}
-		Users user = userConnect.getUser(idUser);
-		if (user.getCodeUtilisateur() != creneau.get().getIdUser1()) {
+		if (!creneau.get().getStatut().equals("passe")) {
+			logger.info(creneau.get().getStatut());
 			throw new ForbiddenException("Vous n'estes pas autorisé a laisser un avis");
+		}
+		Users user = userConnect.getUser(idUser);
+		if (user.getCodeUtilisateur() != avisDto.getCreneau().getIdUserDemande()) {
+			logger.info("id du User co" + user.getCodeUtilisateur());
+			logger.info("id du User qui a fait la demande de la competence" + avisDto.getCreneau().getIdUserDemande());
+			throw new ForbiddenException("Vous n'estes pas autorisé a laisser un avis1");
 		}
 
 		Avis avis = new Avis();
 		avis.setCommentaire(avisDto.getCommentaire());
 		avis.setNote(avisDto.getNote());
 		avis.setCreneau(avisDto.getCreneau());
+		avis.setIdComp(avisDto.getCreneau().getIdComp());
+		avis.setIdUser(user.getCodeUtilisateur());
 
 		avisRepository.saveAndFlush(avis);
-
 		return avis;
-
 	}
 
 	@Override
-	public Page<Avis> getAvis(Long idComp, Long idUser, int page, int size)
-			throws ResultNotFoundException, ForbiddenException {
+	public Page<Avis> getAvis(Long idComp, int page, int size) throws ResultNotFoundException, ForbiddenException {
 		Pageable pageable = PageRequest.of(page, size);
 		Page<Avis> avis = avisRepository.findByIdComp(idComp, pageable);
 

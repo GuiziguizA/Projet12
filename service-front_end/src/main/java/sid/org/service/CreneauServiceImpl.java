@@ -47,18 +47,13 @@ public class CreneauServiceImpl implements CreneauService {
 		RestTemplate rt = new RestTemplate();
 		HttpHeaders headers = headersService.createTokenHeaders(request);
 
-		try {
-			CreneauDto creneauDto = new CreneauDto();
-			creneauDto.setIdUser(chatDateDtoObject.getChat().getIdUser());
-			creneauDto.setIdUser1(chatDateDtoObject.getChat().getIdUser1());
-			creneauDto.setIdUserDemande(idUser);
-			creneauDto.setIdComp(chatDateDtoObject.getChat().getIdComp());
-			creneauDto.setDate(chatDateDtoObject.getDateDto());
-			rt.exchange(uri, HttpMethod.POST, new HttpEntity<>(creneauDto, headers), Creneau.class);
-
-		} catch (HttpStatusCodeException e) {
-			e.getMessage();
-		}
+		CreneauDto creneauDto = new CreneauDto();
+		creneauDto.setIdUser(chatDateDtoObject.getChat().getIdUser());
+		creneauDto.setIdUser1(chatDateDtoObject.getChat().getIdUser1());
+		creneauDto.setIdUserDemande(idUser);
+		creneauDto.setIdComp(chatDateDtoObject.getChat().getIdComp());
+		creneauDto.setDate(chatDateDtoObject.getDateDto());
+		rt.exchange(uri, HttpMethod.POST, new HttpEntity<>(creneauDto, headers), Creneau.class);
 
 	}
 
@@ -93,6 +88,19 @@ public class CreneauServiceImpl implements CreneauService {
 				responseType);
 		Page<Creneau> creneauUserPage = result.getBody();
 		return creneauUserPage;
+	}
+
+	@Override
+	public Creneau getCreneau(Long id, HttpServletRequest request) throws HttpStatusCodeException {
+
+		RestTemplate rt = requestFactory.getRestTemplate();
+		HttpHeaders headers = headersService.createTokenHeaders(request);
+
+		String uri = url + "/compagny-creneaux_requetes/creneau1?id=" + id;
+
+		ResponseEntity<Creneau> result = rt.exchange(uri, HttpMethod.GET, new HttpEntity<>(headers), Creneau.class);
+		Creneau creneau = result.getBody();
+		return creneau;
 	}
 
 	@Override

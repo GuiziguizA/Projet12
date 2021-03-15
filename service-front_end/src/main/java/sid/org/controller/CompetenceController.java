@@ -19,10 +19,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.HttpStatusCodeException;
 
+import sid.org.classe.Avis;
 import sid.org.classe.Competence;
 import sid.org.classe.Users;
 import sid.org.dto.CompetenceDto;
 import sid.org.exception.APiUSerAndCompetenceException;
+import sid.org.service.AvisService;
 import sid.org.service.CompetenceService;
 import sid.org.service.HttpService;
 
@@ -32,6 +34,8 @@ public class CompetenceController {
 	CompetenceService competenceService;
 	@Autowired
 	HttpService httpService;
+	@Autowired
+	AvisService avisService;
 
 	@GetMapping("/competences")
 	public String getCompetencesSearch(Model model, @RequestParam(required = false) Optional<String> recherche,
@@ -104,16 +108,22 @@ public class CompetenceController {
 
 	@GetMapping("/competence")
 	public String getCompetence(Model model, @RequestParam Long id, HttpServletRequest request) {
-
+		int currentPage = 0;
+		int pagesize = 2;
 		try {
 			Competence competence = competenceService.getCompetence(id, request);
 			model.addAttribute("competence", competence);
 
+			Page<Avis> avisPage = avisService.getAvis(id, currentPage, pagesize, request);
+			model.addAttribute("avisPage", avisPage);
+			int totalPages = avisPage.getTotalPages();
+			if (totalPages > 0) {
+				List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
+				model.addAttribute("pageNumbers", pageNumbers);
+
+			}
 			return "competence";
-
-		} catch (
-
-		HttpStatusCodeException e) {
+		} catch (HttpStatusCodeException e) {
 
 			String error = httpService.traiterLesExceptionsApi(e);
 			if (error == "error") {

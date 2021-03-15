@@ -52,9 +52,16 @@
 							<td th:text="${creneau.idComp}"></td>
 							<td th:text="${creneau.date}"></td>
 								<td th:text="${creneau.statut}"></td>
-									<td th:if="${creneau.statut!='valide'}" ><form method="post" th:action="@{/validateCreneau(idCreneau=${creneau.codeCreneau})}"  >
+									<td th:if="${creneau.statut == 'demande'}" ><form method="post" th:action="@{/validateCreneau(idCreneau=${creneau.codeCreneau})}"  >
 	            <button type="submit" name="submit" value="value" class="btn btn-primary">Valider</button>
+	            
 	        </form> </td>
+	        <td th:if="${creneau.statut == 'valide'}" ><form method="post" th:action="@{/validateCreneau(idCreneau=${creneau.codeCreneau})}"  >
+	            <button type="submit" name="submit" value="value" class="btn btn-primary">valider la rencontre</button>
+	            
+	        </form> </td>
+	      		<td th:if= "${creneau.statut == 'passe'}" ><a  th:href="@{/avis(id=${creneau.codeCreneau})}"><input type="button"  id="${creneau.codeCreneau}" class="btn btn-primary" value="laisser un avis" /></a></td>
+			
 				</tr>
 		
 		</table>
@@ -99,7 +106,9 @@
 							<td th:text="${creneau1.idUser}"></td>
 							<td th:text="${creneau1.idComp}"></td>
 							<td th:text="${creneau1.date}"></td>
-								<td th:text="${creneau1.statut}"></td>
+							<td th:text="${creneau1.statut}"></td>
+							<td th:if= "${creneau1.statut == 'passe'}" ><a  th:href="@{/avis(id=${creneau1.codeCreneau})}"><input type="button"  id="${creneau.codeCreneau}" class="btn btn-primary" value="laisser un avis" /></a></td>
+			
 									<!-- <td th:if="${requete.statut!='valide'}" ><form method="post" th:action="@{/valideRequete(idRequete=${requete.codeRequete})}"  >
 	            <button type="submit" name="submit" value="value" class="btn btn-primary">Reserver</button>
 	        </form> </td> -->
@@ -129,9 +138,8 @@
 	
 	
 
-	<div class="alert alert-success"th:if="${succes}" th:text="${succes}"role="alert" >
-</div>
-	
+	<div class="alert alert-success"th:if="${succes}" th:text="${succes}"role="alert" ></div>
+	<div class="alert alert-danger" th:if="${error}" role="alert" th:text="${error}"></div>
 
 				</div>
 				

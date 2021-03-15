@@ -90,7 +90,11 @@ public class CreneauServiceImpl implements CreneauService {
 		if (creneau.get().getIdUserDemande() == idUser) {
 			throw new ForbiddenException("Vous n'etes pas autorisé a valider le creneaux");
 		}
-		creneau.get().setStatut("valide");
+		if (creneau.get().getStatut().equals("demande")) {
+			creneau.get().setStatut("valide");
+		} else if (creneau.get().getStatut().equals("valide")) {
+			creneau.get().setStatut("passe");
+		}
 		creneauRepository.save(creneau.get());
 	}
 
@@ -108,7 +112,7 @@ public class CreneauServiceImpl implements CreneauService {
 	}
 
 	@Override
-	public Page<Creneau> getCreneauxUser(Long idUser) throws APiUSerAndCompetenceException {
+	public Page<Creneau> getCreneauxUser(Long idUser) {
 
 		Pageable pageable = PageRequest.of(0, 2);
 		Page<Creneau> creneaux = creneauRepository.findByIdUser(idUser, pageable);
@@ -118,7 +122,7 @@ public class CreneauServiceImpl implements CreneauService {
 	}
 
 	@Override
-	public Page<Creneau> getCreneauxUser1(Long idUser1) throws APiUSerAndCompetenceException {
+	public Page<Creneau> getCreneauxUser1(Long idUser1) {
 
 		Pageable pageable = PageRequest.of(0, 2);
 		Page<Creneau> creneaux = creneauRepository.findByIdUser1(idUser1, pageable);
@@ -128,8 +132,19 @@ public class CreneauServiceImpl implements CreneauService {
 	}
 
 	@Override
-	public void deleteCreneau(Long id, Long idUser, Long idUser1)
-			throws ResultNotFoundException, APiUSerAndCompetenceException {
+	public Creneau getCreneau(Long id) throws ResultNotFoundException {
+
+		Optional<Creneau> creneau = creneauRepository.findById(id);
+		if (!creneau.isPresent()) {
+			throw new ResultNotFoundException("creneau introuvable");
+		}
+
+		return creneau.get();
+
+	}
+
+	@Override
+	public void deleteCreneau(Long id, Long idUser, Long idUser1) throws ResultNotFoundException {
 		Optional<Creneau> creneau = creneauRepository.findById(id);
 		if (!creneau.isPresent()) {
 			throw new ResultNotFoundException("creneau introuvable");
@@ -141,9 +156,7 @@ public class CreneauServiceImpl implements CreneauService {
 	}
 
 	@Override
-
-	public Page<Creneau> getlistCreneauxComp(Competence comp, Long idUser)
-			throws ResultNotFoundException, ForbiddenException {
+	public Page<Creneau> getlistCreneauxComp(Competence comp, Long idUser) throws ForbiddenException {
 		Pageable pageable = PageRequest.of(0, 2);
 		Page<Creneau> listCreneau = creneauRepository.findByIdComp(comp.getCodeCompetence(), pageable);
 

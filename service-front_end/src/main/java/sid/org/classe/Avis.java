@@ -54,4 +54,12 @@ public class Avis {
 		this.creneau = creneau;
 	}
 
+	public Long getIdUser() {
+		return idUser;
+	}
+
+	public void setIdUser(Long idUser) {
+		this.idUser = idUser;
+	}
+
 }

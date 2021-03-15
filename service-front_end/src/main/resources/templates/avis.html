@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://ultraq.net.nz/thymleaf/layout"
+  data-layout-decorate="template1">
+
+
+
+<head>
+	<meta charset="UTF-8">
+	<script type="text/javascript" src="webjars/jquery/3.5.1/jquery.min.js"></script>
+	<script type="text/javascript" src="webjars/bootstrap/4.5.3/js/bootstrap.min.js"></script>
+	<script type="text/javascript" th:src="@{js/main.js}" src="../static/js/main.js"></script>
+
+	<link rel="stylesheet" href="webjars/bootstrap/4.5.3/css/bootstrap.min.css" />
+</head>
+ 
+
+<body>
+
+  <div layout:fragment="content">
+    <div class="container pt-3">
+      <div class="form-group">
+        <div class="jumbotron text-center">
+
+          <h2>Ajouter une competence</h2>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+
+     <form action="#" th:action="@{/avis(idCreneau=${id})}" th:object="${avisDto}" method="post">
+        <br>
+        <input type="text" th:field="*{note}" id="nom" class="form-control" placeholder="note">
+        <div th:if="${#fields.hasErrors('note')}" class="alert alert-danger" role="alert"><span  th:errors="*{note}"></span></div>
+   <br>
+    <input type="text" th:field="*{commentaire}" id="type" class="form-control" placeholder="commentaire">
+     <div  th:if="${#fields.hasErrors('commentaire')}" class="alert alert-danger" role="alert"><span th:errors="*{commentaire}"></span></div>
+      <br>
+    
+   
+    <input type="submit" class="btn btn-primary" value="Ajouter">   
+    
+</form>
+  
+<div class="alert alert-danger"th:if="${error}"th:text="${error}" role="alert">
+</div>
+
+</div>
+</div>
+
+</body>
+
+</html>

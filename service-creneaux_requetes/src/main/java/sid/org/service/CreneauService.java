@@ -16,19 +16,19 @@ public interface CreneauService {
 			throws EntityAlreadyExistException, APiUSerAndCompetenceException, ForbiddenException,
 			ResultNotFoundException;
 
+	public void updateCreneau(Long id, Long idUser) throws ResultNotFoundException, ForbiddenException;
+
 	public Creneau getCreneau(Long id, Long idUser, Long idUser1)
 			throws ResultNotFoundException, APiUSerAndCompetenceException;
 
-	public Page<Creneau> getCreneauxUser(Long idUser) throws APiUSerAndCompetenceException;
+	public Page<Creneau> getCreneauxUser(Long idUser);
 
-	public void deleteCreneau(Long id, Long idUser, Long idUser1)
-			throws ResultNotFoundException, APiUSerAndCompetenceException;
+	public Page<Creneau> getCreneauxUser1(Long idUser1);
 
-	public Page<Creneau> getlistCreneauxComp(Competence comp, Long idUser)
-			throws ResultNotFoundException, ForbiddenException;
+	public Creneau getCreneau(Long id) throws ResultNotFoundException;
 
-	public void updateCreneau(Long id, Long idUser) throws ResultNotFoundException, ForbiddenException;
+	public void deleteCreneau(Long id, Long idUser, Long idUser1) throws ResultNotFoundException;
 
-	public Page<Creneau> getCreneauxUser1(Long idUser1) throws APiUSerAndCompetenceException;
+	public Page<Creneau> getlistCreneauxComp(Competence comp, Long idUser) throws ForbiddenException;
 
 }
