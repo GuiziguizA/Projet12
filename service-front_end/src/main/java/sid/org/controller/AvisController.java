@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import sid.org.classe.Creneau;
 import sid.org.classe.Users;
@@ -31,7 +32,8 @@ public class AvisController {
 	CreneauService creneauService;
 
 	@PostMapping("/avis")
-	public String createAvis(Model model, @RequestParam Long idCreneau, AvisDto avisDto, HttpServletRequest request) {
+	public String createAvis(Model model, @RequestParam Long idCreneau, AvisDto avisDto,
+			RedirectAttributes redirectAttrs, HttpServletRequest request) {
 		try {
 
 			HttpSession session = request.getSession();
@@ -45,7 +47,7 @@ public class AvisController {
 			avisService.createAvis(avisDto, request, idUser);
 
 			String succes = "l'avis a été ajouté";
-			model.addAttribute("succes", succes);
+			redirectAttrs.addFlashAttribute("succes", succes);
 			return "redirect:/creneaux?page=0&size=2";
 		} catch (HttpStatusCodeException e) {
 
@@ -53,8 +55,8 @@ public class AvisController {
 			if (error == "error") {
 				return "redirect:/logout";
 			} else {
-				model.addAttribute("error", error);
-				return "error";
+				redirectAttrs.addFlashAttribute("error", error);
+				return "redirect:/creneaux?page=0&size=2";
 			}
 		}
 

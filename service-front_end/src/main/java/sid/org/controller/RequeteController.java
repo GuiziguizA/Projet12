@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import sid.org.classe.Competence;
 import sid.org.classe.Requete;
@@ -40,7 +41,8 @@ public class RequeteController {
 	HttpService httpService;
 
 	@PostMapping("/requete")
-	public String addRequete(Model model, @RequestParam Long idComp, HttpServletRequest request) {
+	public String addRequete(Model model, @RequestParam Long idComp, HttpServletRequest request,
+			RedirectAttributes redirectAttrs) {
 		HttpSession session = request.getSession();
 		String name = (String) session.getAttribute("username");
 		String password = (String) session.getAttribute("password");
@@ -52,13 +54,13 @@ public class RequeteController {
 			Competence comp = competenceService.getCompetence(idComp, request);
 			model.addAttribute("competence", comp);
 			String succes = "la requete a ete envoyé";
-			model.addAttribute("succes", succes);
+			redirectAttrs.addFlashAttribute("succes", succes);
 			return "redirect:/competence?id=" + idComp;
 
 		} catch (HttpStatusCodeException e) {
 			String error = httpService.traiterLesExceptionsApi(e);
 
-			model.addAttribute("error", error);
+			redirectAttrs.addFlashAttribute("error", error);
 			return "redirect:/competence?id=" + idComp;
 
 		}

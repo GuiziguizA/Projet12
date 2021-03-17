@@ -17,6 +17,7 @@ import sid.org.classe.Users;
 import sid.org.dao.AvisRepository;
 import sid.org.dao.CreneauRepository;
 import sid.org.dto.AvisDto;
+import sid.org.exception.EntityAlreadyExistException;
 import sid.org.exception.ForbiddenException;
 import sid.org.exception.ResultNotFoundException;
 
@@ -32,12 +33,18 @@ public class AvisServiceImpl implements AvisService {
 	private static final Logger logger = LoggerFactory.getLogger(AvisServiceImpl.class);
 
 	@Override
-	public Avis createAvis(AvisDto avisDto, Long idUser) throws ResultNotFoundException, ForbiddenException {
+	public Avis createAvis(AvisDto avisDto, Long idUser)
+			throws ResultNotFoundException, ForbiddenException, EntityAlreadyExistException {
 
 		Optional<Creneau> creneau = creneauRepository.findById(avisDto.getCreneau().getCodeCreneau());
 		if (!creneau.isPresent()) {
 			throw new ResultNotFoundException("creneau introuvable");
 		}
+		Optional<Avis> avis1 = avisRepository.findByCreneau(creneau.get());
+		if (avis1.isPresent()) {
+			throw new EntityAlreadyExistException("l'avis existe deja");
+		}
+
 		if (!creneau.get().getStatut().equals("passe")) {
 			logger.info(creneau.get().getStatut());
 			throw new ForbiddenException("Vous n'estes pas autorisé a laisser un avis");

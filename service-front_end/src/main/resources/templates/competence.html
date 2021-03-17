@@ -17,11 +17,15 @@
 		<div class="container pt-3">
 			<div class="form-group">
 				<div class="jumbotron text-center">
-					
+					<h1>Competence</h1>
+
+					<div class="alert alert-success" th:if="${succes}" th:text="${succes}" role="alert"> </div>
+					<div class="alert alert-danger" th:if="${error}" role="alert" th:text="${error}"></div>
+
 				</div>
 
 				<br>
-				<h2>Competence</h2>
+
 				<div>
 					<table class="table table-striped">
 						<tr>
@@ -29,7 +33,7 @@
 							<th scope="col">Auteur</th>
 							<th scope="col">Type</th>
 							<th scope="col">description</th>
-								<th scope="col"></th>
+							<th scope="col"></th>
 						</tr>
 
 						<tr>
@@ -37,70 +41,70 @@
 							<td th:text="${competence.user.username}"></td>
 							<td th:text="${competence.type}"></td>
 							<td th:text="${competence.description}"></td>
-							<td>	<form method="post" th:action="@{/requete?(idComp=${competence.codeCompetence})}" >
+							<td>
+								<form method="post" th:action="@{/requete?(idComp=${competence.codeCompetence})}">
 
-	
 
-						<input type="submit" class="btn btn-primary" value="Demande de chat">
-						<br>
-						<br>
 
-					</form></td>
-					
+									<input type="submit" class="btn btn-primary" value="Demande de chat">
+									<br>
+									<br>
+
+								</form>
+							</td>
+
 						</tr>
 
 					</table>
 
-		
+
 				</div>
-<h2>Avis des utilisateurs</h2>
+				<h2>Avis des utilisateurs</h2>
 
 
-<div class="border rounded" >
-			
+				<div class="border rounded">
+
 					<table class="table table-striped">
 						<tr>
 							<th scope="col">Utilisateur</th>
 							<th scope="col">Note</th>
 							<th scope="col">Commentaire</th>
-							
-							
+
+
 						</tr>
-						
+
 						<tr th:each="avis:${avisPage}">
-						
-						<td th:text="${avis.idUser}"></td>
+
+							<td th:text="${avis.idUser}"></td>
 							<td th:text="${avis.note}"></td>
 							<td th:text="${avis.commentaire}"></td>
-							
-									
-				</tr>
-		
-		</table>
-		
-</div>
 
-<div>
-<div th:if="${avisPage.totalPages > 0}"
-    th:each="pageNumber : ${pageNumbers}" class="btn-group btn-group-toggle">
-    <nav aria-label="...">
-  <ul class="pagination pagination-sm">
-    <li class="page-item"> <a class="btn btn-secondary" th:href="@{/avis(idComp=${idComp},page=${pageNumber-1},size=${avisPage.size})}"
-        th:text=${pageNumber}
-        th:class="${pageNumber==avisPage.number} ? active"></a>
-        </li>
-        </ul>
-        </nav>
-</div>
-	</div>
 
-				
-				<div class="alert alert-danger" th:if="${error}" role="alert" th:text="${error}"></div>
-		<div class="alert alert-danger" th:if="${succes}" role="alert" th:text="${succes}"></div>
-				
+						</tr>
+
+					</table>
+
+				</div>
+
+				<div>
+					<div th:if="${avisPage.totalPages > 0}" th:each="pageNumber : ${pageNumbers}"
+						class="btn-group btn-group-toggle">
+						<nav aria-label="...">
+							<ul class="pagination pagination-sm">
+								<li class="page-item"> <a class="btn btn-secondary"
+										th:href="@{/avis(idComp=${idComp},page=${pageNumber-1},size=${avisPage.size})}"
+										th:text=${pageNumber} th:class="${pageNumber==avisPage.number} ? active"></a>
+								</li>
+							</ul>
+						</nav>
+					</div>
+
+				</div>
+
+
 			</div>
 		</div>
-	
+
 	</div>
 
 

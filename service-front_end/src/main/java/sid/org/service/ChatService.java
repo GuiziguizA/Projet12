@@ -11,6 +11,7 @@ public interface ChatService {
 
 	public Page<Chat> getChatUser(Long idUser, int page, int size, HttpServletRequest request);
 
-	public Chat getChat(HttpServletRequest request, Long idUser, Long idUser1) throws HttpStatusCodeException;
+	public Chat getChat(HttpServletRequest request, Long idUser, Long idUser1, Long idRequete)
+			throws HttpStatusCodeException;
 
 }

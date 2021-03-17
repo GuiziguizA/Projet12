@@ -18,90 +18,99 @@
 	<div layout:fragment="content">
 		<div class="container pt-3">
 			<div class="jumbotron text-center">
-			
-			<div class="modal fade" id="myModal" role="dialog">
-							<div class="modal-dialog modal-sm">
-								<div class="modal-content">
-									<div class="modal-header">
-										<button type="button" class="close" data-dismiss="modal">&times;</button>
-										<h4 class="modal-title"></h4>
-									</div>
-									<div class="modal-body">
-										<p class="alert alert-danger">Etes-vous sûr de vouloir supprimer cette competence</p>
-									</div>
-									<div class="modal-footer">
-										<button type="button" class="btn btn-default"
-											data-dismiss="modal">Close</button>
-										<a href=" " class="btn btn-danger" id="delRef">Ok</a>
-									</div>
-								</div>
+
+				<div class="modal fade" id="myModal" role="dialog">
+					<div class="modal-dialog modal-sm">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+								<h4 class="modal-title"></h4>
+							</div>
+							<div class="modal-body">
+								<p class="alert alert-danger">Etes-vous sûr de vouloir supprimer cette competence</p>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+								<a href=" " class="btn btn-danger" id="delRef">Ok</a>
 							</div>
 						</div>
-
-						<script>
-							function modal_btn_click() {
-
-								$('#myModal').modal({ show: true });
-							}
-						</script>
-			
-			
-				<h1>Home</h1>
-<div class="border rounded">
-
-<br>
-<div>
-						 <a th:href="@{/competenceForm}"class="btn btn-primary eBtn" id ="ajouter"><input type="button"
-									class="btn btn-primary" value="+Ajouter" /></a>
 					</div>
-<br>
-					
+				</div>
+
+				<script>
+					function modal_btn_click() {
+
+						$('#myModal').modal({ show: true });
+					}
+				</script>
+
+
+				<h1>Home</h1>
+				<div class="alert alert-success" th:if="${succes}" th:text="${succes}" role="alert">
+					<div class="alert alert-danger" th:if="${error}" role="alert" th:text="${error}"></div>
+
+					<br>
+
+				</div>
+				</div>
+
+
+
+				<div>
+					<a th:href="@{/competenceForm}" class="btn btn-primary eBtn" id="ajouter"><input type="button"
+							class="btn btn-primary" value="+Ajouter" /></a>
+				</div>
+				<br>
+				<div class="border rounded">
 
 					<table class="table table-striped">
 						<tr>
 							<th scope="col">Nom de la competence</th>
-							
+
 							<th scope="col">Type</th>
-							<th scope="col"></th>
-							
-							
+							<!-- <th scope="col"></th> -->
+
+
 						</tr>
 						<tr th:each="competence:${competencePage}">
-						<td th:text="${competence.nom}"></td>
-							
-							<td th:text="${competence.type}"></td>
-						
-							<td><a th:href="@{/deletecompetence(id=${competence.codeCompetence})}" th:method="get" class="btn btn-danger delBtn"  id="delBtn" onclick="modal_btn_click()" >Delete</a></td>
-				</tr>
-		
-		</table>
-		
-</div>
-<div>
-<div th:if="${competencePage.totalPages > 0}"
-    th:each="pageNumber : ${pageNumbers}" class="btn-group btn-group-toggle">
-    <nav aria-label="...">
-  <ul class="pagination pagination-sm">
-    <li class="page-item"> <a class="btn btn-secondary" th:href="@{/home(page=${pageNumber-1},size=${competencePage.size},recherche=${recherche})}"
-        th:text=${pageNumber}
-        th:class="${pageNumber==competencePage.number} ? active"></a>
-        </li>
-        </ul>
-        </nav>
-</div>
-	</div>
-	
-	
-	
+							<td th:text="${competence.nom}"></td>
 
-				
-			
-	
-				<div class="alert alert-success" th:if="${succes}" th:text="${succes}" role="alert">
+							<td th:text="${competence.type}"></td>
+
+							<!-- <td><a th:href="@{/deletecompetence(id=${competence.codeCompetence})}" th:method="get"
+									class="btn btn-danger delBtn" id="delBtn" onclick="modal_btn_click()">Delete</a>
+							</td> -->
+						</tr>
+
+					</table>
+
 				</div>
+				<div>
+					<div th:if="${competencePage.totalPages > 0}" th:each="pageNumber : ${pageNumbers}"
+						class="btn-group btn-group-toggle">
+						<nav aria-label="...">
+							<ul class="pagination pagination-sm">
+								<li class="page-item"> <a class="btn btn-secondary"
+										th:href="@{/home(page=${pageNumber-1},size=${competencePage.size},recherche=${recherche})}"
+										th:text=${pageNumber}
+										th:class="${pageNumber==competencePage.number} ? active"></a>
+								</li>
+							</ul>
+						</nav>
+					</div>
+				</div>
+
+
+
+
+
+
+
+
+
 			</div>
 		</div>
-	</div>
+	
 
 </body>
 

@@ -1,6 +1,7 @@
 package sid.org.service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,21 +42,24 @@ public class CreneauServiceImpl implements CreneauService {
 			throws EntityAlreadyExistException, APiUSerAndCompetenceException, ForbiddenException,
 			ResultNotFoundException {
 
-		Optional<Creneau> creneau = creneauRepository.findByIdUserAndIdUser1AndIdComp(creneauDto.getIdUser(),
-				creneauDto.getIdUser1(), creneauDto.getIdComp());
-		Optional<Creneau> creneau2 = creneauRepository.findByIdUserAndIdUser1AndIdComp(creneauDto.getIdUser1(),
-				creneauDto.getIdUser(), creneauDto.getIdComp());
+		List<Creneau> creneau = creneauRepository.findByIdUserAndIdUser1AndIdCompAndStatut(creneauDto.getIdUser(),
+				creneauDto.getIdUser1(), creneauDto.getIdComp(), "valide");
+		List<Creneau> creneau2 = creneauRepository.findByIdUserAndIdUser1AndIdCompAndStatut(creneauDto.getIdUser1(),
+				creneauDto.getIdUser(), creneauDto.getIdComp(), "valide");
 
-		if (creneau.isPresent()) {
-			if (creneau.get().getStatut() == "valide") {
-				throw new EntityAlreadyExistException("Un creneau a deja été reservé");
-			}
+		if (!creneau.isEmpty()) {
+			throw new EntityAlreadyExistException("Un creneau validé existe deja pour cette competence");
 		}
-		if (creneau2.isPresent()) {
-			if (creneau2.get().getStatut() == "valide") {
-				throw new EntityAlreadyExistException("Un creneau a deja été reservé");
-			}
+		if (!creneau2.isEmpty()) {
+			throw new EntityAlreadyExistException("Un creneau validé existe deja pour cette competence");
 		}
+
+		/*
+		 * if (creneau.isPresent()) { if (creneau.get().getStatut() == "valide") { throw
+		 * new EntityAlreadyExistException("Un creneau a deja été reservé"); } } if
+		 * (creneau2.isPresent()) { if (creneau2.get().getStatut() == "valide") { throw
+		 * new EntityAlreadyExistException("Un creneau a deja été reservé"); } }
+		 */
 		Optional<Requete> requete = requeteRepository.findById(idRequete);
 
 		if (!requete.isPresent()) {
@@ -64,16 +68,23 @@ public class CreneauServiceImpl implements CreneauService {
 
 		// chatConnect verifie si le chat existe
 
-		chatConnect.getChat(creneauDto.getIdUser(), creneauDto.getIdUser1());
+		chatConnect.getChat(creneauDto.getIdUser(), creneauDto.getIdUser1(), idRequete);
 
 		Creneau creneau1 = new Creneau();
 		creneau1.setIdComp(creneauDto.getIdComp());
 		creneau1.setDate(new Date());
 		creneau1.setIdUser(creneauDto.getIdUser());
 		creneau1.setIdUser1(creneauDto.getIdUser1());
+
 		creneau1.setIdUserDemande(idUserDemande);
+		if (idUserDemande == creneauDto.getIdUser1()) {
+			creneau1.setIdUserRecoit(creneauDto.getIdUser());
+		} else {
+			creneau1.setIdUserRecoit(creneauDto.getIdUser1());
+		}
 		creneau1.setStatut("demande");
 		creneau1.setDate(creneauDto.getDate());
+		creneau1.setIdChat(creneauDto.getIdChat());
 		creneauRepository.saveAndFlush(creneau1);
 
 		return creneau1;
@@ -92,6 +103,10 @@ public class CreneauServiceImpl implements CreneauService {
 		}
 		if (creneau.get().getStatut().equals("demande")) {
 			creneau.get().setStatut("valide");
+			List<Creneau> listCreneau = creneauRepository.findByIdChatAndStatut(creneau.get().getIdChat(), "demande");
+			if (!listCreneau.isEmpty()) {
+				creneauRepository.deleteAll(listCreneau);
+			}
 		} else if (creneau.get().getStatut().equals("valide")) {
 			creneau.get().setStatut("passe");
 		}
@@ -106,26 +121,26 @@ public class CreneauServiceImpl implements CreneauService {
 			throw new ResultNotFoundException("creneau introuvable");
 		}
 		// chatConnect verifie si le chat existe
-		chatConnect.getChat(idUser, idUser1);
+		/* chatConnect.getChat(idUser, idUser1); */
 		return creneau.get();
 
 	}
 
 	@Override
-	public Page<Creneau> getCreneauxUser(Long idUser) {
+	public Page<Creneau> getCreneauxUser(Long idUser, int page, int size) {
 
-		Pageable pageable = PageRequest.of(0, 2);
-		Page<Creneau> creneaux = creneauRepository.findByIdUser(idUser, pageable);
+		Pageable pageable = PageRequest.of(page, size);
+		Page<Creneau> creneaux = creneauRepository.findByIdUserDemande(idUser, pageable);
 
 		return creneaux;
 
 	}
 
 	@Override
-	public Page<Creneau> getCreneauxUser1(Long idUser1) {
+	public Page<Creneau> getCreneauxUser1(Long idUser1, int page, int size) {
 
-		Pageable pageable = PageRequest.of(0, 2);
-		Page<Creneau> creneaux = creneauRepository.findByIdUser1(idUser1, pageable);
+		Pageable pageable = PageRequest.of(page, size);
+		Page<Creneau> creneaux = creneauRepository.findByIdUserRecoit(idUser1, pageable);
 
 		return creneaux;
 
@@ -143,21 +158,21 @@ public class CreneauServiceImpl implements CreneauService {
 
 	}
 
-	@Override
-	public void deleteCreneau(Long id, Long idUser, Long idUser1) throws ResultNotFoundException {
-		Optional<Creneau> creneau = creneauRepository.findById(id);
-		if (!creneau.isPresent()) {
-			throw new ResultNotFoundException("creneau introuvable");
-		}
-		// chatConnect verifie si le chat existe
-		chatConnect.getChat(idUser, idUser1);
-		creneauRepository.delete(creneau.get());
+	/*
+	 * @Override public void deleteCreneau(Long id, Long idUser, Long idUser1)
+	 * throws ResultNotFoundException { Optional<Creneau> creneau =
+	 * creneauRepository.findById(id); if (!creneau.isPresent()) { throw new
+	 * ResultNotFoundException("creneau introuvable"); } // chatConnect verifie si
+	 * le chat existe chatConnect.getChat(idUser, idUser1);
+	 * creneauRepository.delete(creneau.get());
+	 * 
+	 * }
+	 */
 
-	}
-
 	@Override
-	public Page<Creneau> getlistCreneauxComp(Competence comp, Long idUser) throws ForbiddenException {
-		Pageable pageable = PageRequest.of(0, 2);
+	public Page<Creneau> getlistCreneauxComp(Competence comp, Long idUser, int page, int size)
+			throws ForbiddenException {
+		Pageable pageable = PageRequest.of(page, size);
 		Page<Creneau> listCreneau = creneauRepository.findByIdComp(comp.getCodeCompetence(), pageable);
 
 		if (idUser != comp.getUser().getCodeUtilisateur()) {

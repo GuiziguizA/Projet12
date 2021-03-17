@@ -40,7 +40,7 @@ public class RequeteTest {
 		Requete requete = new Requete(1L, new Date(), 1L, 2L, "demande");
 		RequeteDto requeteDto = new RequeteDto(1L, 2L, "demande");
 
-		Mockito.when(requeteRepository.findByIdUserAndIdComp(Mockito.anyLong(), Mockito.anyLong()))
+		Mockito.when(requeteRepository.findByIdUserAndIdCompAndStatut(Mockito.anyLong(), Mockito.anyLong(), "demande"))
 				.thenReturn(Optional.empty());
 
 		Requete requete1 = requeteService.createRequete(requeteDto);
@@ -55,7 +55,7 @@ public class RequeteTest {
 		Requete requete = new Requete(1L, new Date(), 1L, 2L, "demande");
 		RequeteDto requeteDto = new RequeteDto(1L, 1L, "demande");
 
-		Mockito.when(requeteRepository.findByIdUserAndIdComp(Mockito.anyLong(), Mockito.anyLong()))
+		Mockito.when(requeteRepository.findByIdUserAndIdCompAndStatut(Mockito.anyLong(), Mockito.anyLong(), "demande"))
 				.thenReturn(Optional.of(requete));
 
 		EntityAlreadyExistException exception = assertThrows(EntityAlreadyExistException.class, () -> {

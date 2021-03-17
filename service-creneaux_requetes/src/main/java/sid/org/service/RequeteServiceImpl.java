@@ -49,8 +49,8 @@ public class RequeteServiceImpl implements RequeteService {
 	public Requete createRequete(RequeteDto requeteDto)
 			throws EntityAlreadyExistException, APiUSerAndCompetenceException, ForbiddenException {
 		Users user = userConnect.getUser(requeteDto.getIdUser());
-		Optional<Requete> requete = requeteRepository.findByIdUserAndIdComp(requeteDto.getIdUser(),
-				requeteDto.getIdComp());
+		Optional<Requete> requete = requeteRepository.findByIdUserAndIdCompAndStatut(requeteDto.getIdUser(),
+				requeteDto.getIdComp(), "demande");
 		if (requete.isPresent()) {
 			throw new EntityAlreadyExistException("la requete existe deja");
 		}
@@ -61,10 +61,13 @@ public class RequeteServiceImpl implements RequeteService {
 			throw new ForbiddenException("un utilisateur ne peut pas s'envoyer une requete a lui même");
 		}
 
-		if (chatConnect.getChat(requeteDto.getIdUser(), competence.getUser().getCodeUtilisateur()) == 1) {
-			throw new EntityAlreadyExistException("le chat existe deja");
-
-		}
+		/*
+		 * if (chatConnect.getChat(requeteDto.getIdUser(),
+		 * competence.getUser().getCodeUtilisateur()) == 1) { throw new
+		 * EntityAlreadyExistException("le chat existe deja");
+		 * 
+		 * }
+		 */
 
 		Requete requete1 = new Requete();
 
@@ -92,10 +95,12 @@ public class RequeteServiceImpl implements RequeteService {
 		Competence competence = competenceApi.getCompetence(requete.get().getIdComp());
 		if (idUser1 == competence.getUser().getCodeUtilisateur()) {
 
-			if (chatConnect.getChat(requete.get().getIdUser(), idUser1) == 1) {
-				throw new EntityAlreadyExistException("le chat existe deja");
-
-			}
+			/*
+			 * if (chatConnect.getChat(requete.get().getIdUser(), idUser1) == 1) { throw new
+			 * EntityAlreadyExistException("le chat existe deja");
+			 * 
+			 * }
+			 */
 
 			ChatDto chatDto = new ChatDto();
 			chatDto.setIdUser(requete.get().getIdUser());

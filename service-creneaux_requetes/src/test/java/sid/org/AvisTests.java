@@ -25,6 +25,7 @@ import sid.org.dao.AvisRepository;
 import sid.org.dao.CreneauRepository;
 import sid.org.dto.AvisDto;
 import sid.org.exception.APiUSerAndCompetenceException;
+import sid.org.exception.EntityAlreadyExistException;
 import sid.org.exception.ForbiddenException;
 import sid.org.exception.ResultNotFoundException;
 import sid.org.service.AvisServiceImpl;
@@ -46,7 +47,8 @@ class AvisTests {
 	}
 
 	@Test
-	public void createAvisTest() throws ResultNotFoundException, APiUSerAndCompetenceException, ForbiddenException {
+	public void createAvisTest() throws ResultNotFoundException, APiUSerAndCompetenceException, ForbiddenException,
+			EntityAlreadyExistException {
 		Creneau creneau = new Creneau(new Date(), 1L, 2L, 3L);
 		Avis avis = new Avis(3, "insufisant", creneau);
 		AvisDto avisDto = new AvisDto(3, 2L, 3L, "insufisant", creneau);

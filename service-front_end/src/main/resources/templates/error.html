@@ -16,7 +16,7 @@
 		<div class="container pt-3">
 			<div class="jumbotron text-center">
 				<h1>Page d'erreur</h1>
-
+				<div class="alert alert-success"th:if="${succes}" th:text="${succes}"role="alert"> </div>
 				<div class="alert alert-danger" th:if="${error}" role="alert" th:text="${error}"></div>
 			</div>
 		</div>

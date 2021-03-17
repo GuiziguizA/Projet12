@@ -84,4 +84,13 @@ public class Creneau {
 		this.idUserDemande = idUserDemande;
 	}
 
+	
+	public Collection<Avis> getAvis() {
+		return avis;
+	}
+
+	public void setAvis(Collection<Avis> avis) {
+		this.avis = avis;
+	}
+
 }

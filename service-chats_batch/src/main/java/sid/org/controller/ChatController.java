@@ -17,9 +17,10 @@ public class ChatController {
 	ChatService chatService;
 
 	@GetMapping("/chat")
-	public Chat getChat(@RequestParam Long idUser, @RequestParam Long idUser1) throws ResultNotFoundException {
+	public Chat getChat(@RequestParam Long idUser, @RequestParam Long idUser1, @RequestParam Long idRequete)
+			throws ResultNotFoundException {
 
-		Chat chat = chatService.getUnChat(idUser, idUser1);
+		Chat chat = chatService.getUnChat(idUser, idUser1, idRequete);
 
 		return chat;
 

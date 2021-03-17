@@ -1,6 +1,7 @@
 package sid.org.controller;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import sid.org.classe.Chat;
 import sid.org.classe.Creneau;
@@ -43,7 +45,8 @@ public class CreneauController {
 
 	@PostMapping("/creneau")
 	public String createCreneau(Model model, @RequestParam Long idUser1, @RequestParam Long idUser,
-			ChatDateDtoObject chatDateDtoObject, HttpServletRequest request) {
+			@RequestParam Long idRequete, ChatDateDtoObject chatDateDtoObject, HttpServletRequest request,
+			RedirectAttributes redirectAttrs) {
 		HttpSession session = request.getSession();
 		String name = (String) session.getAttribute("username");
 		String password = (String) session.getAttribute("password");
@@ -52,33 +55,37 @@ public class CreneauController {
 		Long idUser2 = user.getCodeUtilisateur();
 		try {
 			logger.info("show the date " + chatDateDtoObject.getDateDto().toString());
-			Chat chat = chatService.getChat(request, idUser, idUser1);
+			logger.info("show the idRequete " + idRequete);
+			Chat chat = chatService.getChat(request, idUser, idUser1, idRequete);
 			chatDateDtoObject.setChat(chat);
 			logger.info("show the chat " + chatDateDtoObject.getChat().toString());
 
 			creneauService.createCreneau(chatDateDtoObject, idUser2, request);
-
-			int currentPage = 0;
-			int pageSize = 2;
-			Page<Chat> pageChat = chatService.getChatUser(idUser, currentPage, pageSize, request);
-			model.addAttribute("pageChat", pageChat);
-			int totalPages = pageChat.getTotalPages();
-			if (totalPages > 0) {
-				List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
-				model.addAttribute("pageNumbers", pageNumbers);
-			}
-			return "chats";
+			/*
+			 * int currentPage = 0; int pageSize = 2; Page<Chat> pageChat =
+			 * chatService.getChatUser(idUser, currentPage, pageSize, request);
+			 * model.addAttribute("pageChat", pageChat); int totalPages =
+			 * pageChat.getTotalPages(); if (totalPages > 0) { List<Integer> pageNumbers =
+			 * IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
+			 * model.addAttribute("pageNumbers", pageNumbers); }
+			 */
+			String succes = "le creneau a été envoyé";
+			model.addAttribute("succes", succes);
+			redirectAttrs.addFlashAttribute("succes", succes);
+			return "redirect:/chats?page=0&size=2";
 		} catch (HttpStatusCodeException e) {
 			String error = httpService.traiterLesExceptionsApi(e);
 
-			model.addAttribute("error", error);
-			return "error";
+			redirectAttrs.addFlashAttribute("error", error);
+			return "redirect:/chats?page=0&size=2";
 		}
 
 	}
 
 	@GetMapping("/creneaux")
-	public String getlistCreneau(Model model, HttpServletRequest request) {
+	public String getlistCreneau(Model model, HttpServletRequest request,
+			@RequestParam(required = false) Optional<Integer> size,
+			@RequestParam(required = false) Optional<Integer> page) {
 
 		HttpSession session = request.getSession();
 		String name = (String) session.getAttribute("username");
@@ -87,8 +94,8 @@ public class CreneauController {
 		Users user = (Users) session.getAttribute("user");
 
 		Long idUser = user.getCodeUtilisateur();
-		int currentPage = 0;
-		int pageSize = 2;
+		int currentPage = page.orElse(0);
+		int pageSize = size.orElse(2);
 		try {
 			Page<Creneau> pageCreneau = creneauService.getCreneauxUser(idUser, currentPage, pageSize, request);
 			Page<Creneau> pageCreneau1 = creneauService.getCreneauxUser1(idUser, currentPage, pageSize, request);
@@ -117,17 +124,19 @@ public class CreneauController {
 	}
 
 	@GetMapping(value = "/creneau")
-	public String User(Model model, @RequestParam Long idUser, @RequestParam Long idUser1,
+	public String User(Model model, @RequestParam Long idUser, @RequestParam Long idUser1, @RequestParam Long idRequete,
 			ChatDateDtoObject chatDateDtoObject) {
 
 		model.addAttribute("idUser", idUser);
 		model.addAttribute("idUser1", idUser1);
+		model.addAttribute("idRequete", idRequete);
 
 		return "creneau";
 	}
 
 	@PostMapping("/validateCreneau")
-	public String valideCreneau(Model model, @RequestParam Long idCreneau, HttpServletRequest request) {
+	public String valideCreneau(Model model, @RequestParam Long idCreneau, HttpServletRequest request,
+			RedirectAttributes redirectAttrs) {
 		HttpSession session = request.getSession();
 		String name = (String) session.getAttribute("username");
 		String password = (String) session.getAttribute("password");
@@ -141,10 +150,10 @@ public class CreneauController {
 			return "redirect:/creneaux?page=0&size=2";
 
 		} catch (HttpStatusCodeException e) {
-			String error = e.getMessage();
-			model.addAttribute("error", error);
-			return "error";
+			String error = httpService.traiterLesExceptionsApi(e);
 
+			redirectAttrs.addFlashAttribute("error", error);
+			return "redirect:/creneaux?page=0&size=2";
 		}
 	}
 

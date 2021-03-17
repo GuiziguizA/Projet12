@@ -16,7 +16,7 @@
 
 
 	<div layout:fragment="content">
-	
+
 
 
 
@@ -26,72 +26,72 @@
 
 					<h1>Messages</h1>
 				</div>
-		
-				<div class="border rounded" >
-				
-					
+
+				<div class="border rounded">
+
+
 					<table class="table table-striped">
 						<tr>
-							
+
 							<th scope="col">utilisateur</th>
 							<th scope="col">message</th>
-							
-							
+
+
 						</tr>
 						<tr th:each="message:${pageMessage}">
-						<td th:text="${message.idUser}"></td>
+							<td th:text="${message.idUser}"></td>
 							<td th:text="${message.content}"></td>
-							
-								
-							
-				</tr>
-		
-		</table>
-		
-</div>
-<br>
-		<div>
-		<form th:action="@{/messages(idChat=${idChat})}"  th:object="${messageDto}" method="post">
 
-	<br>
-					 <input type="text" th:field="*{content}" id="content"  placeholder="message">
-							
 
-						</div>
-						<br>
 
-						<input type="submit" class="btn btn-primary" value="envoyer">
-						<br>
-						<br>
+						</tr>
 
-					</form>
-					</div>
-<div>
-<div th:if="${pageMessage.totalPages > 0}"
-    th:each="pageNumber : ${pageNumbers}" class="btn-group btn-group-toggle">
-    <nav aria-label="...">
-  <ul class="pagination pagination-sm">
-    <li class="page-item"> <a class="btn btn-secondary" th:href="@{/messages(idChat=${idChat},page=${pageNumber-1},size=${pageMessage.size})}"
-        th:text=${pageNumber}
-        th:class="${pageNumber==pageMessage.number} ? active"></a>
-        </li>
-        </ul>
-        </nav>
-</div>
-	</div>
-	</div>
-	</div>
-	
-
-	<div class="alert alert-success"th:if="${succes}" th:text="${succes}"role="alert" >
-</div>
-	
+					</table>
 
 				</div>
-				
-				
-			
-	
+				<br>
+				<div>
+					<form th:action="@{/messages(idChat=${idChat})}" th:object="${messageDto}" method="post">
+
+						<br>
+						<input type="text" th:field="*{content}" id="content" placeholder="message">
+
+
+				</div>
+				<br>
+
+				<input type="submit" class="btn btn-primary" value="envoyer">
+				<br>
+				<br>
+
+				</form>
+			</div>
+			<div>
+				<div th:if="${pageMessage.totalPages > 0}" th:each="pageNumber : ${pageNumbers}"
+					class="btn-group btn-group-toggle">
+					<nav aria-label="...">
+						<ul class="pagination pagination-sm">
+							<li class="page-item"> <a class="btn btn-secondary"
+									th:href="@{/messages(idChat=${idChat},page=${pageNumber-1},size=${pageMessage.size})}"
+									th:text=${pageNumber} th:class="${pageNumber==pageMessage.number} ? active"></a>
+							</li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="alert alert-success" th:if="${succes}" th:text="${succes}" role="alert">
+	</div>
+
+
+	</div>
+
+
+
+
 
 </body>
 

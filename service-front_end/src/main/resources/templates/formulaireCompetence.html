@@ -5,14 +5,14 @@
 
 
 <head>
-	<meta charset="UTF-8">
-	<script type="text/javascript" src="webjars/jquery/3.5.1/jquery.min.js"></script>
-	<script type="text/javascript" src="webjars/bootstrap/4.5.3/js/bootstrap.min.js"></script>
-	<script type="text/javascript" th:src="@{js/main.js}" src="../static/js/main.js"></script>
+  <meta charset="UTF-8">
+  <script type="text/javascript" src="webjars/jquery/3.5.1/jquery.min.js"></script>
+  <script type="text/javascript" src="webjars/bootstrap/4.5.3/js/bootstrap.min.js"></script>
+  <script type="text/javascript" th:src="@{js/main.js}" src="../static/js/main.js"></script>
 
-	<link rel="stylesheet" href="webjars/bootstrap/4.5.3/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="webjars/bootstrap/4.5.3/css/bootstrap.min.css" />
 </head>
- 
+
 
 <body>
 
@@ -22,33 +22,39 @@
         <div class="jumbotron text-center">
 
           <h2>Ajouter une competence</h2>
+          
+          <div class="alert alert-danger" th:if="${error}" th:text="${error}" role="alert">
+      </div>
+      
         </div>
       </div>
     </div>
     <div class="container">
 
-     <form action="#" th:action="@{/competence}" th:object="${competenceDto}" method="post">
+      <form action="#" th:action="@{/competence}" th:object="${competenceDto}" method="post">
         <br>
         <input type="text" th:field="*{nom}" id="nom" class="form-control" placeholder="nom">
-        <div th:if="${#fields.hasErrors('nom')}" class="alert alert-danger" role="alert"><span  th:errors="*{nom}"></span></div>
-   <br>
-    <input type="text" th:field="*{type}" id="type" class="form-control" placeholder="type de la competence">
-     <div  th:if="${#fields.hasErrors('type')}" class="alert alert-danger" role="alert"><span th:errors="*{type}"></span></div>
-      <br>
-    <input type="text" th:field="*{description}" id="description" class="form-control" placeholder="description">
-   <div  th:if="${#fields.hasErrors('description')}" class="alert alert-danger" role="alert"> <span th:errors="*{description}"></span></div>
-  
-<br>
-   
-    <input type="submit" class="btn btn-primary" value="Ajouter">   
-    
-</form>
-  
-<div class="alert alert-danger"th:if="${error}"th:text="${error}" role="alert">
-</div>
+        <div th:if="${#fields.hasErrors('nom')}" class="alert alert-danger" role="alert"><span
+            th:errors="*{nom}"></span></div>
+        <br>
+        <input type="text" th:field="*{type}" id="type" class="form-control" placeholder="type de la competence">
+        <div th:if="${#fields.hasErrors('type')}" class="alert alert-danger" role="alert"><span
+            th:errors="*{type}"></span></div>
+        <br>
+        <input type="text" th:field="*{description}" id="description" class="form-control" placeholder="description">
+        <div th:if="${#fields.hasErrors('description')}" class="alert alert-danger" role="alert"> <span
+            th:errors="*{description}"></span></div>
 
-</div>
-</div>
+        <br>
+
+        <input type="submit" class="btn btn-primary" value="Ajouter">
+
+      </form>
+
+      
+
+    </div>
+  </div>
 
 </body>
 

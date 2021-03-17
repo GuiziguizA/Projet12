@@ -13,11 +13,15 @@ public interface CreneauRepository extends JpaRepository<Creneau, Long> {
 
 	Optional<Creneau> findByIdUserAndIdUser1AndIdComp(Long idUser, Long idUser1, Long idComp);
 
-	Page<Creneau> findByIdUser(Long idUser, Pageable pageable);
+	List<Creneau> findByIdUserAndIdUser1AndIdCompAndStatut(Long idUser, Long idUser1, Long idComp, String statut);
 
-	Page<Creneau> findByIdUser1(Long idUser1, Pageable pageable);
+	Page<Creneau> findByIdUserDemande(Long idUserDemande, Pageable pageable);
+
+	Page<Creneau> findByIdUserRecoit(Long idUserRecoit, Pageable pageable);
 
 	List<Creneau> findByIdUser(Long idUser);
+
+	List<Creneau> findByIdChatAndStatut(Long idChat, String statut);
 
 	Page<Creneau> findByIdComp(Long codeCompetence, Pageable pageable);
 

@@ -7,7 +7,7 @@ import sid.org.exception.ResultNotFoundException;
 
 public interface ChatService {
 
-	public Chat getUnChat(Long idUser, Long idUser1) throws ResultNotFoundException;
+	public Chat getUnChat(Long idUser, Long idUser1, Long idRequete) throws ResultNotFoundException;
 
 	public void deleteUnChat(Long id) throws ResultNotFoundException;
 

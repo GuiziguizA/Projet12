@@ -28,10 +28,11 @@ public class ChatServiceImpl implements ChatService {
 	@RabbitListener(queues = MessagingConfig.QUEUE1)
 	public void creerUnChat(ChatDto chatDto) {
 
-		System.out.println("LLLLLLLLLLLLLLLLL" + chatDto.toString());
-		Optional<Chat> chat = chatRepository.findByUserAndUser(chatDto.getIdUser(), chatDto.getIdUser1());
-		Optional<Chat> chat2 = chatRepository.findByUserAndUser(chatDto.getIdUser1(), chatDto.getIdUser());
-
+		/*
+		 * Optional<Chat> chat = chatRepository.findByUserAndUser(chatDto.getIdUser(),
+		 * chatDto.getIdUser1()); Optional<Chat> chat2 =
+		 * chatRepository.findByUserAndUser(chatDto.getIdUser1(), chatDto.getIdUser());
+		 */
 		/*
 		 * if (chat.isPresent()) { throw new
 		 * EntityAlreadyExistException("chat existe deja"); } if (chat2.isPresent()) {
@@ -50,9 +51,9 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
-	public Chat getUnChat(Long idUser, Long idUser1) throws ResultNotFoundException {
-		Optional<Chat> chat = chatRepository.findByUserAndUser(idUser, idUser1);
-		Optional<Chat> chat1 = chatRepository.findByUserAndUser(idUser1, idUser);
+	public Chat getUnChat(Long idUser, Long idUser1, Long idRequete) throws ResultNotFoundException {
+		Optional<Chat> chat = chatRepository.findByUserAndUser1AndidRequete(idUser, idUser1, idRequete);
+		Optional<Chat> chat1 = chatRepository.findByUserAndUser1AndidRequete(idUser1, idUser, idRequete);
 
 		if (!chat.isPresent() && !chat1.isPresent()) {
 			throw new ResultNotFoundException("chat introuvable");
@@ -71,7 +72,8 @@ public class ChatServiceImpl implements ChatService {
 		List<Chat> chats1 = chatRepository.findByidUser1(idUser);
 		chats.addAll(chats1);
 		Pageable pageable = PageRequest.of(page, size);
-		Page<Chat> pageChat = new PageImpl<>(chats);
+		long totalChats = chats.size() + chats1.size();
+		Page<Chat> pageChat = new PageImpl<>(chats, pageable, totalChats);
 		return pageChat;
 
 	}

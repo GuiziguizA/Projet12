@@ -10,7 +10,7 @@ import sid.org.classe.Requete;
 
 public interface RequeteRepository extends JpaRepository<Requete, Long> {
 
-	Optional<Requete> findByIdUserAndIdComp(Long idUser, Long idComp);
+	Optional<Requete> findByIdUserAndIdCompAndStatut(Long idUser, Long idComp, String statut);
 
 	Page<Requete> findByIdUserComp(Long idUserComp, Pageable pageable);
 

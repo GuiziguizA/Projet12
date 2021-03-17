@@ -51,8 +51,10 @@ public class CreneauServiceImpl implements CreneauService {
 		creneauDto.setIdUser(chatDateDtoObject.getChat().getIdUser());
 		creneauDto.setIdUser1(chatDateDtoObject.getChat().getIdUser1());
 		creneauDto.setIdUserDemande(idUser);
+
 		creneauDto.setIdComp(chatDateDtoObject.getChat().getIdComp());
 		creneauDto.setDate(chatDateDtoObject.getDateDto());
+		creneauDto.setIdChat(chatDateDtoObject.getChat().getId());
 		rt.exchange(uri, HttpMethod.POST, new HttpEntity<>(creneauDto, headers), Creneau.class);
 
 	}

@@ -28,8 +28,9 @@ public class ChatConnectImpl implements ChatConnect {
 	private HeadersService headersService;
 
 	@Override
-	public int getChat(Long idUser, Long idUser1) throws HttpStatusCodeException {
-		String uri = url + "/compagny-chat_batch/chat?idUser1=" + idUser1 + "&idUser=" + idUser;
+	public int getChat(Long idUser, Long idUser1, Long idRequete) throws HttpStatusCodeException {
+		String uri = url + "/compagny-chat_batch/chat?idUser1=" + idUser1 + "&idUser=" + idUser + "&idRequete="
+				+ idRequete;
 		RecupToken token = new RecupToken();
 		TokenString tok = token.tokenString();
 		HttpHeaders headers = headersService.createTokenHeaders(tok.getValue());

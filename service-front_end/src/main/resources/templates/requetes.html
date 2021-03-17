@@ -16,7 +16,7 @@
 
 
 	<div layout:fragment="content">
-	
+
 
 
 
@@ -25,18 +25,21 @@
 				<div class="jumbotron text-center">
 
 					<h1>Requetes</h1>
+
+					<div class="alert alert-success" th:if="${succes}" th:text="${succes}" role="alert">
+						<div class="alert alert-danger" th:if="${error}" role="alert" th:text="${error}"></div>
+					</div>
+
+
 				</div>
-				
-			
-				</div>
-				
-				
+
+
 				<h2>Les requetes des utilisateurs </h2>
 				<br>
-				<br>
-					
-				<div class="border rounded" >
-			
+
+
+				<div class="border rounded">
+
 					<table class="table table-striped">
 						<tr>
 							<th scope="col">Nom de la Competence</th>
@@ -44,92 +47,84 @@
 							<th scope="col">Date</th>
 							<th scope="col">Statut</th>
 							<th scope="col"></th>
-							
+
 						</tr>
-						
+
 						<tr th:each="requete:${requetePage}">
-						
-						<td th:text="${requete.competenceNom}"></td>
+
+							<td th:text="${requete.competenceNom}"></td>
 							<td th:text="${requete.username}"></td>
 							<td th:text="${requete.date}"></td>
-								<td th:text="${requete.statut}"></td>
-									<td th:if="${requete.statut!='valide'}" ><form method="post" th:action="@{/valideRequete(idRequete=${requete.codeRequete})}"  >
-	            <button type="submit" name="submit" value="value" class="btn btn-primary">Reserver</button>
-	        </form> </td>
-				</tr>
-		
-		</table>
-		
-</div>
-<br>
+							<td th:text="${requete.statut}"></td>
+							<td th:if="${requete.statut!='valide'}">
+								<form method="post" th:action="@{/valideRequete(idRequete=${requete.codeRequete})}">
+									<button type="submit" name="submit" value="value"
+										class="btn btn-primary">Reserver</button>
+								</form>
+							</td>
+						</tr>
 
-<div>
-<div th:if="${requetePage.totalPages > 0}"
-    th:each="pageNumber : ${pageNumbers}" class="btn-group btn-group-toggle">
-    <nav aria-label="...">
-  <ul class="pagination pagination-sm">
-    <li class="page-item"> <a class="btn btn-secondary" th:href="@{/requetes(page=${pageNumber-1},size=${requetePage.size})}"
-        th:text=${pageNumber}
-        th:class="${pageNumber==requetePage.number} ? active"></a>
-        </li>
-        </ul>
-        </nav>
-</div>
-	</div>
-	
-	<h2>Vos Requetes </h2>
-	<br>
-		<br>
-			
+					</table>
+
+				</div>
+				<br>
+
+				<div>
+					<div th:if="${requetePage.totalPages > 0}" th:each="pageNumber : ${pageNumbers}"
+						class="btn-group btn-group-toggle">
+						<nav aria-label="...">
+							<ul class="pagination pagination-sm">
+								<li class="page-item"> <a class="btn btn-secondary"
+										th:href="@{/requetes(page=${pageNumber-1},size=${requetePage.size})}"
+										th:text=${pageNumber} th:class="${pageNumber==requetePage.number} ? active"></a>
+								</li>
+							</ul>
+						</nav>
+					</div>
+				</div>
+
+				<h2>Vos Requetes </h2>
+				<br>
+
+				<div class="border rounded">
 					<table class="table table-striped">
 						<tr>
 							<th scope="col">Nom de la Competence</th>
 							<th scope="col">Nom de l'utilisateur qui fait la requete</th>
 							<th scope="col">Date</th>
 							<th scope="col">Statut</th>
-							
-							
+
+
 						</tr>
-						
+
 						<tr th:each="requete1:${requetePage1}">
-						
-						<td th:text="${requete1.competenceNom}"></td>
+
+							<td th:text="${requete1.competenceNom}"></td>
 							<td th:text="${requete1.username}"></td>
 							<td th:text="${requete1.date}"></td>
-								<td th:text="${requete1.statut}"></td>
-									
-				</tr>
-		
-		</table>
-		
-</div>
+							<td th:text="${requete1.statut}"></td>
 
-<div>
-<div th:if="${requetePage.totalPages > 0}"
-    th:each="pageNumber : ${pageNumbers}" class="btn-group btn-group-toggle">
-    <nav aria-label="...">
-  <ul class="pagination pagination-sm">
-    <li class="page-item"> <a class="btn btn-secondary" th:href="@{/requetesU(page=${pageNumber-1},size=${requetePage.size})}"
-        th:text=${pageNumber}
-        th:class="${pageNumber==requetePage.number} ? active"></a>
-        </li>
-        </ul>
-        </nav>
-</div>
-	</div>
-	</div>
-	
+						</tr>
 
-	<div class="alert alert-success"th:if="${succes}" th:text="${succes}"role="alert" >
-</div>
-	
+					</table>
 
 				</div>
-				
-				
-			
-	
 
+				<div>
+					<div th:if="${requetePage.totalPages > 0}" th:each="pageNumber : ${pageNumbers}"
+						class="btn-group btn-group-toggle">
+						<nav aria-label="...">
+							<ul class="pagination pagination-sm">
+								<li class="page-item"> <a class="btn btn-secondary"
+										th:href="@{/requetes(page=${pageNumber-1},size=${requetePage.size})}"
+										th:text=${pageNumber} th:class="${pageNumber==requetePage.number} ? active"></a>
+								</li>
+							</ul>
+						</nav>
+					</div>
+				</div>
+			</div>
+		</div>
 </body>
 
 </html>

@@ -21,14 +21,17 @@ public interface CreneauService {
 	public Creneau getCreneau(Long id, Long idUser, Long idUser1)
 			throws ResultNotFoundException, APiUSerAndCompetenceException;
 
-	public Page<Creneau> getCreneauxUser(Long idUser);
+	public Page<Creneau> getCreneauxUser(Long idUser, int page, int size);
 
-	public Page<Creneau> getCreneauxUser1(Long idUser1);
+	public Page<Creneau> getCreneauxUser1(Long idUser1, int page, int size);
 
 	public Creneau getCreneau(Long id) throws ResultNotFoundException;
 
-	public void deleteCreneau(Long id, Long idUser, Long idUser1) throws ResultNotFoundException;
-
-	public Page<Creneau> getlistCreneauxComp(Competence comp, Long idUser) throws ForbiddenException;
+	/*
+	 * public void deleteCreneau(Long id, Long idUser, Long idUser1) throws
+	 * ResultNotFoundException;
+	 */
+	public Page<Creneau> getlistCreneauxComp(Competence comp, Long idUser, int page, int size)
+			throws ForbiddenException;
 
 }

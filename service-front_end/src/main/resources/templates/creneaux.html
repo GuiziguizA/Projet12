@@ -16,7 +16,7 @@
 
 
 	<div layout:fragment="content">
-	
+
 
 
 
@@ -25,128 +25,147 @@
 				<div class="jumbotron text-center">
 
 					<h1>Creneaux</h1>
-				</div>
-				
-			
-				</div>
-				<br>
-				<br>
-					
-				<div class="border rounded" >
-			
-					<table class="table table-striped">
-						<tr>
-							
-							<th scope="col">Nom de l'utilisateur </th>
-							<th scope="col">Competence</th>
-							<th scope="col">Date</th>
-							<th scope="col">Statut</th>
-							<th scope="col"></th>
-							
-						</tr>
-						
-						<tr th:each="creneau:${pageCreneau}">
-						
-						
-							<td th:text="${creneau.idUser1}"></td>
-							<td th:text="${creneau.idComp}"></td>
-							<td th:text="${creneau.date}"></td>
-								<td th:text="${creneau.statut}"></td>
-									<td th:if="${creneau.statut == 'demande'}" ><form method="post" th:action="@{/validateCreneau(idCreneau=${creneau.codeCreneau})}"  >
-	            <button type="submit" name="submit" value="value" class="btn btn-primary">Valider</button>
-	            
-	        </form> </td>
-	        <td th:if="${creneau.statut == 'valide'}" ><form method="post" th:action="@{/validateCreneau(idCreneau=${creneau.codeCreneau})}"  >
-	            <button type="submit" name="submit" value="value" class="btn btn-primary">valider la rencontre</button>
-	            
-	        </form> </td>
-	      		<td th:if= "${creneau.statut == 'passe'}" ><a  th:href="@{/avis(id=${creneau.codeCreneau})}"><input type="button"  id="${creneau.codeCreneau}" class="btn btn-primary" value="laisser un avis" /></a></td>
-			
-				</tr>
-		
-		</table>
-		
-</div>
 
-<div>
-<div th:if="${pageCreneau.totalPages > 0}"
-    th:each="pageNumber : ${pageNumbers}" class="btn-group btn-group-toggle">
-    <nav aria-label="...">
-  <ul class="pagination pagination-sm">
-    <li class="page-item"> <a class="btn btn-secondary" th:href="@{/creneaux(page=${pageNumber-1},size=${pageCreneau.size})}"
-        th:text=${pageNumber}
-        th:class="${pageNumber==pageCreneau.number} ? active"></a>
-        </li>
-        </ul>
-        </nav>
-</div>
-	</div>
-	
-	<br>
-	
-	<br>
-	
+					<div class="alert alert-success" th:if="${succes}" th:text="${succes}" role="alert"></div>
+					<div class="alert alert-danger" th:if="${error}" role="alert" th:text="${error}"></div>
+
+				</div>
+
+
+			</div>
+
+			<h2>Vos demandes</h2>
 			
-				<div class="border rounded" >
+			<br>
 			
-					<table class="table table-striped">
-						<tr>
-							
-							<th scope="col">Nom de l'utilisateur </th>
-							<th scope="col">Competence</th>
-							<th scope="col">Date</th>
-							<th scope="col">Statut</th>
-							<th scope="col"></th>
-							
-						</tr>
+
+			<div class="border rounded">
+
+				<table class="table table-striped">
+					<tr>
+
+						<th scope="col">Demandé à </th>
+						<th scope="col">Competence</th>
+						<th scope="col">Date</th>
+						<th scope="col">Statut</th>
+						<th scope="col"></th>
+
+					</tr>
+
+					<tr th:each="creneau:${pageCreneau}">
+
+
+						<td th:text="${creneau.idUserDemande}"></td>
+						<td th:text="${creneau.idComp}"></td>
+						<td th:text="${creneau.date}"></td>
+						<td th:text="${creneau.statut}"></td>
+						<td th:if="${creneau.statut == 'demande'}">
+							<form method="post" th:action="@{/validateCreneau(idCreneau=${creneau.codeCreneau})}">
+								<button type="submit" name="submit" value="value"
+									class="btn btn-primary">Valider</button>
+
+							</form>
+						</td>
+						<td th:if="${creneau.statut == 'valide'}">
+							<form method="post" th:action="@{/validateCreneau(idCreneau=${creneau.codeCreneau})}">
+								<button type="submit" name="submit" value="value" class="btn btn-primary">valider la
+									rencontre</button>
+
+							</form>
+						</td>
+						<td th:if="${creneau.statut == 'passe'}"><a th:href="@{/avis(id=${creneau.codeCreneau})}"><input
+									type="button" id="${creneau.codeCreneau}" class="btn btn-primary"
+									value="laisser un avis" /></a></td>
+
+					</tr>
+
+				</table>
+
+			</div>
+			<br>
+			<div>
+				<div th:if="${pageCreneau.totalPages > 0}" th:each="pageNumber : ${pageNumbers}"
+					class="btn-group btn-group-toggle">
+					<nav aria-label="...">
+						<ul class="pagination pagination-sm">
+							<li class="page-item"> <a class="btn btn-secondary"
+									th:href="@{/creneaux(page=${pageNumber-1},size=${pageCreneau.size})}"
+									th:text=${pageNumber} th:class="${pageNumber==pageCreneau.number} ? active"></a>
+							</li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+
+			<br>
+
+			<h2>Les demandes de creneaux des utilisateurs</h2>
+
+
+			<div class="border rounded">
+
+				<table class="table table-striped">
+					<tr>
+						<th scope="col">Nom de l'utilisateur </th>
+						<th scope="col">Competence</th>
+						<th scope="col">Date</th>
+						<th scope="col">Statut</th>
+						<th scope="col"></th>
+					</tr>
+
+					<tr th:each="creneau1:${pageCreneau1}">
+
+
+						<td th:text="${creneau1.idUserDemande}"></td>
+						<td th:text="${creneau1.idComp}"></td>
+						<td th:text="${creneau1.date}"></td>
+						<td th:text="${creneau1.statut}"></td>
+						<td th:if="${creneau1.statut == 'passe'}"><a
+								th:href="@{/avis(id=${creneau1.codeCreneau})}"><input type="button"
+									id="${creneau.codeCreneau}" class="btn btn-primary" value="laisser un avis" /></a>
+						</td>
+<td th:if="${creneau1.statut == 'demande'}">
+							<form method="post" th:action="@{/validateCreneau(idCreneau=${creneau1.codeCreneau})}">
+								<button type="submit" name="submit" value="value"
+									class="btn btn-primary">Valider</button>
+
+							</form>
+						</td>
 						
-						<tr th:each="creneau1:${pageCreneau1}">
 						
-						
-							<td th:text="${creneau1.idUser}"></td>
-							<td th:text="${creneau1.idComp}"></td>
-							<td th:text="${creneau1.date}"></td>
-							<td th:text="${creneau1.statut}"></td>
-							<td th:if= "${creneau1.statut == 'passe'}" ><a  th:href="@{/avis(id=${creneau1.codeCreneau})}"><input type="button"  id="${creneau.codeCreneau}" class="btn btn-primary" value="laisser un avis" /></a></td>
-			
-									<!-- <td th:if="${requete.statut!='valide'}" ><form method="post" th:action="@{/valideRequete(idRequete=${requete.codeRequete})}"  >
+						<td th:if="${creneau1.statut == 'valide'}">
+							<form method="post" th:action="@{/validateCreneau(idCreneau=${creneau1.codeCreneau})}">
+								<button type="submit" name="submit" value="value" class="btn btn-primary">valider la
+									rencontre</button>
+
+							</form>
+							</td>
+						<!-- <td th:if="${requete.statut!='valide'}" ><form method="post" th:action="@{/valideRequete(idRequete=${requete.codeRequete})}"  >
 	            <button type="submit" name="submit" value="value" class="btn btn-primary">Reserver</button>
 	        </form> </td> -->
-				</tr>
-		
-		</table>
-		
-</div>
+	        
+	        
+					</tr>
 
-<div>
-<div th:if="${pageCreneau1.totalPages > 0}"
-    th:each="pageNumber1 : ${pageNumbers1}" class="btn-group btn-group-toggle">
-    <nav aria-label="...">
-  <ul class="pagination pagination-sm">
-    <li class="page-item"> <a class="btn btn-secondary" th:href="@{/creneaux(page=${pageNumber1-1},size=${pageCreneau1.size})}"
-        th:text=${pageNumber1}
-        th:class="${pageNumber1==pageCreneau1.number} ? active"></a>
-        </li>
-        </ul>
-        </nav>
-</div>
-	</div>
-	
-	
-	
-	</div>
-	
-	
+				</table>
 
-	<div class="alert alert-success"th:if="${succes}" th:text="${succes}"role="alert" ></div>
-	<div class="alert alert-danger" th:if="${error}" role="alert" th:text="${error}"></div>
+			</div>
 
+			<div>
+				<div th:if="${pageCreneau.totalPages > 0}" th:each="pageNumber : ${pageNumbers}"
+					class="btn-group btn-group-toggle">
+					<nav aria-label="...">
+						<ul class="pagination pagination-sm">
+							<li class="page-item"> <a class="btn btn-secondary"
+									th:href="@{/creneaux(page=${pageNumber-1},size=${pageCreneau.size})}"
+									th:text=${pageNumber} th:class="${pageNumber==pageCreneau.number} ? active"></a>
+							</li>
+						</ul>
+					</nav>
 				</div>
-				
-				
-			
-	
-
+			</div>
+		</div>
+	</div>
 </body>
 
 </html>
