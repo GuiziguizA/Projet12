@@ -7,7 +7,10 @@ public class CreneauDto {
 	private Long idUser;
 	private Long idUser1;
 	private Long idUserDemande;
+	private String userDemandeName;
 	private Long idComp;
+	private String competenceName;
+	private Long idRequete;
 	private Long idChat;
 	private String statut;
 	private Date date;
@@ -80,6 +83,30 @@ public class CreneauDto {
 
 	public void setIdChat(Long idChat) {
 		this.idChat = idChat;
+	}
+
+	public Long getIdRequete() {
+		return idRequete;
+	}
+
+	public void setIdRequete(Long idRequete) {
+		this.idRequete = idRequete;
+	}
+
+	public String getUserDemandeName() {
+		return userDemandeName;
+	}
+
+	public void setUserDemandeName(String userDemandeName) {
+		this.userDemandeName = userDemandeName;
+	}
+
+	public String getCompetenceName() {
+		return competenceName;
+	}
+
+	public void setCompetenceName(String competenceName) {
+		this.competenceName = competenceName;
 	}
 
 }

@@ -33,6 +33,8 @@
 							<th scope="col">Auteur</th>
 							<th scope="col">Type</th>
 							<th scope="col">description</th>
+							<th scope="col">Note</th>
+						<th scope="col">Nombre d'avis</th>
 							<th scope="col"></th>
 						</tr>
 
@@ -41,6 +43,8 @@
 							<td th:text="${competence.user.username}"></td>
 							<td th:text="${competence.type}"></td>
 							<td th:text="${competence.description}"></td>
+							<td th:text="${competence.note}"></td>
+						<td th:text="${competence.nbreAvis}"></td>
 							<td>
 								<form method="post" th:action="@{/requete?(idComp=${competence.codeCompetence})}">
 

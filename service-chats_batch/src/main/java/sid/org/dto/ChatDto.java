@@ -7,6 +7,7 @@ public class ChatDto {
 	private Long idComp;
 	private Long idRequete;
 	private String username;
+	private String username1;
 	private String competenceNom;
 
 	public ChatDto(Long idUser, Long idUser1, Long idComp, Long idRequete) {
@@ -68,6 +69,14 @@ public class ChatDto {
 
 	public void setCompetenceNom(String competenceNom) {
 		this.competenceNom = competenceNom;
+	}
+
+	public String getUsername1() {
+		return username1;
+	}
+
+	public void setUsername1(String username1) {
+		this.username1 = username1;
 	}
 
 }

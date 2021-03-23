@@ -55,6 +55,8 @@
 						<th scope="col">Nom de la competence</th>
 						<th scope="col">Utilisateur</th>
 						<th scope="col">Type</th>
+						<th scope="col">Note</th>
+						<th scope="col">Nombre d'avis</th>
 						<th scope="col"></th>
 
 					</tr>
@@ -62,6 +64,8 @@
 						<td th:text="${competence.nom}"></td>
 						<td th:text="${competence.user.username}"></td>
 						<td th:text="${competence.type}"></td>
+						<td th:text="${competence.note}"></td>
+						<td th:text="${competence.nbreAvis}"></td>
 						<td th:if="${competence.user.username!=name}"><a
 								th:href="@{/competence(id=${competence.codeCompetence})}"><input type="button"
 									id="${competence.codeCompetence}" class="btn btn-primary" value="Consulter" /></a>

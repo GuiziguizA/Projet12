@@ -1,5 +1,6 @@
 package sid.org.dao;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -18,4 +19,5 @@ public interface AvisRepository extends JpaRepository<Avis, Long> {
 
 	Page<Avis> findByIdComp(Long idComp, Pageable pageable);
 
+	List<Avis> findByIdComp(Long idComp);
 }

@@ -42,6 +42,7 @@ public class CompetenceSpecificationImpl implements Specification<Competence> {
 
 		if (criteria.getNom()!=null) {
 			predicate.getExpressions().add(builder.like(root.get("nom"),"%"+criteria.getNom()+"%"));
+			
 		}
 		if (criteria.getDescription()!=null) {
 			predicate.getExpressions().add(builder.like(root.get("description"),"%"+criteria.getDescription()+"%"));

@@ -56,7 +56,8 @@
 							<td th:text="${requete.username}"></td>
 							<td th:text="${requete.date}"></td>
 							<td th:text="${requete.statut}"></td>
-							<td th:if="${requete.statut!='valide'}">
+							<td th:if="${requete.statut!='demande'}"></td>
+							<td th:if="${requete.statut=='demande'}">
 								<form method="post" th:action="@{/valideRequete(idRequete=${requete.codeRequete})}">
 									<button type="submit" name="submit" value="value"
 										class="btn btn-primary">Reserver</button>

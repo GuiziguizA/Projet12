@@ -39,8 +39,8 @@ public class CreneauServiceImpl implements CreneauService {
 	}
 
 	@Override
-	public void createCreneau(ChatDateDtoObject chatDateDtoObject, Long idUser, HttpServletRequest request)
-			throws HttpStatusCodeException {
+	public void createCreneau(ChatDateDtoObject chatDateDtoObject, Long idUser, String userDemandeName,
+			HttpServletRequest request) throws HttpStatusCodeException {
 
 		String uri = url + "/compagny-creneaux_requetes/creneau?&idRequete="
 				+ chatDateDtoObject.getChat().getIdRequete();
@@ -51,7 +51,8 @@ public class CreneauServiceImpl implements CreneauService {
 		creneauDto.setIdUser(chatDateDtoObject.getChat().getIdUser());
 		creneauDto.setIdUser1(chatDateDtoObject.getChat().getIdUser1());
 		creneauDto.setIdUserDemande(idUser);
-
+		creneauDto.setUserDemandeName(userDemandeName);
+		creneauDto.setIdRequete(chatDateDtoObject.getChat().getIdRequete());
 		creneauDto.setIdComp(chatDateDtoObject.getChat().getIdComp());
 		creneauDto.setDate(chatDateDtoObject.getDateDto());
 		creneauDto.setIdChat(chatDateDtoObject.getChat().getId());

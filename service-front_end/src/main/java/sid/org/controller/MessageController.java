@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import sid.org.classe.Message;
 import sid.org.classe.Users;
@@ -76,7 +77,7 @@ public class MessageController {
 
 	@PostMapping("/messages")
 	public String postChatsUser(@RequestParam Long idChat, Model model, HttpServletRequest request,
-			MessageDto messageDto) {
+			MessageDto messageDto, RedirectAttributes redirectAttrs) {
 		HttpSession session = request.getSession();
 		String name = (String) session.getAttribute("username");
 		String password = (String) session.getAttribute("password");
@@ -86,7 +87,8 @@ public class MessageController {
 
 		try {
 			messageService.postMessagesChats(idChat, idUser, request, messageDto);
-
+			String succes = "le message a été envoyé";
+			redirectAttrs.addFlashAttribute("succes", succes);
 			return "redirect:/messages?idChat=" + idChat + "&idUser=" + idUser;
 
 		} catch (HttpStatusCodeException e) {

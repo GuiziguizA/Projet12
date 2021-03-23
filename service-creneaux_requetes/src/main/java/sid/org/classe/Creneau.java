@@ -19,7 +19,10 @@ public class Creneau {
 	private Long idUser;
 	private Long idUser1;
 	private Long idUserDemande;
+	private String UserDemandeName;
 	private Long idUserRecoit;
+	private String UserRecoitName;
+	private Long idRequete;
 	private Long idComp;
 	private Long idChat;
 	private String statut;
@@ -111,6 +114,30 @@ public class Creneau {
 
 	public void setIdUserRecoit(Long idUserRecoit) {
 		this.idUserRecoit = idUserRecoit;
+	}
+
+	public Long getIdRequete() {
+		return idRequete;
+	}
+
+	public void setIdRequete(Long idRequete) {
+		this.idRequete = idRequete;
+	}
+
+	public String getUserDemandeName() {
+		return UserDemandeName;
+	}
+
+	public void setUserDemandeName(String userDemandeName) {
+		UserDemandeName = userDemandeName;
+	}
+
+	public String getUserRecoitName() {
+		return UserRecoitName;
+	}
+
+	public void setUserRecoitName(String userRecoitName) {
+		UserRecoitName = userRecoitName;
 	}
 
 }

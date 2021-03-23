@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +17,7 @@ import sid.org.api.UserConnect;
 import sid.org.classe.Competence;
 import sid.org.classe.Creneau;
 import sid.org.classe.Requete;
+import sid.org.config.MessagingConfig;
 import sid.org.dao.CreneauRepository;
 import sid.org.dao.RequeteRepository;
 import sid.org.dto.CreneauDto;
@@ -36,6 +38,8 @@ public class CreneauServiceImpl implements CreneauService {
 	ChatConnect chatConnect;
 	@Autowired
 	RequeteRepository requeteRepository;
+	@Autowired
+	RabbitTemplate template;
 
 	@Override
 	public Creneau createCreneau(CreneauDto creneauDto, Long idRequete, Long idUserDemande)
@@ -74,8 +78,9 @@ public class CreneauServiceImpl implements CreneauService {
 		creneau1.setIdComp(creneauDto.getIdComp());
 		creneau1.setDate(new Date());
 		creneau1.setIdUser(creneauDto.getIdUser());
+		creneau1.setUserDemandeName(creneauDto.getUserName());
 		creneau1.setIdUser1(creneauDto.getIdUser1());
-
+		creneau1.setIdRequete(creneauDto.getIdRequete());
 		creneau1.setIdUserDemande(idUserDemande);
 		if (idUserDemande == creneauDto.getIdUser1()) {
 			creneau1.setIdUserRecoit(creneauDto.getIdUser());
@@ -109,6 +114,9 @@ public class CreneauServiceImpl implements CreneauService {
 			}
 		} else if (creneau.get().getStatut().equals("valide")) {
 			creneau.get().setStatut("passe");
+
+			template.convertAndSend(MessagingConfig.EXCHANGE, MessagingConfig.ROUTIN_KEY2, creneau.get().getIdChat());
+
 		}
 		creneauRepository.save(creneau.get());
 	}

@@ -37,7 +37,6 @@ public class ServiceUserCompetenceApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-
 		/*
 		 * Role role = new Role("user"); rolesRepository.save(role);
 		 */

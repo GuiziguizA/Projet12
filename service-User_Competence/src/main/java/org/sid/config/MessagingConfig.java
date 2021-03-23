@@ -1,4 +1,4 @@
-package sid.org.config;
+package org.sid.config;
 
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Binding;
@@ -15,50 +15,28 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MessagingConfig {
 
-	public static final String QUEUE = "service_chat";
 	public static final String QUEUE1 = "service_note";
-	public static final String QUEUE2 = "service_closeChat";
-	public static final String EXCHANGE = "service_exchange";
-	public static final String ROUTIN_KEY = "service.routingKeyChat";
+
+	public static final String EXCHANGE1 = "service_exchange";
+
 	public static final String ROUTIN_KEY1 = "service.routingKey";
-	public static final String ROUTIN_KEY2 = "service.routingKeyCloseChat";
 
 	@Bean
-	public Queue chatqueue() {
+	public Queue queue() {
 
-		return new Queue(QUEUE, false);
-	}
-
-	@Bean
-	public Queue noteQueue() {
-		return new Queue(QUEUE1, false);
-	}
-
-	@Bean
-	public Queue chatcloseQueue() {
-		return new Queue(QUEUE2, false);
+		return new Queue(QUEUE1);
 	}
 
 	@Bean
 	public TopicExchange exchange() {
 
-		return new TopicExchange(EXCHANGE);
+		return new TopicExchange(EXCHANGE1);
 	}
 
 	@Bean
-	public Binding chatBinding(Queue chatqueue, TopicExchange exchange) {
+	public Binding binding(Queue queue, TopicExchange exchange) {
 
-		return BindingBuilder.bind(chatqueue).to(exchange).with(ROUTIN_KEY);
-	}
-
-	@Bean
-	public Binding notebinding(Queue noteQueue, TopicExchange exchange) {
-		return BindingBuilder.bind(noteQueue).to(exchange).with(ROUTIN_KEY1);
-	}
-
-	@Bean
-	public Binding closeChatbinding(Queue noteQueue, TopicExchange exchange) {
-		return BindingBuilder.bind(noteQueue).to(exchange).with(ROUTIN_KEY2);
+		return BindingBuilder.bind(queue).to(exchange).with(ROUTIN_KEY1);
 	}
 
 	@Bean

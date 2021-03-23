@@ -45,6 +45,7 @@ public class ChatServiceImpl implements ChatService {
 		chat1.setIdRequete(chatDto.getIdRequete());
 		chat1.setCompetenceName(chatDto.getCompetenceNom());
 		chat1.setUsername(chatDto.getUsername());
+		chat1.setUsername1(chatDto.getUsername1());
 		chat1.setIdComp(chatDto.getIdComp());
 		chatRepository.saveAndFlush(chat1);
 
@@ -52,8 +53,10 @@ public class ChatServiceImpl implements ChatService {
 
 	@Override
 	public Chat getUnChat(Long idUser, Long idUser1, Long idRequete) throws ResultNotFoundException {
-		Optional<Chat> chat = chatRepository.findByUserAndUser1AndidRequete(idUser, idUser1, idRequete);
-		Optional<Chat> chat1 = chatRepository.findByUserAndUser1AndidRequete(idUser1, idUser, idRequete);
+		Optional<Chat> chat = chatRepository.findByUserAndUser1AndidRequeteAndStatut(idUser, idUser1, idRequete,
+				"enMarche");
+		Optional<Chat> chat1 = chatRepository.findByUserAndUser1AndidRequeteAndStatut(idUser1, idUser, idRequete,
+				"enMarche");
 
 		if (!chat.isPresent() && !chat1.isPresent()) {
 			throw new ResultNotFoundException("chat introuvable");
@@ -86,6 +89,17 @@ public class ChatServiceImpl implements ChatService {
 		}
 		chatRepository.delete(chat.get());
 
+	}
+
+	@RabbitListener(queues = MessagingConfig.QUEUE2)
+	public void updateChat(Long idChat) throws ResultNotFoundException {
+
+		Optional<Chat> chat1 = chatRepository.findById(idChat);
+		chat1.get().setStatut("cloturé");
+		if (!chat1.isPresent()) {
+			throw new ResultNotFoundException("le chat n'existe pas");
+		}
+		chatRepository.saveAndFlush(chat1.get());
 	}
 
 }

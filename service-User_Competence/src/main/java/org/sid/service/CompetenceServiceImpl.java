@@ -5,13 +5,17 @@ import java.util.Optional;
 import org.sid.classe.Competence;
 import org.sid.classe.Role;
 import org.sid.classe.Users;
+import org.sid.config.MessagingConfig;
 import org.sid.dao.CompetenceRepository;
 import org.sid.dao.UsersRepository;
 import org.sid.dto.CompetenceDto;
+import org.sid.dto.NotesDto;
 import org.sid.exception.EntityAlreadyExistException;
 import org.sid.exception.ResultNotFoundException;
 import org.sid.specification.CompetenceCriteria;
 import org.sid.specification.CompetenceSpecificationImpl;
+import org.sid.specification.CompetenceSpecificationTriImpl;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -79,7 +83,7 @@ public class CompetenceServiceImpl implements CompetenceService {
 			throws ResultNotFoundException {
 
 		CompetenceSpecificationImpl competenceSpecificationImpl = new CompetenceSpecificationImpl(criteria);
-
+		CompetenceSpecificationTriImpl competenceSpecificationTriImpl = new CompetenceSpecificationTriImpl(criteria);
 		if (size == 0) {
 			throw new ResultNotFoundException("le parametre size est incorrect");
 		}
@@ -122,6 +126,16 @@ public class CompetenceServiceImpl implements CompetenceService {
 		CompetenceCriteria comp = new CompetenceCriteria(null, "cuisine", null);
 
 		return comp;
+
+	}
+
+	@RabbitListener(queues = MessagingConfig.QUEUE1)
+	public void modifierLaNoteEtNombreDAvis(NotesDto notesDto) {
+
+		Optional<Competence> comp = competenceRepository.findById(notesDto.getIdComp());
+		comp.get().setNote(notesDto.getMoyenne());
+		comp.get().setNbreAvis(notesDto.getNombreDAvis());
+		competenceRepository.saveAndFlush(comp.get());
 
 	}
 

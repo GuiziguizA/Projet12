@@ -10,7 +10,11 @@ public class Creneau {
 	private Long idUser;
 	private Long idUser1;
 	private Long idComp;
+	private Long idRequete;
 	private Long idUserDemande;
+	private String UserDemandeName;
+	private Long idUserRecoit;
+	private String UserRecoitName;
 	private String statut;
 
 	private Collection<Avis> avis;
@@ -84,13 +88,44 @@ public class Creneau {
 		this.idUserDemande = idUserDemande;
 	}
 
-	
 	public Collection<Avis> getAvis() {
 		return avis;
 	}
 
 	public void setAvis(Collection<Avis> avis) {
 		this.avis = avis;
+	}
+
+	public String getUserDemandeName() {
+		return UserDemandeName;
+	}
+
+	public void setUserDemandeName(String userDemandeName) {
+		UserDemandeName = userDemandeName;
+	}
+
+	public Long getIdUserRecoit() {
+		return idUserRecoit;
+	}
+
+	public void setIdUserRecoit(Long idUserRecoit) {
+		this.idUserRecoit = idUserRecoit;
+	}
+
+	public String getUserRecoitName() {
+		return UserRecoitName;
+	}
+
+	public void setUserRecoitName(String userRecoitName) {
+		UserRecoitName = userRecoitName;
+	}
+
+	public Long getIdRequete() {
+		return idRequete;
+	}
+
+	public void setIdRequete(Long idRequete) {
+		this.idRequete = idRequete;
 	}
 
 }

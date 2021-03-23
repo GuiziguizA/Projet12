@@ -1,5 +1,6 @@
 package org.sid.classe;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,6 +20,10 @@ public class Competence {
 	@ManyToOne
 	@JoinColumn(name = "ID_USER")
 	private Users user;
+	@Column(name = "NOTE")
+	private int note;
+	@Column(name = "NOMBRE_AVIS")
+	private int nbreAvis;
 
 	public Competence(Long codeCompetence, String nom, String type, String description, Users user) {
 		super();
@@ -73,6 +78,22 @@ public class Competence {
 
 	public void setUser(Users user) {
 		this.user = user;
+	}
+
+	public int getNbreAvis() {
+		return nbreAvis;
+	}
+
+	public void setNbreAvis(int nbreAvis) {
+		this.nbreAvis = nbreAvis;
+	}
+
+	public int getNote() {
+		return note;
+	}
+
+	public void setNote(int note) {
+		this.note = note;
 	}
 
 }

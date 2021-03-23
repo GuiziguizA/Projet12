@@ -6,6 +6,8 @@ public class Competence {
 	private String nom;
 	private String type;
 	private String description;
+	private int note;
+	private int nbreAvis;
 
 	private Users user;
 
@@ -62,6 +64,22 @@ public class Competence {
 
 	public void setUser(Users user) {
 		this.user = user;
+	}
+
+	public int getNote() {
+		return note;
+	}
+
+	public void setNote(int note) {
+		this.note = note;
+	}
+
+	public int getNbreAvis() {
+		return nbreAvis;
+	}
+
+	public void setNbreAvis(int nbreAvis) {
+		this.nbreAvis = nbreAvis;
 	}
 
 }

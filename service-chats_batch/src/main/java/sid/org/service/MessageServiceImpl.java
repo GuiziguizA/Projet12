@@ -57,12 +57,12 @@ public class MessageServiceImpl implements MessageService {
 		message1.setChat(chat.get());
 
 		message1.setContent(message.getContent());
-		template.convertAndSend(MessagingConfig.EXCHANGE, MessagingConfig.ROUTIN_KEY, message1);
+		template.convertAndSend(MessagingConfig.EXCHANGE, MessagingConfig.ROUTIN_KEY3, message1);
 		return "sucess";
 
 	}
 
-	@RabbitListener(queues = MessagingConfig.QUEUE)
+	@RabbitListener(queues = MessagingConfig.QUEUE3)
 	public void getMessage(Message message) {
 		Message message1 = new Message();
 		message1.setChat(message.getChat());
@@ -71,7 +71,7 @@ public class MessageServiceImpl implements MessageService {
 		message1.setIdUser(message.getIdUser());
 		message1.setStatut("non lu");
 		messageRepository.saveAndFlush(message1);
-		logger.info(message1.toString());
+		logger.info("Voici le message envoyé" + message1.toString());
 
 	}
 

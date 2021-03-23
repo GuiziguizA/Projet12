@@ -73,9 +73,8 @@ class ChatServiceTest {
 	@Test
 	public void getUnChatTestResultNotFoundException() {
 
-		Mockito.when(
-				chatRepository.findByUserAndUser1AndidRequete(Mockito.anyLong(), Mockito.anyLong(), Mockito.anyLong()))
-				.thenReturn(Optional.empty());
+		Mockito.when(chatRepository.findByUserAndUser1AndidRequeteAndStatut(Mockito.anyLong(), Mockito.anyLong(),
+				Mockito.anyLong(), Mockito.anyString())).thenReturn(Optional.empty());
 
 		ResultNotFoundException exception = assertThrows(ResultNotFoundException.class, () -> {
 			chatService.getUnChat(1L, 2L, 1L);
@@ -91,9 +90,8 @@ class ChatServiceTest {
 	@Test
 	public void getUnChatTest() throws ResultNotFoundException {
 		Chat chat = new Chat("ouvert", 1L, 2L, 1L, 1L);
-		Mockito.when(
-				chatRepository.findByUserAndUser1AndidRequete(Mockito.anyLong(), Mockito.anyLong(), Mockito.anyLong()))
-				.thenReturn(Optional.of(chat));
+		Mockito.when(chatRepository.findByUserAndUser1AndidRequeteAndStatut(Mockito.anyLong(), Mockito.anyLong(),
+				Mockito.anyLong(), Mockito.anyString())).thenReturn(Optional.of(chat));
 
 		Chat chat1 = chatService.getUnChat(1L, 2L, 1L);
 
@@ -113,9 +111,8 @@ class ChatServiceTest {
 	@Test
 	public void deleteChatTestResultNotFoundException() {
 
-		Mockito.when(
-				chatRepository.findByUserAndUser1AndidRequete(Mockito.anyLong(), Mockito.anyLong(), Mockito.anyLong()))
-				.thenReturn(Optional.empty());
+		Mockito.when(chatRepository.findByUserAndUser1AndidRequeteAndStatut(Mockito.anyLong(), Mockito.anyLong(),
+				Mockito.anyLong(), Mockito.anyString())).thenReturn(Optional.empty());
 
 		ResultNotFoundException exception = assertThrows(ResultNotFoundException.class, () -> {
 			chatService.deleteUnChat(1L);

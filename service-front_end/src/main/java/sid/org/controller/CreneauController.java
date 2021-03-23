@@ -60,7 +60,7 @@ public class CreneauController {
 			chatDateDtoObject.setChat(chat);
 			logger.info("show the chat " + chatDateDtoObject.getChat().toString());
 
-			creneauService.createCreneau(chatDateDtoObject, idUser2, request);
+			creneauService.createCreneau(chatDateDtoObject, idUser2, user.getUsername(), request);
 			/*
 			 * int currentPage = 0; int pageSize = 2; Page<Chat> pageChat =
 			 * chatService.getChatUser(idUser, currentPage, pageSize, request);
