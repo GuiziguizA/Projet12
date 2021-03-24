@@ -62,7 +62,7 @@ public class MessageServiceImpl implements MessageService {
 		HttpHeaders headers = headersService.createTokenHeaders(request);
 		RestTemplate rt = requestFactory.getRestTemplate();
 
-		String uri = url + "/compagny-chat_batch/message?idUser=" + idUser + "&idChat=" + 1;
+		String uri = url + "/compagny-chat_batch/message?idUser=" + idUser + "&idChat=" + idChat;
 
 		rt.exchange(uri, HttpMethod.POST, new HttpEntity<>(message, headers), String.class);
 

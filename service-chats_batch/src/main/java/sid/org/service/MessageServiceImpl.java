@@ -55,6 +55,8 @@ public class MessageServiceImpl implements MessageService {
 		message1.setDate(new Date());
 		message1.setIdUser(idUser);
 		message1.setChat(chat.get());
+		message1.setUsername(userConnect.getUser(idUser).getUsername());
+		logger.info("l'id du chat est :" + chat.get().getId().toString());
 
 		message1.setContent(message.getContent());
 		template.convertAndSend(MessagingConfig.EXCHANGE, MessagingConfig.ROUTIN_KEY3, message1);
@@ -69,6 +71,7 @@ public class MessageServiceImpl implements MessageService {
 		message1.setContent(message.getContent());
 		message1.setDate(new Date());
 		message1.setIdUser(message.getIdUser());
+		message1.setUsername(message.getUsername());
 		message1.setStatut("non lu");
 		messageRepository.saveAndFlush(message1);
 		logger.info("Voici le message envoyé" + message1.toString());

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 
@@ -143,7 +144,7 @@ public class RequeteServiceImpl implements RequeteService {
 
 	@Override
 	public Page<Requete> getRequetes(Long idUserComp, int page, int size) throws APiUSerAndCompetenceException {
-		Pageable pageable = PageRequest.of(page, size);
+		Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "codeRequete");
 		userConnect.getUser(idUserComp);
 		Page<Requete> requete = requeteRepository.findByIdUserComp(idUserComp, pageable);
 		return requete;
@@ -152,7 +153,7 @@ public class RequeteServiceImpl implements RequeteService {
 
 	@Override
 	public Page<Requete> getRequetesComp(Long idUser, int page, int size) throws APiUSerAndCompetenceException {
-		Pageable pageable = PageRequest.of(page, size);
+		Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "codeRequete");
 		userConnect.getUser(idUser);
 		Page<Requete> requete = requeteRepository.findByIdUser(idUser, pageable);
 		return requete;

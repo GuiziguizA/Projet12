@@ -10,6 +10,7 @@ public class Creneau {
 	private Long idUser;
 	private Long idUser1;
 	private Long idComp;
+	private String CompetenceName;
 	private Long idRequete;
 	private Long idUserDemande;
 	private String UserDemandeName;
@@ -126,6 +127,14 @@ public class Creneau {
 
 	public void setIdRequete(Long idRequete) {
 		this.idRequete = idRequete;
+	}
+
+	public String getCompetenceName() {
+		return CompetenceName;
+	}
+
+	public void setCompetenceName(String competenceName) {
+		CompetenceName = competenceName;
 	}
 
 }

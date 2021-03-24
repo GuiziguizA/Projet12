@@ -26,9 +26,9 @@
 
 					<h1>Requetes</h1>
 
-					<div class="alert alert-success" th:if="${succes}" th:text="${succes}" role="alert">
-						<div class="alert alert-danger" th:if="${error}" role="alert" th:text="${error}"></div>
-					</div>
+					<div class="alert alert-success" th:if="${succes}" th:text="${succes}" role="alert"></div>
+					<div class="alert alert-danger" th:if="${error}" role="alert" th:text="${error}"></div>
+					
 
 
 				</div>
@@ -44,6 +44,7 @@
 						<tr>
 							<th scope="col">Nom de la Competence</th>
 							<th scope="col">Nom de l'utilisateur qui fait la requete</th>
+							<th scope="col">Envoyé à</th>
 							<th scope="col">Date</th>
 							<th scope="col">Statut</th>
 							<th scope="col"></th>
@@ -54,7 +55,8 @@
 
 							<td th:text="${requete.competenceNom}"></td>
 							<td th:text="${requete.username}"></td>
-							<td th:text="${requete.date}"></td>
+							<td th:text="${#dates.format(requete.date, 'HH:mm')}"></td>
+							<td th:text="${#dates.format(requete.date, 'dd-MM-yyyy')}"></td>
 							<td th:text="${requete.statut}"></td>
 							<td th:if="${requete.statut!='demande'}"></td>
 							<td th:if="${requete.statut=='demande'}">
@@ -92,6 +94,7 @@
 						<tr>
 							<th scope="col">Nom de la Competence</th>
 							<th scope="col">Nom de l'utilisateur qui fait la requete</th>
+							<th scope="col">Envoyé à</th>
 							<th scope="col">Date</th>
 							<th scope="col">Statut</th>
 
@@ -102,7 +105,8 @@
 
 							<td th:text="${requete1.competenceNom}"></td>
 							<td th:text="${requete1.username}"></td>
-							<td th:text="${requete1.date}"></td>
+							<td th:text="${#dates.format(requete1.date, 'HH:mm')}"></td>
+							<td th:text="${#dates.format(requete1.date, 'dd-MM-yyyy')}"></td>
 							<td th:text="${requete1.statut}"></td>
 
 						</tr>
@@ -112,13 +116,13 @@
 				</div>
 
 				<div>
-					<div th:if="${requetePage.totalPages > 0}" th:each="pageNumber : ${pageNumbers}"
+					<div th:if="${requetePage1.totalPages > 0}" th:each="pageNumber : ${pageNumbers1}"
 						class="btn-group btn-group-toggle">
 						<nav aria-label="...">
 							<ul class="pagination pagination-sm">
 								<li class="page-item"> <a class="btn btn-secondary"
-										th:href="@{/requetes(page=${pageNumber-1},size=${requetePage.size})}"
-										th:text=${pageNumber} th:class="${pageNumber==requetePage.number} ? active"></a>
+										th:href="@{/requetes(page1=${pageNumber-1},size1=${requetePage1.size})}"
+										th:text=${pageNumber} th:class="${pageNumber==requetePage1.number} ? active"></a>
 								</li>
 							</ul>
 						</nav>

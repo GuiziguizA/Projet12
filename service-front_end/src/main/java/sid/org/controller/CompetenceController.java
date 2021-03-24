@@ -23,6 +23,7 @@ import sid.org.classe.Avis;
 import sid.org.classe.Competence;
 import sid.org.classe.Users;
 import sid.org.dto.CompetenceDto;
+import sid.org.enumeration.Types;
 import sid.org.exception.APiUSerAndCompetenceException;
 import sid.org.service.AvisService;
 import sid.org.service.CompetenceService;
@@ -51,6 +52,7 @@ public class CompetenceController {
 		try {
 			Page<Competence> competencePage = competenceService.searchCompetence(recherche, pageSize, currentPage,
 					request);
+
 			model.addAttribute("competencePage", competencePage);
 			model.addAttribute("name", name);
 			int totalPages = competencePage.getTotalPages();
@@ -187,8 +189,9 @@ public class CompetenceController {
 	}
 
 	@GetMapping(value = "/competenceForm")
-	public String competenceForm(CompetenceDto competenceDto, Model model) {
-
+	public String competenceForm(Model model, CompetenceDto competenceDto) {
+		List<Types> listTypes = competenceService.chargerLesTypesDeRecherches();
+		model.addAttribute("listTypes", listTypes);
 		return "formulaireCompetence";
 	}
 

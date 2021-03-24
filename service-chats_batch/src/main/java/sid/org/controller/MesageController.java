@@ -1,5 +1,7 @@
 package sid.org.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,10 +22,13 @@ public class MesageController {
 	@Autowired
 	MessageService messageService;
 
+	private static final Logger logger = LoggerFactory.getLogger(MesageController.class);
+
 	@PostMapping("/message")
 	public String createMessage(@RequestBody Message message, @RequestParam Long idUser, @RequestParam Long idChat)
 			throws APiUSerAndCompetenceException, ResultNotFoundException, ForbiddenException {
 		String sucess = messageService.createMessage(message, idUser, idChat);
+		logger.info("l'id du chat est :" + idChat);
 
 		return sucess;
 

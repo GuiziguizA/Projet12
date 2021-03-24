@@ -101,10 +101,14 @@ public class RequeteController {
 
 	@GetMapping("/requetes")
 	public String getRequetes(Model model, @RequestParam(required = false) Optional<Integer> size,
-			@RequestParam(required = false) Optional<Integer> page, HttpServletRequest request) {
+			@RequestParam(required = false) Optional<Integer> page,
+			@RequestParam(required = false) Optional<Integer> size1,
+			@RequestParam(required = false) Optional<Integer> page1, HttpServletRequest request) {
 
 		int currentPage = page.orElse(0);
 		int pageSize = size.orElse(2);
+		int currentPage1 = page1.orElse(0);
+		int pageSize1 = size1.orElse(2);
 		HttpSession session = request.getSession();
 		String name = (String) session.getAttribute("username");
 		String password = (String) session.getAttribute("password");
@@ -113,7 +117,7 @@ public class RequeteController {
 		Long idUserComp = user.getCodeUtilisateur();
 		try {
 			Page<Requete> requetePage = requeteService.getRequetes(idUserComp, currentPage, pageSize, request);
-			Page<Requete> requetePage1 = requeteService.getRequetesU(idUserComp, currentPage, pageSize, request);
+			Page<Requete> requetePage1 = requeteService.getRequetesU(idUserComp, currentPage1, pageSize1, request);
 			List<Users> users = userService.getUsers(request);
 			model.addAttribute("users", users);
 			model.addAttribute("requetePage", requetePage);
@@ -122,6 +126,10 @@ public class RequeteController {
 			if (totalPages > 0) {
 				List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
 				model.addAttribute("pageNumbers", pageNumbers);
+			}
+			if (totalPages > 0) {
+				List<Integer> pageNumbers1 = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
+				model.addAttribute("pageNumbers1", pageNumbers1);
 			}
 			return "requetes";
 

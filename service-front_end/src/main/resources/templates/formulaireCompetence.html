@@ -37,9 +37,14 @@
         <div th:if="${#fields.hasErrors('nom')}" class="alert alert-danger" role="alert"><span
             th:errors="*{nom}"></span></div>
         <br>
-        <input type="text" th:field="*{type}" id="type" class="form-control" placeholder="type de la competence">
-        <div th:if="${#fields.hasErrors('type')}" class="alert alert-danger" role="alert"><span
+        <select th:field="*{type}" class="form-control">
+    <option th:each="i : ${listTypes}" th:value="${i.nom}" th:text="${i.nom}">
+    </option>
+   
+</select>
+<div th:if="${#fields.hasErrors('type')}" class="alert alert-danger" role="alert"><span
             th:errors="*{type}"></span></div>
+ <br>
         <br>
         <input type="text" th:field="*{description}" id="description" class="form-control" placeholder="description">
         <div th:if="${#fields.hasErrors('description')}" class="alert alert-danger" role="alert"> <span

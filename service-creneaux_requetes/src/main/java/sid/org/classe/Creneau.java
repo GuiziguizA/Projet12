@@ -24,6 +24,7 @@ public class Creneau {
 	private String UserRecoitName;
 	private Long idRequete;
 	private Long idComp;
+	private String competenceName;
 	private Long idChat;
 	private String statut;
 
@@ -138,6 +139,14 @@ public class Creneau {
 
 	public void setUserRecoitName(String userRecoitName) {
 		UserRecoitName = userRecoitName;
+	}
+
+	public String getCompetenceName() {
+		return competenceName;
+	}
+
+	public void setCompetenceName(String competenceName) {
+		this.competenceName = competenceName;
 	}
 
 }

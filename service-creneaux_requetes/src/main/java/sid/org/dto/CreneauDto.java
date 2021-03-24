@@ -7,7 +7,7 @@ public class CreneauDto {
 	private Long idUser;
 	private Long idUser1;
 	private Long idUserDemande;
-	private String UserName;
+	private String UserDemandeName;
 	private String UserName1;
 	private Long idComp;
 	private Long idRequete;
@@ -93,20 +93,20 @@ public class CreneauDto {
 		this.idRequete = idRequete;
 	}
 
-	public String getUserName() {
-		return UserName;
-	}
-
-	public void setUserName(String userName) {
-		UserName = userName;
-	}
-
 	public String getUserName1() {
 		return UserName1;
 	}
 
 	public void setUserName1(String userName1) {
 		UserName1 = userName1;
+	}
+
+	public String getUserDemandeName() {
+		return UserDemandeName;
+	}
+
+	public void setUserDemandeName(String userDemandeName) {
+		UserDemandeName = userDemandeName;
 	}
 
 }

@@ -1,5 +1,6 @@
 package sid.org.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +29,8 @@ import sid.org.classe.Competence;
 import sid.org.classe.CompetenceCriteria;
 import sid.org.config.RequestFactory;
 import sid.org.dto.CompetenceDto;
+import sid.org.enumeration.ListType;
+import sid.org.enumeration.Types;
 
 @Component
 
@@ -142,6 +145,16 @@ public class CompetenceServiceImpl implements CompetenceService {
 		HttpHeaders headers = headersService.createTokenHeaders(request);
 
 		rt.exchange(uri, HttpMethod.DELETE, new HttpEntity<>(headers), Competence.class);
+
+	}
+
+	@Override
+	public List<Types> chargerLesTypesDeRecherches() {
+
+		ListType listType = new ListType();
+		List<Types> types = listType.listTypes();
+		logger.info(types.get(1).getNom());
+		return types;
 
 	}
 

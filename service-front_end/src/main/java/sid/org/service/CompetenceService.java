@@ -1,5 +1,6 @@
 package sid.org.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +10,7 @@ import org.springframework.web.client.HttpStatusCodeException;
 
 import sid.org.classe.Competence;
 import sid.org.dto.CompetenceDto;
+import sid.org.enumeration.Types;
 
 public interface CompetenceService {
 
@@ -24,5 +26,7 @@ public interface CompetenceService {
 			throws HttpStatusCodeException;
 
 	public void deleteComp(Long id, HttpServletRequest request) throws HttpStatusCodeException;
+
+	public List<Types> chargerLesTypesDeRecherches();
 
 }

@@ -15,6 +15,7 @@ public class Message {
 	Date date;
 	String content;
 	Long idUser;
+	String username;
 
 	private Chat chat;
 	private String statut;

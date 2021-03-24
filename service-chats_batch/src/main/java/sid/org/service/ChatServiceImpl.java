@@ -1,14 +1,13 @@
 package sid.org.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import sid.org.api.RequeteConnect;
@@ -28,27 +27,23 @@ public class ChatServiceImpl implements ChatService {
 	@RabbitListener(queues = MessagingConfig.QUEUE1)
 	public void creerUnChat(ChatDto chatDto) {
 
-		/*
-		 * Optional<Chat> chat = chatRepository.findByUserAndUser(chatDto.getIdUser(),
-		 * chatDto.getIdUser1()); Optional<Chat> chat2 =
-		 * chatRepository.findByUserAndUser(chatDto.getIdUser1(), chatDto.getIdUser());
-		 */
-		/*
-		 * if (chat.isPresent()) { throw new
-		 * EntityAlreadyExistException("chat existe deja"); } if (chat2.isPresent()) {
-		 * throw new EntityAlreadyExistException("chat existe deja"); }
-		 */
-		Chat chat1 = new Chat();
-		chat1.setIdUser(chatDto.getIdUser());
-		chat1.setIdUser1(chatDto.getIdUser1());
-		chat1.setStatut("enMarche");
-		chat1.setIdRequete(chatDto.getIdRequete());
-		chat1.setCompetenceName(chatDto.getCompetenceNom());
-		chat1.setUsername(chatDto.getUsername());
-		chat1.setUsername1(chatDto.getUsername1());
-		chat1.setIdComp(chatDto.getIdComp());
-		chatRepository.saveAndFlush(chat1);
+		Optional<Chat> chat = chatRepository.findByUserAndUser1AndidRequeteAndStatut(chatDto.getIdUser(),
+				chatDto.getIdUser1(), chatDto.getIdRequete(), "enMarche");
+		if (chat.isPresent()) {
 
+		} else {
+
+			Chat chat1 = new Chat();
+			chat1.setIdUser(chatDto.getIdUser());
+			chat1.setIdUser1(chatDto.getIdUser1());
+			chat1.setStatut("enMarche");
+			chat1.setIdRequete(chatDto.getIdRequete());
+			chat1.setCompetenceName(chatDto.getCompetenceNom());
+			chat1.setUsername(chatDto.getUsername());
+			chat1.setUsername1(chatDto.getUsername1());
+			chat1.setIdComp(chatDto.getIdComp());
+			chatRepository.saveAndFlush(chat1);
+		}
 	}
 
 	@Override
@@ -71,12 +66,9 @@ public class ChatServiceImpl implements ChatService {
 
 	@Override
 	public Page<Chat> getChatsUser(Long idUser, int page, int size) throws ResultNotFoundException {
-		List<Chat> chats = chatRepository.findByidUser(idUser);
-		List<Chat> chats1 = chatRepository.findByidUser1(idUser);
-		chats.addAll(chats1);
-		Pageable pageable = PageRequest.of(page, size);
-		long totalChats = chats.size() + chats1.size();
-		Page<Chat> pageChat = new PageImpl<>(chats, pageable, totalChats);
+		Pageable pageable = PageRequest.of(page, size, Sort.Direction.ASC, "id");
+		Page<Chat> pageChat = chatRepository.findByIdUserOrIdUser1(idUser, idUser, pageable);
+
 		return pageChat;
 
 	}

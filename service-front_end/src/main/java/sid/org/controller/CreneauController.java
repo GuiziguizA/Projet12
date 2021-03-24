@@ -85,7 +85,9 @@ public class CreneauController {
 	@GetMapping("/creneaux")
 	public String getlistCreneau(Model model, HttpServletRequest request,
 			@RequestParam(required = false) Optional<Integer> size,
-			@RequestParam(required = false) Optional<Integer> page) {
+			@RequestParam(required = false) Optional<Integer> page,
+			@RequestParam(required = false) Optional<Integer> size1,
+			@RequestParam(required = false) Optional<Integer> page1) {
 
 		HttpSession session = request.getSession();
 		String name = (String) session.getAttribute("username");
@@ -96,9 +98,11 @@ public class CreneauController {
 		Long idUser = user.getCodeUtilisateur();
 		int currentPage = page.orElse(0);
 		int pageSize = size.orElse(2);
+		int currentPage1 = page1.orElse(0);
+		int pageSize1 = size1.orElse(2);
 		try {
 			Page<Creneau> pageCreneau = creneauService.getCreneauxUser(idUser, currentPage, pageSize, request);
-			Page<Creneau> pageCreneau1 = creneauService.getCreneauxUser1(idUser, currentPage, pageSize, request);
+			Page<Creneau> pageCreneau1 = creneauService.getCreneauxUser1(idUser, currentPage1, pageSize1, request);
 
 			model.addAttribute("pageCreneau", pageCreneau);
 			model.addAttribute("pageCreneau1", pageCreneau1);

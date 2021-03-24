@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import sid.org.api.ChatConnect;
@@ -17,6 +18,7 @@ import sid.org.api.UserConnect;
 import sid.org.classe.Competence;
 import sid.org.classe.Creneau;
 import sid.org.classe.Requete;
+import sid.org.classe.Users;
 import sid.org.config.MessagingConfig;
 import sid.org.dao.CreneauRepository;
 import sid.org.dao.RequeteRepository;
@@ -76,16 +78,23 @@ public class CreneauServiceImpl implements CreneauService {
 
 		Creneau creneau1 = new Creneau();
 		creneau1.setIdComp(creneauDto.getIdComp());
+		creneau1.setCompetenceName(competenceApi.getCompetence(creneauDto.getIdComp()).getNom());
+		;
+
 		creneau1.setDate(new Date());
 		creneau1.setIdUser(creneauDto.getIdUser());
-		creneau1.setUserDemandeName(creneauDto.getUserName());
+		creneau1.setUserDemandeName(creneauDto.getUserDemandeName());
 		creneau1.setIdUser1(creneauDto.getIdUser1());
 		creneau1.setIdRequete(creneauDto.getIdRequete());
 		creneau1.setIdUserDemande(idUserDemande);
 		if (idUserDemande == creneauDto.getIdUser1()) {
 			creneau1.setIdUserRecoit(creneauDto.getIdUser());
+			Users user = userConnect.getUser(creneauDto.getIdUser());
+			creneau1.setUserRecoitName(user.getUsername());
 		} else {
 			creneau1.setIdUserRecoit(creneauDto.getIdUser1());
+			Users user = userConnect.getUser(creneauDto.getIdUser1());
+			creneau1.setUserRecoitName(user.getUsername());
 		}
 		creneau1.setStatut("demande");
 		creneau1.setDate(creneauDto.getDate());
@@ -137,7 +146,7 @@ public class CreneauServiceImpl implements CreneauService {
 	@Override
 	public Page<Creneau> getCreneauxUser(Long idUser, int page, int size) {
 
-		Pageable pageable = PageRequest.of(page, size);
+		Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "codeCreneau");
 		Page<Creneau> creneaux = creneauRepository.findByIdUserDemande(idUser, pageable);
 
 		return creneaux;
@@ -147,7 +156,7 @@ public class CreneauServiceImpl implements CreneauService {
 	@Override
 	public Page<Creneau> getCreneauxUser1(Long idUser1, int page, int size) {
 
-		Pageable pageable = PageRequest.of(page, size);
+		Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "codeCreneau");
 		Page<Creneau> creneaux = creneauRepository.findByIdUserRecoit(idUser1, pageable);
 
 		return creneaux;

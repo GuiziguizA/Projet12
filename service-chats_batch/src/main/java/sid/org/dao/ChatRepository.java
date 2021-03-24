@@ -3,6 +3,8 @@ package sid.org.dao;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -14,7 +16,7 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
 	Optional<Chat> findByUserAndUser1AndidRequeteAndStatut(@Param("idUser") Long idUser, @Param("idUser1") Long idUser1,
 			@Param("idRequete") Long idRequete, @Param("statut") String statut);
 
-	List<Chat> findByidUser(Long idUser);
+	Page<Chat> findByIdUserOrIdUser1(Long idUser, Long idUser1, Pageable pageable);
 
 	List<Chat> findByidUser1(Long idUser1);
 

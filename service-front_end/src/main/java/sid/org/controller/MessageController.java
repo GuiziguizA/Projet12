@@ -50,6 +50,7 @@ public class MessageController {
 		Long idUser = user.getCodeUtilisateur();
 		model.addAttribute("idUser", idUser);
 		model.addAttribute("idChat", idChat);
+		logger.info("l'idChat des messages du service front" + idChat);
 
 		int currentPage = page.orElse(0);
 		int pageSize = size.orElse(2);
@@ -84,6 +85,7 @@ public class MessageController {
 		Users user = (Users) session.getAttribute("user");
 		Long idUser = user.getCodeUtilisateur();
 		/* Long idChat = (Long) model.getAttribute("idChat"); */
+		logger.info("l'idChat des messages du service front post" + idChat);
 
 		try {
 			messageService.postMessagesChats(idChat, idUser, request, messageDto);

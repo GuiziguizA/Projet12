@@ -21,10 +21,12 @@ public class Message {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	Long id;
-	Date date;
-	String content;
-	Long idUser;
+	private Long id;
+	private Date date;
+	private String content;
+	private Long idUser;
+	private String username;
+
 	@ManyToOne
 	@JoinColumn(name = "chat_id")
 	private Chat chat;
