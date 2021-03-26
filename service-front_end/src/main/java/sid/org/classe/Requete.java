@@ -8,6 +8,7 @@ public class Requete {
 	private Date date;
 	private Long idUser;
 	private String username;
+	private String usernameComp;
 	private String competenceNom;
 	private Long idComp;
 	private String statut;
@@ -80,6 +81,14 @@ public class Requete {
 
 	public void setCompetenceNom(String competenceNom) {
 		this.competenceNom = competenceNom;
+	}
+
+	public String getUsernameComp() {
+		return usernameComp;
+	}
+
+	public void setUsernameComp(String usernameComp) {
+		this.usernameComp = usernameComp;
 	}
 
 }

@@ -16,6 +16,7 @@ public class Requete {
 	private Date date;
 	private Long idUser;
 	private String username;
+	private String usernameComp;
 	private String competenceNom;
 	private Long idComp;
 	private Long idUserComp;
@@ -98,6 +99,14 @@ public class Requete {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public String getUsernameComp() {
+		return usernameComp;
+	}
+
+	public void setUsernameComp(String usernameComp) {
+		this.usernameComp = usernameComp;
 	}
 
 }

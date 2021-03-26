@@ -53,18 +53,6 @@ public class CompetenceController {
 		return competence;
 	}
 
-	@GetMapping("/competenceDto")
-	public CompetenceDto getcompetenceDto() throws ResultNotFoundException {
-		CompetenceDto competencedto = competenceService.getCompetenceDto();
-		return competencedto;
-	}
-
-	@GetMapping("/competenceCrit")
-	public CompetenceCriteria getcompetenceCrit() throws ResultNotFoundException {
-		CompetenceCriteria competence = competenceService.getCompetenceCriteria();
-		return competence;
-	}
-
 	@GetMapping("/competences")
 	public Page<Competence> getcompetencesUser(@RequestParam String nom, @RequestParam int page, @RequestParam int size)
 			throws ResultNotFoundException {

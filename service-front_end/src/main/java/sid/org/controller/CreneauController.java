@@ -107,12 +107,13 @@ public class CreneauController {
 			model.addAttribute("pageCreneau", pageCreneau);
 			model.addAttribute("pageCreneau1", pageCreneau1);
 			int totalPages = pageCreneau.getTotalPages();
+			int totalPages1 = pageCreneau1.getTotalPages();
 			if (totalPages > 0) {
 				List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
 				model.addAttribute("pageNumbers", pageNumbers);
 			}
 			if (totalPages > 0) {
-				List<Integer> pageNumbers1 = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
+				List<Integer> pageNumbers1 = IntStream.rangeClosed(1, totalPages1).boxed().collect(Collectors.toList());
 				model.addAttribute("pageNumbers1", pageNumbers1);
 			}
 			return "creneaux";

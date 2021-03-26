@@ -17,10 +17,6 @@ public interface CompetenceService {
 	public Page<Competence> searchCompetence(CompetenceCriteria criteria, int page, int size)
 			throws ResultNotFoundException;
 
-	public CompetenceDto getCompetenceDto();
-
-	public CompetenceCriteria getCompetenceCriteria();
-
 	public Competence getCompetence(Long id) throws ResultNotFoundException;
 
 	public Page<Competence> getCompetencesUser(String nom, int page, int size) throws ResultNotFoundException;

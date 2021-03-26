@@ -79,6 +79,7 @@ public class RequeteServiceImpl implements RequeteService {
 		requete1.setIdUserComp(competence.getUser().getCodeUtilisateur());
 		requete1.setUsername(user.getUsername());
 		requete1.setCompetenceNom(competence.getNom());
+		requete1.setUsernameComp(competence.getUser().getUsername());
 		requeteRepository.saveAndFlush(requete1);
 		return requete1;
 

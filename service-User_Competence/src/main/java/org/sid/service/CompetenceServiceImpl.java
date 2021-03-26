@@ -3,7 +3,6 @@ package org.sid.service;
 import java.util.Optional;
 
 import org.sid.classe.Competence;
-import org.sid.classe.Role;
 import org.sid.classe.Users;
 import org.sid.config.MessagingConfig;
 import org.sid.dao.CompetenceRepository;
@@ -14,7 +13,6 @@ import org.sid.exception.EntityAlreadyExistException;
 import org.sid.exception.ResultNotFoundException;
 import org.sid.specification.CompetenceCriteria;
 import org.sid.specification.CompetenceSpecificationImpl;
-import org.sid.specification.CompetenceSpecificationTriImpl;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -84,7 +82,7 @@ public class CompetenceServiceImpl implements CompetenceService {
 			throws ResultNotFoundException {
 
 		CompetenceSpecificationImpl competenceSpecificationImpl = new CompetenceSpecificationImpl(criteria);
-		CompetenceSpecificationTriImpl competenceSpecificationTriImpl = new CompetenceSpecificationTriImpl(criteria);
+
 		if (size == 0) {
 			throw new ResultNotFoundException("le parametre size est incorrect");
 		}
@@ -108,25 +106,6 @@ public class CompetenceServiceImpl implements CompetenceService {
 		Page<Competence> results = competenceRepository.findByUser(user.get(), pageable);
 
 		return results;
-
-	}
-
-	@Override
-	public CompetenceDto getCompetenceDto() {
-		Role role = new Role("user");
-		Users user = new Users("bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
-
-		CompetenceDto competenceDto = new CompetenceDto("changer un pneu", "mecanique",
-				"j'ai une machine permettant de changer les pneus d'une voiture", user.getUsername());
-		return competenceDto;
-
-	}
-
-	@Override
-	public CompetenceCriteria getCompetenceCriteria() {
-		CompetenceCriteria comp = new CompetenceCriteria(null, "cuisine", null);
-
-		return comp;
 
 	}
 

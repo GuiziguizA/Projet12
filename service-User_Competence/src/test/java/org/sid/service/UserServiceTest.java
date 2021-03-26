@@ -37,6 +37,8 @@ class UserServiceTest {
 	@InjectMocks
 	UserServiceImpl userService;
 	@Mock
+	KeycloakServiceImpl keycloakService;
+	@Mock
 	CompetenceRepository competenceRepository;
 
 	@BeforeEach

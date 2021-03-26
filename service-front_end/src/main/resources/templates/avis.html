@@ -29,7 +29,15 @@
 
       <form action="#" th:action="@{/avis(idCreneau=${id})}" th:object="${avisDto}" method="post">
         <br>
-        <input type="text" th:field="*{note}" id="nom" class="form-control" placeholder="note">
+       <select th:field="*{note}" class="form-control">
+    <option th:value=0>0</option>
+    <option th:value=1>1</option>
+    <option th:value=2>2</option>
+    <option th:value=3>3</option>
+    <option th:value=4>4</option>
+    <option th:value=5>5</option>
+   
+</select>
         <div th:if="${#fields.hasErrors('note')}" class="alert alert-danger" role="alert"><span
             th:errors="*{note}"></span></div>
         <br>

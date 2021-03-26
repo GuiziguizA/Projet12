@@ -12,6 +12,7 @@ public class Avis {
 	@GeneratedValue
 	private Long avisId;
 	private Long idUser;
+	private String username;
 	private Long idComp;
 	private int note;
 	private String commentaire;
@@ -78,6 +79,14 @@ public class Avis {
 
 	public void setIdComp(Long idComp) {
 		this.idComp = idComp;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 }

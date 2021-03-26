@@ -123,12 +123,13 @@ public class RequeteController {
 			model.addAttribute("requetePage", requetePage);
 			model.addAttribute("requetePage1", requetePage1);
 			int totalPages = requetePage.getTotalPages();
+			int totalPages1 = requetePage1.getTotalPages();
 			if (totalPages > 0) {
 				List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
 				model.addAttribute("pageNumbers", pageNumbers);
 			}
 			if (totalPages > 0) {
-				List<Integer> pageNumbers1 = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
+				List<Integer> pageNumbers1 = IntStream.rangeClosed(1, totalPages1).boxed().collect(Collectors.toList());
 				model.addAttribute("pageNumbers1", pageNumbers1);
 			}
 			return "requetes";

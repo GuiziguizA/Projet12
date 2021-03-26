@@ -24,7 +24,7 @@
 			<div class="form-group">
 				<div class="jumbotron text-center">
 
-					<h1>Requetes</h1>
+					<h1>Requêtes</h1>
 
 					<div class="alert alert-success" th:if="${succes}" th:text="${succes}" role="alert"></div>
 					<div class="alert alert-danger" th:if="${error}" role="alert" th:text="${error}"></div>
@@ -34,7 +34,7 @@
 				</div>
 
 
-				<h2>Les requetes des utilisateurs </h2>
+				<h2>Les requêtes des utilisateurs </h2>
 				<br>
 
 
@@ -42,8 +42,8 @@
 
 					<table class="table table-striped">
 						<tr>
-							<th scope="col">Nom de la Competence</th>
-							<th scope="col">Nom de l'utilisateur qui fait la requete</th>
+							<th scope="col">Compétence</th>
+							<th scope="col">La requête est faite par</th>
 							<th scope="col">Envoyé à</th>
 							<th scope="col">Date</th>
 							<th scope="col">Statut</th>
@@ -86,14 +86,14 @@
 					</div>
 				</div>
 
-				<h2>Vos Requetes </h2>
+				<h2>Vos Requêtes </h2>
 				<br>
 
 				<div class="border rounded">
 					<table class="table table-striped">
 						<tr>
-							<th scope="col">Nom de la Competence</th>
-							<th scope="col">Nom de l'utilisateur qui fait la requete</th>
+							<th scope="col">Compétence</th>
+							<th scope="col">La requête est adressée à</th>
 							<th scope="col">Envoyé à</th>
 							<th scope="col">Date</th>
 							<th scope="col">Statut</th>
@@ -104,7 +104,7 @@
 						<tr th:each="requete1:${requetePage1}">
 
 							<td th:text="${requete1.competenceNom}"></td>
-							<td th:text="${requete1.username}"></td>
+							<td th:text="${requete1.usernameComp}"></td>
 							<td th:text="${#dates.format(requete1.date, 'HH:mm')}"></td>
 							<td th:text="${#dates.format(requete1.date, 'dd-MM-yyyy')}"></td>
 							<td th:text="${requete1.statut}"></td>

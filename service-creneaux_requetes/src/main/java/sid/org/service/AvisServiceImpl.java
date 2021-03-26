@@ -77,6 +77,7 @@ public class AvisServiceImpl implements AvisService {
 		avis.setCreneau(avisDto.getCreneau());
 		avis.setIdComp(avisDto.getCreneau().getIdComp());
 		avis.setIdUser(user.getCodeUtilisateur());
+		avis.setUsername(user.getUsername());
 		avisRepository.saveAndFlush(avis);
 
 		modifNoteCompetence(avisDto.getCreneau().getIdComp());

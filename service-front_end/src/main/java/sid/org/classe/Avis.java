@@ -5,6 +5,7 @@ public class Avis {
 	private Long avisId;
 	private Long idUser;
 	private int note;
+	private String username;
 	private String commentaire;
 
 	private Creneau creneau;
@@ -60,6 +61,14 @@ public class Avis {
 
 	public void setIdUser(Long idUser) {
 		this.idUser = idUser;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 }
