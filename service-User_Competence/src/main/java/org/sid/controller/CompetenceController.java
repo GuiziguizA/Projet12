@@ -10,7 +10,6 @@ import org.sid.service.CompetenceService;
 import org.sid.specification.CompetenceCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,12 +38,6 @@ public class CompetenceController {
 
 		Competence competence = competenceService.createCompetence(competenceDto);
 		return competence;
-	}
-
-	@DeleteMapping("/competence")
-	public void deleteCompetence(@RequestParam Long id) throws ResultNotFoundException {
-		competenceService.deleteCompetence(id);
-
 	}
 
 	@GetMapping("/competence/{id}")

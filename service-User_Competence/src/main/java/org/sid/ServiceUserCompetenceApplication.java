@@ -37,9 +37,11 @@ public class ServiceUserCompetenceApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+
 		/*
 		 * Role role = new Role("user"); rolesRepository.save(role);
 		 */
+
 		/*
 		 * List<Competence> listComp = new ArrayList<Competence>(); UserDto userDto =
 		 * new UserDto("kamel", "kamel@gmail.com", "3 rue du cerisier", "frere",

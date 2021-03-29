@@ -15,6 +15,4 @@ public interface AvisService {
 
 	public Page<Avis> getAvis(Long idComp, int page, int size) throws ResultNotFoundException, ForbiddenException;
 
-	public void deleteAvis(Long id, Long Userid) throws ResultNotFoundException, ForbiddenException;
-
 }

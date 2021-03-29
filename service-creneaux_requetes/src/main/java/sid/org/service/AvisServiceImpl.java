@@ -94,20 +94,7 @@ public class AvisServiceImpl implements AvisService {
 
 	}
 
-	@Override
-	public void deleteAvis(Long id, Long Userid) throws ResultNotFoundException, ForbiddenException {
-		Optional<Avis> avis = avisRepository.findById(id);
-
-		if (!avis.isPresent()) {
-			throw new ResultNotFoundException("avis introuvable");
-		}
-		if (avis.get().getCreneau().getIdUser() != Userid && avis.get().getCreneau().getIdUser1() != Userid) {
-			throw new ForbiddenException("Impossible de supprimer cet avis pour cette utilisateur");
-		}
-
-		avisRepository.delete(avis.get());
-
-	}
+	
 
 	public void modifNoteCompetence(Long idComp) {
 		List<Avis> listAvis = avisRepository.findByIdComp(idComp);

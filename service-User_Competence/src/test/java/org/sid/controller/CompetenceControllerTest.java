@@ -10,9 +10,10 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.sid.classe.Users;
-import org.sid.dao.UsersRepository;
-import org.sid.dto.UserDto;
+import org.sid.classe.Competence;
+import org.sid.dao.CompetenceRepository;
+import org.sid.dto.CompetenceDto;
+import org.sid.specification.CompetenceCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,16 +28,11 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
-public class UserControllerTest {
-
+public class CompetenceControllerTest {
+	@Autowired
+	CompetenceRepository competenceRepository;
 	@Autowired
 	private MockMvc mockMvc;
-
-	@Autowired
-	private ObjectMapper objectMapper;
-
-	@Autowired
-	private UsersRepository usersRepository;
 
 	String BASE_URL = "http://localhost:8082/";
 
@@ -44,49 +40,53 @@ public class UserControllerTest {
 			MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
 
 	@Test
-	void createUserControllerTest() throws Exception {
+	void createCompetenceControllerTest() throws Exception {
 
-		String url = BASE_URL + "/user";
-		UserDto userDto = new UserDto("tots", "tots@gmail.com", "3 rue du cerisier", "tots", "45125");
+		String url = BASE_URL + "/competence";
 
+		CompetenceDto competenceDto = new CompetenceDto("changer un pneu de vélo", "mecanique",
+				"j'ai une machine permettant de changer les pneus d'une voiture", "tots");
 		// ... more
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
 		ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-		String requestJson = ow.writeValueAsString(userDto);
+		String requestJson = ow.writeValueAsString(competenceDto);
 
 		mockMvc.perform(post(url).contentType(APPLICATION_JSON_UTF8).content(requestJson)).andExpect(status().isOk());
 
-		Optional<Users> user = usersRepository.findByMail("tots@gmail.com");
-		assertThat(user.get().getUsername()).isEqualTo("tots");
+		Optional<Competence> comp = competenceRepository.findById(2L);
+		assertThat(comp.get().getNom()).isEqualTo("changer un pneu de vélo");
 	}
 
 	@Test
-	void getUserTest() throws Exception {
+	void getCompetenceTest() throws Exception {
 
-		String url = BASE_URL + "/user";
-		String name = "tots";
-
-		mockMvc.perform(get(url).contentType(APPLICATION_JSON_UTF8).param("name", name)).andExpect(status().isOk());
-
-	}
-
-	@Test
-	void getUsersTest() throws Exception {
-
-		String url = BASE_URL + "/users";
+		String url = BASE_URL + "/competence/1";
 
 		mockMvc.perform(get(url).contentType(APPLICATION_JSON_UTF8)).andExpect(status().isOk());
 
 	}
 
 	@Test
-	void identityUserTest() throws Exception {
+	void getCompetencesUserTest() throws Exception {
+		String nom = "tots";
+		String url = BASE_URL + "/competences?nom=" + nom + "&page=0&size=2";
 
-		String url = BASE_URL + "/user/identity";
-		String name = "tots";
+		mockMvc.perform(get(url).contentType(APPLICATION_JSON_UTF8)).andExpect(status().isOk());
 
-		mockMvc.perform(post(url).contentType(APPLICATION_JSON_UTF8).param("name", name)).andExpect(status().isOk());
+	}
+
+	@Test
+	void searchCompetencesTest() throws Exception {
+
+		String url = BASE_URL + "/search?page=0&size=2";
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+		ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+		CompetenceCriteria criteria = new CompetenceCriteria(null, null, "mecanique");
+		String requestJson = ow.writeValueAsString(criteria);
+
+		mockMvc.perform(get(url).contentType(APPLICATION_JSON_UTF8).content(requestJson)).andExpect(status().isOk());
 
 	}
 

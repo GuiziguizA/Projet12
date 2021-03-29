@@ -1,4 +1,4 @@
-package sid.org;
+package sid.org.service;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -9,11 +9,10 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import sid.org.classe.Requete;
@@ -23,15 +22,14 @@ import sid.org.exception.APiUSerAndCompetenceException;
 import sid.org.exception.EntityAlreadyExistException;
 import sid.org.exception.ForbiddenException;
 import sid.org.exception.ResultNotFoundException;
-import sid.org.service.RequeteService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ContextConfiguration
+
 public class RequeteTest {
-	@Autowired
-	RequeteService requeteService;
-	@MockBean
+	@InjectMocks
+	RequeteServiceImpl requeteService;
+	@Mock
 	RequeteRepository requeteRepository;
 
 	@Test

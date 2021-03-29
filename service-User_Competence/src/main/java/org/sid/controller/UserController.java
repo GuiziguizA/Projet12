@@ -9,7 +9,6 @@ import org.sid.exception.EntityAlreadyExistException;
 import org.sid.exception.ResultNotFoundException;
 import org.sid.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -66,11 +65,6 @@ public class UserController {
 	@PutMapping("/user")
 	public void updateUserController(UserDto userDto) throws EntityAlreadyExistException, ResultNotFoundException {
 		userService.updateUser(userDto, Optional.empty());
-	}
-
-	@DeleteMapping("/user")
-	public void deleteUserController(Long id) throws ResultNotFoundException, EntityAlreadyExistException {
-		userService.deleteUser(id);
 	}
 
 }
