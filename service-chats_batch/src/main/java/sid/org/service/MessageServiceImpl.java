@@ -56,7 +56,6 @@ public class MessageServiceImpl implements MessageService {
 		message1.setIdUser(idUser);
 		message1.setChat(chat.get());
 		message1.setUsername(userConnect.getUser(idUser).getUsername());
-		logger.info("l'id du chat est :" + chat.get().getId().toString());
 
 		message1.setContent(message.getContent());
 		template.convertAndSend(MessagingConfig.EXCHANGE, MessagingConfig.ROUTIN_KEY3, message1);
@@ -84,12 +83,12 @@ public class MessageServiceImpl implements MessageService {
 
 		Optional<Message> message = messageRepository.findById(id);
 		Users user = userConnect.getUser(idUser);
-
+		if (!message.isPresent()) {
+			throw new ResultNotFoundException("message introuvable");
+		}
 		if (user.getCodeUtilisateur() == message.get().getChat().getIdUser()
 				|| user.getCodeUtilisateur() == message.get().getChat().getIdUser1()) {
-			if (!message.isPresent()) {
-				throw new ResultNotFoundException("message introuvable");
-			}
+
 			if (message.get().getStatut().equals("non lu")) {
 				message.get().setStatut("lu");
 			}

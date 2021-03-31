@@ -12,7 +12,7 @@ public class Avis {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 
-	private Long avisId;
+	private Long aviId;
 	private Long idUser;
 	private String username;
 	private Long idComp;
@@ -35,12 +35,12 @@ public class Avis {
 		this.creneau = creneau;
 	}
 
-	public Long getAvisId() {
-		return avisId;
+	public Long getAviId() {
+		return aviId;
 	}
 
-	public void setAvisId(Long avisId) {
-		this.avisId = avisId;
+	public void setAviId(Long aviId) {
+		this.aviId = aviId;
 	}
 
 	public int getNote() {

@@ -29,7 +29,7 @@ public class Creneau {
 	private String statut;
 
 	@OneToOne
-	@JoinColumn(name = "id_avi")
+	@JoinColumn(name = "id_avis")
 	private Avis avis;
 
 	public Creneau(Date date, Long idUser, Long idUser1, Long idComp) {

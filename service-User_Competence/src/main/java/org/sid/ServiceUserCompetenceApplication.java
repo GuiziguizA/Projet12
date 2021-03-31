@@ -1,9 +1,9 @@
 package org.sid;
 
+import org.sid.api.KeycloakService;
 import org.sid.dao.CompetenceRepository;
 import org.sid.dao.RolesRepository;
 import org.sid.dao.UsersRepository;
-import org.sid.service.KeycloakService;
 import org.sid.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

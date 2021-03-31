@@ -15,7 +15,6 @@ import org.springframework.web.client.RestTemplate;
 import sid.org.classe.Requete;
 import sid.org.classe.TokenString;
 import sid.org.config.RecupToken;
-import sid.org.service.HeadersService;
 
 @Service
 public class RequeteConnectImpl implements RequeteConnect {

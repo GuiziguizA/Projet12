@@ -9,8 +9,6 @@ public interface ChatService {
 
 	public Chat getUnChat(Long idUser, Long idUser1, Long idRequete) throws ResultNotFoundException;
 
-	public void deleteUnChat(Long id) throws ResultNotFoundException;
-
-	public Page<Chat> getChatsUser(Long idUser, int page, int size) throws ResultNotFoundException;
+	public Page<Chat> getChatsUser(Long idUser, int page, int size);
 
 }

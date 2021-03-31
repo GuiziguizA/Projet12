@@ -11,9 +11,9 @@
 
   
   
-    <changeSet author="guali (generated)" id="1617056160842-1">
+    <changeSet author="guali (generated)" id="1617090899203-1">
         <createTable tableName="avis">
-            <column autoIncrement="true" name="avis_id" type="BIGINT">
+            <column autoIncrement="true" name="avi_id" type="BIGINT">
                 <constraints primaryKey="true"/>
             </column>
             <column name="commentaire" type="VARCHAR(255)"/>
@@ -26,7 +26,7 @@
             <column name="id_creneau" type="BIGINT"/>
         </createTable>
     </changeSet>
-    <changeSet author="guali (generated)" id="1617056160842-2">
+    <changeSet author="guali (generated)" id="1617090899203-2">
         <createTable tableName="creneau">
             <column autoIncrement="true" name="code_creneau" type="BIGINT">
                 <constraints primaryKey="true"/>
@@ -43,10 +43,10 @@
             <column name="id_user_demande" type="BIGINT"/>
             <column name="id_user_recoit" type="BIGINT"/>
             <column name="statut" type="VARCHAR(255)"/>
-            <column name="id_avi" type="BIGINT"/>
+            <column name="id_avis" type="BIGINT"/>
         </createTable>
     </changeSet>
-    <changeSet author="guali (generated)" id="1617056160842-3">
+    <changeSet author="guali (generated)" id="1617090899203-3">
         <createTable tableName="requete">
             <column autoIncrement="true" name="code_requete" type="BIGINT">
                 <constraints primaryKey="true"/>
@@ -61,14 +61,14 @@
             <column name="username_comp" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
-    <changeSet author="guali (generated)" id="1617056160842-4">
-        <createIndex indexName="FK32397byipmk3fjgb32n46olb1" tableName="creneau">
-            <column name="id_avi"/>
-        </createIndex>
-    </changeSet>
-    <changeSet author="guali (generated)" id="1617056160842-5">
+    <changeSet author="guali (generated)" id="1617090899203-4">
         <createIndex indexName="FKg7gwc8bh189596r6lrm5n2y25" tableName="avis">
             <column name="id_creneau"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="guali (generated)" id="1617090899203-5">
+        <createIndex indexName="FKlel33ftoi8rngmr6436ouyb71" tableName="creneau">
+            <column name="id_avis"/>
         </createIndex>
     </changeSet>
 </databaseChangeLog>

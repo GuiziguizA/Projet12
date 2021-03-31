@@ -16,7 +16,6 @@ import sid.org.classe.Chat;
 import sid.org.classe.TokenString;
 import sid.org.config.RecupToken;
 import sid.org.dto.ChatDto;
-import sid.org.service.HeadersService;
 
 @Service
 public class ChatConnectImpl implements ChatConnect {

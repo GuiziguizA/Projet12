@@ -3,6 +3,7 @@ package org.sid.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.sid.api.KeycloakService;
 import org.sid.classe.Role;
 import org.sid.classe.Users;
 import org.sid.dao.CompetenceRepository;

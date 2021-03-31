@@ -65,21 +65,11 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
-	public Page<Chat> getChatsUser(Long idUser, int page, int size) throws ResultNotFoundException {
-		Pageable pageable = PageRequest.of(page, size, Sort.Direction.ASC, "id");
+	public Page<Chat> getChatsUser(Long idUser, int page, int size) {
+		Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "id");
 		Page<Chat> pageChat = chatRepository.findByIdUserOrIdUser1(idUser, idUser, pageable);
 
 		return pageChat;
-
-	}
-
-	@Override
-	public void deleteUnChat(Long id) throws ResultNotFoundException {
-		Optional<Chat> chat = chatRepository.findById(id);
-		if (!chat.isPresent()) {
-			throw new ResultNotFoundException("chat introuvable");
-		}
-		chatRepository.delete(chat.get());
 
 	}
 

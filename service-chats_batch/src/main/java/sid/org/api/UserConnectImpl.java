@@ -14,7 +14,6 @@ import sid.org.classe.TokenString;
 import sid.org.classe.Users;
 import sid.org.config.RecupToken;
 import sid.org.exception.APiUSerAndCompetenceException;
-import sid.org.service.HeadersService;
 
 @Service
 public class UserConnectImpl implements UserConnect {

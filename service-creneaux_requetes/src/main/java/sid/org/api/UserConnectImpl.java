@@ -14,7 +14,6 @@ import org.springframework.web.client.RestTemplate;
 import sid.org.classe.TokenString;
 import sid.org.classe.Users;
 import sid.org.config.RecupToken;
-import sid.org.service.HeadersService;
 import sid.org.service.RequeteServiceImpl;
 
 @Service

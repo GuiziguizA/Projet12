@@ -129,7 +129,20 @@ services:
      - SPRING_DATASOURCE_URL=jdbc:mysql://database_user_competence:3306/user&competence
      - SPRING_DATASOURCE_USERNAME = guimiom
      - SPRING_DATASOURCE_PASSWORD  = guimiom
-      
+ 
+# service-Front-end
+  service-front_end:
+    restart: always
+    build: 
+      context: service-front_end
+      dockerfile: Dockerfile
+    ports: 
+     - "8099:8099"
+    environment:
+     - SPRING_CLOUD_CONFIG_URI=http://service-config:8888/
+    
+     - SERVER_PORT=8099
+    
     
 # service-chats_batch
   service-chats_batch:
@@ -149,4 +162,27 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://database_chat_batch:3306/chat&batch
       - SPRING_DATASOURCE_USERNAME=guimiom
       - SPRING_DATASOURCE_PASSWORD=guimiom
-     
+
+# keycloak
+  keycloak:
+    image: quay.io/keycloak/keycloak:12.0.4
+    
+    environment:
+     # KEYCLOAK_IMPORT: /opt/jboss/keycloak/realm-export.json -Dkeycloak.profile.feature.upload_scripts=enabled
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+    expose:
+      - 8080  
+    
+    ports:
+      - "8080:8080"
+   #volumes:
+    #  - ./realm-export.json:/opt/jboss/keycloak/realm-export.json
+# RabbitMQ
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: my-rabbit
+    
+    ports:
+      - 5672:5672
+      - 15672:15672
