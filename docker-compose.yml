@@ -44,10 +44,36 @@ services:
     environment:
      - spring.cloud.config.uri=http://service-config:8888/
     #Database
-     - SPRING_CLOUD_CONFIG_URI=jdbc:mysql://database_creneaux_requetes:3306/creneaux&requetes
+     - SPRING_CLOUD_CONFIG_URI=jdbc:mysql://database_creneaux_requetes:3306/creneaux_requetes
      - SPRING_DATASOURCE_USERNAME=guimiom
      - SPRING_DATASOURCE_PASSWORD=guimiom
+
+
+  # service-user_competence
+  service-user_competence:
+    depends_on: 
+      - database_user_competence
+    links:
+      - database_user_competence
+    restart: always
+    build: 
+      context: service-user_competence
+      dockerfile: Dockerfile
+    ports: 
+     - "8082:8082"
+    environment:
+     - SPRING_CLOUD_CONFIG_URI=http://service-config:8888/
     
+     - SERVER_PORT=8082
+    #Database
+     - SPRING_DATASOURCE_URL=jdbc:mysql://database_user_competence:3306/user_competence
+     - SPRING_DATASOURCE_USERNAME=guimiom
+     - SPRING_DATASOURCE_PASSWORD=guimiom
+    networks:
+      - backend 
+    
+      
+
   #Mysql Database user&competence
   database_user_competence:
         container_name: database_user_competence
@@ -59,14 +85,22 @@ services:
            - MYSQL_USER=guimiom
            - MYSQL_PASSWORD=guimiom
            - MYSQL_ROOT_PASSWORD=guimiom
+           - MYSQL_ROOT_USER=guimiom
+           - MYSQL_ROOT_HOST=%  # needs to be enclosed with quotes
         entrypoint:
           sh -c "
           echo 'CREATE DATABASE IF NOT EXISTS user_competence;' > /docker-entrypoint-initdb.d/init.sql;
           /usr/local/bin/docker-entrypoint.sh --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci"
         volumes:
            - ./mysql_data_userCommpetence:/var/lib/mysql
-   
-           
+        networks:
+          - backend 
+        
+ 
+# Networks to be created to facilitate communication between containers
+ 
+        
+  #Mysql Database creneaux_requetes    
   database_creneaux_requetes:
         container_name: database_creneaux_requetes
         image: "mysql:5.6.51"
@@ -110,25 +144,6 @@ services:
       dockerfile: Dockerfile
     ports: 
      - "8089:8089"
-   
-# service-user_competence
-  service-user_competence:
-    depends_on: 
-      - database_user_competence
-    restart: always
-    build: 
-      context: service-user_competence
-      dockerfile: Dockerfile
-    ports: 
-     - "8082:8082"
-    environment:
-     - SPRING_CLOUD_CONFIG_URI=http://service-config:8888/
-    
-     - SERVER_PORT=8082
-    #Database
-     - SPRING_DATASOURCE_URL=jdbc:mysql://database_user_competence:3306/user&competence
-     - SPRING_DATASOURCE_USERNAME = guimiom
-     - SPRING_DATASOURCE_PASSWORD  = guimiom
  
 # service-Front-end
   service-front_end:
@@ -186,3 +201,7 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
+
+# Networks to be created to facilitate communication between containers
+networks:
+  backend: 
