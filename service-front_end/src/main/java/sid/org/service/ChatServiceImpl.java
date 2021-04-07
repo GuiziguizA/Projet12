@@ -43,7 +43,7 @@ public class ChatServiceImpl implements ChatService {
 		HttpHeaders headers = headersService.createTokenHeaders(request);
 		ParameterizedTypeReference<RestResponsePage<Chat>> responseType = new ParameterizedTypeReference<RestResponsePage<Chat>>() {
 		};
-		String uri = url + "/compagny-chat_batch/chats?idUser=" + idUser + "&page=" + page + "&size=" + size;
+		String uri = url + "/service-chat_batch/chats?idUser=" + idUser + "&page=" + page + "&size=" + size;
 
 		ResponseEntity<RestResponsePage<Chat>> result = rt.exchange(uri, HttpMethod.GET, new HttpEntity<>(headers),
 				responseType);
@@ -55,7 +55,7 @@ public class ChatServiceImpl implements ChatService {
 	@Override
 	public Chat getChat(HttpServletRequest request, Long idUser, Long idUser1, Long idRequete)
 			throws HttpStatusCodeException {
-		String uri = url + "/compagny-chat_batch/chat?idUser1=" + idUser1 + "&idUser=" + idUser + "&idRequete="
+		String uri = url + "/service-chat_batch/chat?idUser1=" + idUser1 + "&idUser=" + idUser + "&idRequete="
 				+ idRequete;
 
 		RestTemplate rt = new RestTemplate();

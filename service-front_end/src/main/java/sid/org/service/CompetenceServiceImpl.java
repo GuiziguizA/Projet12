@@ -59,7 +59,7 @@ public class CompetenceServiceImpl implements CompetenceService {
 
 		ParameterizedTypeReference<RestResponsePage<Competence>> responseType = new ParameterizedTypeReference<RestResponsePage<Competence>>() {
 		};
-		final String uri = url + "/compagny-user_competence/search?page=" + page + "&size=" + size;
+		final String uri = url + "/service-user_competence/search?page=" + page + "&size=" + size;
 
 		CompetenceCriteria critere = new CompetenceCriteria(null, recherche.get(), null);
 		logger.info(critere.getType());
@@ -85,7 +85,7 @@ public class CompetenceServiceImpl implements CompetenceService {
 
 		ParameterizedTypeReference<RestResponsePage<Competence>> responseType = new ParameterizedTypeReference<RestResponsePage<Competence>>() {
 		};
-		final String uri = url + "/compagny-user_competence/competences?nom=" + nom + "&page=" + page + "&size=" + size;
+		final String uri = url + "/service-user_competence/competences?nom=" + nom + "&page=" + page + "&size=" + size;
 		ResponseEntity<RestResponsePage<Competence>> result = rt.exchange(uri, HttpMethod.GET,
 				new HttpEntity<Object>(headers), responseType);
 
@@ -113,7 +113,7 @@ public class CompetenceServiceImpl implements CompetenceService {
 		HttpHeaders headers = headersService.createTokenHeaders(request);
 		RestTemplate rt = requestFactory.getRestTemplate();
 
-		final String uri = url + "/compagny-user_competence/competence/" + id;
+		final String uri = url + "/service-user_competence/competence/" + id;
 
 		ResponseEntity<Competence> competence = rt.exchange(uri, HttpMethod.GET, new HttpEntity<>(headers),
 				Competence.class);
@@ -125,7 +125,7 @@ public class CompetenceServiceImpl implements CompetenceService {
 	@Override
 	public void createComp(CompetenceDto competenceDto, Long idUser, HttpServletRequest request)
 			throws HttpStatusCodeException {
-		String uri = url + "/compagny-user_competence/competence";
+		String uri = url + "/service-user_competence/competence";
 		RestTemplate rt = new RestTemplate();
 
 		HttpHeaders headers = headersService.createTokenHeaders(request);
@@ -139,7 +139,7 @@ public class CompetenceServiceImpl implements CompetenceService {
 
 	@Override
 	public void deleteComp(Long id, HttpServletRequest request) throws HttpStatusCodeException {
-		String uri = url + "/compagny-user_competence/competence?id=" + id;
+		String uri = url + "/service-user_competence/competence?id=" + id;
 		RestTemplate rt = new RestTemplate();
 
 		HttpHeaders headers = headersService.createTokenHeaders(request);

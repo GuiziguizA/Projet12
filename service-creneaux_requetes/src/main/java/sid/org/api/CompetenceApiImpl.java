@@ -25,7 +25,7 @@ public class CompetenceApiImpl implements CompetenceApi {
 	@Override
 	public Competence getCompetence(Long idcompetence) throws APiUSerAndCompetenceException, HttpStatusCodeException {
 		System.out.println(idcompetence);
-		String uri = url + "/compagny-user_competence/competence/" + idcompetence;
+		String uri = url + "/service-user_competence/competence/" + idcompetence;
 		RecupToken token = new RecupToken();
 		TokenString tok = token.tokenString();
 		HttpHeaders headers = headersService.createTokenHeaders(tok.getValue());

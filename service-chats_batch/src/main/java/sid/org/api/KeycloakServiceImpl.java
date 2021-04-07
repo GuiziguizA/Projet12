@@ -2,7 +2,7 @@ package sid.org.api;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -22,16 +22,17 @@ public class KeycloakServiceImpl implements KeycloakService {
 
 	private static final Logger logger = LoggerFactory.getLogger(KeycloakServiceImpl.class);
 
+	@Value("${keycloak.auth-server-url}")
+	private String hostUrl;
+
 	@Override
 	public String RecupTokenAdmin(String username, String password, String clientId) {
 
-		MultiValueMap<String, String> token = null;
 		RestTemplate restTemplate = new RestTemplate();
-		String url = "http://localhost:8080/auth/realms/master/protocol/openid-connect/token";
+		String url = hostUrl + "realms/master/protocol/openid-connect/token";
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-		ParameterizedTypeReference<MultiValueMap<String, String>> responseType = new ParameterizedTypeReference<MultiValueMap<String, String>>() {
-		};
+
 		MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
 		map.add("grant_type", "password");
 		map.add("client_id", clientId);
@@ -54,13 +55,11 @@ public class KeycloakServiceImpl implements KeycloakService {
 	@Override
 	public String RecupTokenClient(String username, String password, String clientId) {
 
-		MultiValueMap<String, String> token = null;
 		RestTemplate restTemplate = new RestTemplate();
-		String url = "http://localhost:8080/auth/realms/SocialAppRealm/protocol/openid-connect/token";
+		String url = hostUrl + "realms/SocialAppRealm/protocol/openid-connect/token";
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-		ParameterizedTypeReference<MultiValueMap<String, String>> responseType = new ParameterizedTypeReference<MultiValueMap<String, String>>() {
-		};
+
 		MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
 		map.add("grant_type", "password");
 		map.add("client_id", clientId);
@@ -84,7 +83,7 @@ public class KeycloakServiceImpl implements KeycloakService {
 	public void createUserKeycloak(String name, String mail, String password) {
 		RestTemplate restTemplate = new RestTemplate();
 
-		String url = "http://localhost:8080/auth/admin/realms/SocialAppRealm/users";
+		String url = hostUrl + "admin/realms/SocialAppRealm/users";
 		String accessToken = RecupTokenAdmin("admin", "admin", "admin-cli");
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
@@ -96,7 +95,6 @@ public class KeycloakServiceImpl implements KeycloakService {
 		userkeycloak.setUsername(name);
 		userkeycloak.setCredentials(createMapPasswortd(password));
 		userkeycloak.setEnabled("true");
-		HttpEntity<Userkeycloak> entity = new HttpEntity<>(userkeycloak, headers);
 
 		restTemplate.postForEntity(url, new HttpEntity<>(userkeycloak, headers), Long.class);
 

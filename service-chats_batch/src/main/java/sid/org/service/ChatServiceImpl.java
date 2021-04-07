@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,12 +24,16 @@ public class ChatServiceImpl implements ChatService {
 	ChatRepository chatRepository;
 	@Autowired
 	RequeteConnect requeteConnect;
+	@Value("${statut.chat.1}")
+	private String statut1;
+	@Value("${statut.chat.2}")
+	private String statut2;
 
 	@RabbitListener(queues = MessagingConfig.QUEUE1)
 	public void creerUnChat(ChatDto chatDto) {
 
 		Optional<Chat> chat = chatRepository.findByUserAndUser1AndidRequeteAndStatut(chatDto.getIdUser(),
-				chatDto.getIdUser1(), chatDto.getIdRequete(), "enMarche");
+				chatDto.getIdUser1(), chatDto.getIdRequete(), statut1);
 		if (chat.isPresent()) {
 
 		} else {
@@ -36,7 +41,7 @@ public class ChatServiceImpl implements ChatService {
 			Chat chat1 = new Chat();
 			chat1.setIdUser(chatDto.getIdUser());
 			chat1.setIdUser1(chatDto.getIdUser1());
-			chat1.setStatut("enMarche");
+			chat1.setStatut(statut1);
 			chat1.setIdRequete(chatDto.getIdRequete());
 			chat1.setCompetenceName(chatDto.getCompetenceNom());
 			chat1.setUsername(chatDto.getUsername());
@@ -49,9 +54,9 @@ public class ChatServiceImpl implements ChatService {
 	@Override
 	public Chat getUnChat(Long idUser, Long idUser1, Long idRequete) throws ResultNotFoundException {
 		Optional<Chat> chat = chatRepository.findByUserAndUser1AndidRequeteAndStatut(idUser, idUser1, idRequete,
-				"enMarche");
+				statut1);
 		Optional<Chat> chat1 = chatRepository.findByUserAndUser1AndidRequeteAndStatut(idUser1, idUser, idRequete,
-				"enMarche");
+				statut1);
 
 		if (!chat.isPresent() && !chat1.isPresent()) {
 			throw new ResultNotFoundException("chat introuvable");
@@ -77,7 +82,7 @@ public class ChatServiceImpl implements ChatService {
 	public void updateChat(Long idChat) throws ResultNotFoundException {
 
 		Optional<Chat> chat1 = chatRepository.findById(idChat);
-		chat1.get().setStatut("cloturé");
+		chat1.get().setStatut(statut2);
 		if (!chat1.isPresent()) {
 			throw new ResultNotFoundException("le chat n'existe pas");
 		}

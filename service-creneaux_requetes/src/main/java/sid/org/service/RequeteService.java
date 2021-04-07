@@ -12,9 +12,6 @@ import sid.org.exception.ResultNotFoundException;
 
 public interface RequeteService {
 
-	public void deleteRequete(Long id, Long idUser)
-			throws ResultNotFoundException, APiUSerAndCompetenceException, ForbiddenException;
-
 	public Requete createRequete(RequeteDto requeteDto)
 			throws EntityAlreadyExistException, APiUSerAndCompetenceException, ForbiddenException;
 

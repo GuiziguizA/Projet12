@@ -56,8 +56,9 @@ class AvisTests {
 		Avis avis = new Avis(3, "insufisant", creneau);
 		AvisDto avisDto = new AvisDto(3, 2L, 3L, "insufisant", creneau);
 
-		Mockito.when(creneauRepository.findById(1L)).thenReturn(Optional.of(creneau));
-		Mockito.when(avisRepository.findByCreneau(creneau)).thenReturn(Optional.of(avis));
+		Mockito.when(creneauRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(creneau));
+		Mockito.when(avisRepository.findByCreneau(Mockito.any(Creneau.class))).thenReturn(Optional.empty());
+
 		Avis avis1 = avisService.createAvis(avisDto, 1L);
 
 		assertEquals(avis.getCommentaire(), avis1.getCommentaire());
@@ -95,7 +96,7 @@ class AvisTests {
 		listavis.add(avis2);
 		Pageable pageable = PageRequest.of(0, 2);
 		Page<Avis> pageAvis = new PageImpl<Avis>(listavis);
-		Mockito.when(avisRepository.findByIdComp(Mockito.anyLong(), pageable)).thenReturn(pageAvis);
+		Mockito.when(avisRepository.findByIdComp(Mockito.anyLong(), Mockito.any(Pageable.class))).thenReturn(pageAvis);
 
 		Page<Avis> pageAvis1 = avisService.getAvis(1L, 0, 2);
 

@@ -45,7 +45,7 @@ public class MessageServiceImpl implements MessageService {
 
 		ParameterizedTypeReference<RestResponsePage<Message>> responseType = new ParameterizedTypeReference<RestResponsePage<Message>>() {
 		};
-		String uri = url + "/compagny-chat_batch/messages?idChat=" + idChat + "&page=" + page + "&size=" + size;
+		String uri = url + "/service-chat_batch/messages?idChat=" + idChat + "&page=" + page + "&size=" + size;
 
 		ResponseEntity<RestResponsePage<Message>> result = rt.exchange(uri, HttpMethod.GET, new HttpEntity<>(headers),
 				responseType);
@@ -62,7 +62,7 @@ public class MessageServiceImpl implements MessageService {
 		HttpHeaders headers = headersService.createTokenHeaders(request);
 		RestTemplate rt = requestFactory.getRestTemplate();
 
-		String uri = url + "/compagny-chat_batch/message?idUser=" + idUser + "&idChat=" + idChat;
+		String uri = url + "/service-chat_batch/message?idUser=" + idUser + "&idChat=" + idChat;
 
 		rt.exchange(uri, HttpMethod.POST, new HttpEntity<>(message, headers), String.class);
 

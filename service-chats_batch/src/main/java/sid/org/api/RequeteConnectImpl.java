@@ -28,7 +28,7 @@ public class RequeteConnectImpl implements RequeteConnect {
 	@Override
 	public Requete getRequete(Long idRequete, Long idUser) throws HttpStatusCodeException {
 
-		String uri = url + "/compagny-creneaux_requetes/requete?id=" + idRequete + "&idUser=" + idUser;
+		String uri = url + "/service-creneaux_requetes/requete?id=" + idRequete + "&idUser=" + idUser;
 		RecupToken token = new RecupToken();
 		TokenString tok = token.tokenString();
 		HttpHeaders headers = headersService.createTokenHeaders(tok.getValue());

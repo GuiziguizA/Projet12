@@ -2,8 +2,6 @@ package sid.org.service;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -26,7 +24,7 @@ public class AvisServiceImpl implements AvisService {
 
 	@Value("${api.url}")
 	private String url;
-	private static final Logger logger = LoggerFactory.getLogger(AvisServiceImpl.class);
+
 	private final RequestFactory requestFactory;
 
 	@Autowired
@@ -40,7 +38,7 @@ public class AvisServiceImpl implements AvisService {
 	@Override
 	public void createAvis(AvisDto avisDto, HttpServletRequest request, Long idUser) throws HttpStatusCodeException {
 
-		String uri = url + "/compagny-creneaux_requetes/avis?&idUser=" + idUser;
+		String uri = url + "/service-creneaux_requetes/avis?&idUser=" + idUser;
 		RestTemplate rt = new RestTemplate();
 		HttpHeaders headers = headersService.createTokenHeaders(request);
 		AvisDto avisDto1 = new AvisDto();
@@ -62,7 +60,7 @@ public class AvisServiceImpl implements AvisService {
 		HttpHeaders headers = headersService.createTokenHeaders(request);
 		ParameterizedTypeReference<RestResponsePage<Avis>> responseType = new ParameterizedTypeReference<RestResponsePage<Avis>>() {
 		};
-		String uri = url + "/compagny-creneaux_requetes/avis?idComp=" + idComp + "&page=" + page + "&size=" + size;
+		String uri = url + "/service-creneaux_requetes/avis?idComp=" + idComp + "&page=" + page + "&size=" + size;
 
 		ResponseEntity<RestResponsePage<Avis>> result = rt.exchange(uri, HttpMethod.GET, new HttpEntity<>(headers),
 				responseType);

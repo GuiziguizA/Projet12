@@ -2,8 +2,6 @@ package sid.org.service;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -16,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
-import sid.org.ServiceFrontEndApplication;
 import sid.org.Page.RestResponsePage;
 import sid.org.classe.Creneau;
 import sid.org.config.RequestFactory;
@@ -27,7 +24,6 @@ import sid.org.dto.CreneauDto;
 public class CreneauServiceImpl implements CreneauService {
 	@Value("${api.url}")
 	private String url;
-	private static final Logger logger = LoggerFactory.getLogger(ServiceFrontEndApplication.class);
 
 	@Autowired
 	private HeadersService headersService;
@@ -42,7 +38,7 @@ public class CreneauServiceImpl implements CreneauService {
 	public void createCreneau(ChatDateDtoObject chatDateDtoObject, Long idUser, String userDemandeName,
 			HttpServletRequest request) throws HttpStatusCodeException {
 
-		String uri = url + "/compagny-creneaux_requetes/creneau?&idRequete="
+		String uri = url + "/service-creneaux_requetes/creneau?&idRequete="
 				+ chatDateDtoObject.getChat().getIdRequete();
 		RestTemplate rt = new RestTemplate();
 		HttpHeaders headers = headersService.createTokenHeaders(request);
@@ -68,7 +64,7 @@ public class CreneauServiceImpl implements CreneauService {
 		HttpHeaders headers = headersService.createTokenHeaders(request);
 		ParameterizedTypeReference<RestResponsePage<Creneau>> responseType = new ParameterizedTypeReference<RestResponsePage<Creneau>>() {
 		};
-		String uri = url + "/compagny-creneaux_requetes/creneaux?idUser=" + idUser + "&page=" + page + "&size=" + size;
+		String uri = url + "/service-creneaux_requetes/creneaux?idUser=" + idUser + "&page=" + page + "&size=" + size;
 
 		ResponseEntity<RestResponsePage<Creneau>> result = rt.exchange(uri, HttpMethod.GET, new HttpEntity<>(headers),
 				responseType);
@@ -84,7 +80,7 @@ public class CreneauServiceImpl implements CreneauService {
 		HttpHeaders headers = headersService.createTokenHeaders(request);
 		ParameterizedTypeReference<RestResponsePage<Creneau>> responseType = new ParameterizedTypeReference<RestResponsePage<Creneau>>() {
 		};
-		String uri = url + "/compagny-creneaux_requetes/creneaux1?idUser1=" + idUser1 + "&page=" + page + "&size="
+		String uri = url + "/service-creneaux_requetes/creneaux1?idUser1=" + idUser1 + "&page=" + page + "&size="
 				+ size;
 
 		ResponseEntity<RestResponsePage<Creneau>> result = rt.exchange(uri, HttpMethod.GET, new HttpEntity<>(headers),
@@ -99,7 +95,7 @@ public class CreneauServiceImpl implements CreneauService {
 		RestTemplate rt = requestFactory.getRestTemplate();
 		HttpHeaders headers = headersService.createTokenHeaders(request);
 
-		String uri = url + "/compagny-creneaux_requetes/creneau1?id=" + id;
+		String uri = url + "/service-creneaux_requetes/creneau1?id=" + id;
 
 		ResponseEntity<Creneau> result = rt.exchange(uri, HttpMethod.GET, new HttpEntity<>(headers), Creneau.class);
 		Creneau creneau = result.getBody();
@@ -109,7 +105,7 @@ public class CreneauServiceImpl implements CreneauService {
 	@Override
 	public void validerCreneau(Long idCreneau, Long idUser, HttpServletRequest request) throws HttpStatusCodeException {
 
-		String uri = url + "/compagny-creneaux_requetes/creneau?id=" + idCreneau + "&idUser=" + idUser;
+		String uri = url + "/service-creneaux_requetes/creneau?id=" + idCreneau + "&idUser=" + idUser;
 		RestTemplate rt = new RestTemplate();
 		HttpHeaders headers = headersService.createTokenHeaders(request);
 

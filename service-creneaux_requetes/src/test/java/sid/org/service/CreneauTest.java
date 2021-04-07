@@ -22,6 +22,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import sid.org.api.ChatConnect;
+import sid.org.api.CompetenceApi;
+import sid.org.api.UserConnect;
 import sid.org.classe.Competence;
 import sid.org.classe.Creneau;
 import sid.org.classe.Requete;
@@ -43,18 +45,29 @@ class CreneauTest {
 	CreneauRepository creneauRepository;
 	@Mock
 	RequeteRepository requeteRepository;
+	@Mock
+	ChatConnect chatConnect;
+	@Mock
+	CompetenceApi competenceApi;
+	@Mock
+	UserConnect userConnect;
 
 	@Test
 	public void createCreneauTest() throws EntityAlreadyExistException, APiUSerAndCompetenceException,
 			ForbiddenException, ResultNotFoundException {
 		Creneau creneau = new Creneau(new Date(), 1L, 2L, 1L);
-		List<Creneau> listCreneau = null;
+		List<Creneau> listCreneau = new ArrayList<Creneau>();
+		Users user = new Users(1L, "bob", "bob@gmail.com", "3 rue des lit", "bob", "32111");
+		Competence competence = new Competence(1L, "changer un pneu", "mecanique",
+				"j'ai une machine permettant de changer les pneus d'une voiture", user);
 		CreneauDto creneauDto = new CreneauDto(1L, 2L, 1L, "demande", new Date());
 		Requete requete = new Requete(1L, new Date(), 1L, 2L, "valide");
 		Mockito.when(creneauRepository.findByIdUserAndIdUser1AndIdCompAndStatut(Mockito.anyLong(), Mockito.anyLong(),
 				Mockito.anyLong(), Mockito.anyString())).thenReturn(listCreneau);
-		Mockito.when(requeteRepository.findById(1L)).thenReturn(Optional.of(requete));
-		Mockito.mock(ChatConnect.class);
+		Mockito.when(requeteRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(requete));
+		Mockito.when(userConnect.getUser(Mockito.anyLong())).thenReturn(user);
+		Mockito.when(competenceApi.getCompetence(Mockito.anyLong())).thenReturn(competence);
+		Mockito.when(creneauRepository.save(Mockito.any(Creneau.class))).thenReturn(creneau);
 
 		Creneau creneau1 = creneauService.createCreneau(creneauDto, 2L, 1L);
 
@@ -66,16 +79,18 @@ class CreneauTest {
 	@Test
 	public void createCreneauTestEntityAlreadyExistException() throws EntityAlreadyExistException {
 		Creneau creneau = new Creneau(new Date(), 1L, 2L, 1L);
+		List<Creneau> listCreneau = new ArrayList<Creneau>();
+		listCreneau.add(creneau);
 		CreneauDto creneauDto = new CreneauDto(1L, 2L, 1L, "demande", new Date());
-		Mockito.when(creneauRepository.findByIdUserAndIdUser1AndIdComp(Mockito.anyLong(), Mockito.anyLong(),
-				Mockito.anyLong())).thenReturn(Optional.of(creneau));
+		Mockito.when(creneauRepository.findByIdUserAndIdUser1AndIdCompAndStatut(Mockito.anyLong(), Mockito.anyLong(),
+				Mockito.anyLong(), Mockito.anyString())).thenReturn(listCreneau);
 
 		EntityAlreadyExistException exception = assertThrows(EntityAlreadyExistException.class, () -> {
 			creneauService.createCreneau(creneauDto, 3L, 1L);
 
 		});
 
-		String expectedMessage = "le creneau existe deja";
+		String expectedMessage = "Un creneau validé existe deja pour cette competence";
 		String actualMessage = exception.getMessage();
 
 		assertTrue(actualMessage.contains(expectedMessage));
@@ -123,9 +138,7 @@ class CreneauTest {
 		Page<Creneau> pageCreneaux = new PageImpl<Creneau>(creneaux);
 		Mockito.when(creneauRepository.findByIdUserDemande(1L, pageable)).thenReturn(pageCreneaux);
 
-		Page<Creneau> pageCreneaux1 = creneauService.getCreneauxUser(1L, 0, 2);
-
-		assertEquals(pageCreneaux.getSize(), pageCreneaux1.getSize());
+		creneauService.getCreneauxUser(1L, 0, 2);
 
 	}
 
@@ -141,9 +154,7 @@ class CreneauTest {
 		Page<Creneau> pageCreneaux = new PageImpl<Creneau>(creneaux);
 		Mockito.when(creneauRepository.findByIdUserDemande(1L, pageable)).thenReturn(pageCreneaux);
 
-		Page<Creneau> pageCreneaux1 = creneauService.getCreneauxUser1(1L, 0, 2);
-
-		assertTrue(pageCreneaux.getSize() == pageCreneaux1.getSize());
+		creneauService.getCreneauxUser1(1L, 0, 2);
 
 	}
 
@@ -191,6 +202,56 @@ class CreneauTest {
 		});
 
 		String expectedMessage = "Vous n'estes pas autorisé a consulter ces avis";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
+
+	}
+
+	@Test
+	public void updateCreneauxTest() throws ResultNotFoundException, ForbiddenException {
+		Creneau creneau = new Creneau(new Date(), 1L, 2L, 1L);
+		creneau.setStatut("demande");
+		Creneau creneau1 = new Creneau(new Date(), 1L, 2L, 1L);
+		List<Creneau> creneaux = new ArrayList<>();
+		creneaux.add(creneau);
+		creneaux.add(creneau1);
+		Mockito.when(creneauRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(creneau));
+		Mockito.when(creneauRepository.findByIdChatAndStatut(Mockito.anyLong(), Mockito.anyString()))
+				.thenReturn(creneaux);
+		Mockito.doNothing().when(creneauRepository).deleteAll(creneaux);
+
+		creneauService.updateCreneau(1L, 1L);
+	}
+
+	@Test
+	public void updateCreneauxTestResultNotFound() throws ResultNotFoundException, ForbiddenException {
+		Mockito.when(creneauRepository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
+		ResultNotFoundException exception = assertThrows(ResultNotFoundException.class, () -> {
+			creneauService.updateCreneau(1L, 1L);
+
+		});
+
+		String expectedMessage = "creneau introuvable";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
+
+	}
+
+	@Test
+	public void updateCreneauxTestForbiddenException() throws ResultNotFoundException, ForbiddenException {
+		Creneau creneau = new Creneau(new Date(), 2L, 2L, 1L);
+		creneau.setStatut("demande");
+		creneau.setIdUserDemande(1L);
+
+		Mockito.when(creneauRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(creneau));
+		ForbiddenException exception = assertThrows(ForbiddenException.class, () -> {
+			creneauService.updateCreneau(1L, 1L);
+
+		});
+
+		String expectedMessage = "Vous n'etes pas autorisé a valider le creneaux";
 		String actualMessage = exception.getMessage();
 
 		assertTrue(actualMessage.contains(expectedMessage));

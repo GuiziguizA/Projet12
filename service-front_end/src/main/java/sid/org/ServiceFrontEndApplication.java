@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 import sid.org.service.ChatService;
 import sid.org.service.CompetenceService;
@@ -14,6 +15,7 @@ import sid.org.service.HeadersService;
 import sid.org.service.KeycloakService;
 import sid.org.service.RequeteService;
 
+@EnableDiscoveryClient
 @SpringBootApplication
 public class ServiceFrontEndApplication implements CommandLineRunner {
 	private static final Logger logger = LoggerFactory.getLogger(ServiceFrontEndApplication.class);

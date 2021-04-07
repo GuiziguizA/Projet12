@@ -30,7 +30,7 @@ public class UserConnectImpl implements UserConnect {
 		TokenString tok = token.tokenString();
 
 		logger.info(tok.getValue());
-		String uri = url + "/compagny-user_competence/user/" + idUser;
+		String uri = url + "/service-user_competence/user/" + idUser;
 
 		RestTemplate rt = new RestTemplate();
 		HttpHeaders headers = headersService.createTokenHeaders(tok.getValue());

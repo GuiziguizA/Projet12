@@ -17,9 +17,9 @@ services:
      - SPRING_CLOUD_CONFIG_SERVER_GIT_URI=https://github.com/GuiziguizA/Projet12-config.git
      - SPRING_CLOUD_CONFIG_USERNAME=GuiziguizA
      - SPRING_CLOUD_CONFIG_PASSWORD=tarot1994  
-
+      
   # service-register
-  service-register :
+  service-register:
     build: 
       context: service-register
       dockerfile: Dockerfile 
@@ -30,10 +30,12 @@ services:
       - SERVER_PORT=8761
      
 
-     # service-creneaux_requetes
+  # service-creneaux_requetes
   service-creneaux_requetes :
     depends_on: 
       - database_creneaux_requetes
+      - service-register
+      - service-proxy
     restart: always
     build: 
       context: service-creneaux_requetes
@@ -42,17 +44,50 @@ services:
       - "8074:8074"
       
     environment:
-     - spring.cloud.config.uri=http://service-config:8888/
+      - SPRING_CLOUD_CONFIG_URI=http://service-config:8888/
+    #Eureka  
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-register:8761/eureka/
+      - SERVER_PORT=8074
     #Database
-     - SPRING_CLOUD_CONFIG_URI=jdbc:mysql://database_creneaux_requetes:3306/creneaux_requetes
-     - SPRING_DATASOURCE_USERNAME=guimiom
-     - SPRING_DATASOURCE_PASSWORD=guimiom
+    
+      - SPRING_DATASOURCE_URL=jdbc:mysql://database_creneaux_requetes:3306/creneaux_requetes
+      - SPRING_DATASOURCE_USERNAME=guimiom1
+      - SPRING_DATASOURCE_PASSWORD=guimiom1
+     #liquibase
+      - SPRING_LIQUIBASE_URL=jdbc:mysql://database_creneaux_requetes:3306/creneaux_requetes
+      - SPRING_LIQUIBASE_USER=guimiom1
+      - SPRING_LIQUIBASE_PASSWORD=guimiom1
+     #RabbitMQ
+      - SPRING_RABBITMQ_HOST=192.168.99.100 
+    #Host to connect other MicroServices
+      - API_URL = http://192.168.99.100:8089
+ 
+        
+  #Mysql Database creneaux_requetes    
+  database_creneaux_requetes:
+    container_name: database_creneaux_requetes
+    image: "mysql:5.7.33"
+    
+    
+    environment:
+       - MYSQL_DATABASE=creneaux_requetes
+       - MYSQL_USER=guimiom1
+       - MYSQL_PASSWORD=guimiom1
+       - MYSQL_ROOT_PASSWORD=guimiom1
+       - MYSQL_ROOT_USER=guimiom1 
+    entrypoint:
+      sh -c "
+      echo 'CREATE DATABASE IF NOT EXISTS creneaux_requetes;' > /docker-entrypoint-initdb.d/init.sql;
+      /usr/local/bin/docker-entrypoint.sh --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci"
+    volumes:
+       - ./mysql_data_creneaux_requetes:/var/lib/mysql
 
 
   # service-user_competence
   service-user_competence:
     depends_on: 
       - database_user_competence
+      - service-register
     links:
       - database_user_competence
     restart: always
@@ -63,21 +98,30 @@ services:
      - "8082:8082"
     environment:
      - SPRING_CLOUD_CONFIG_URI=http://service-config:8888/
-    
+     - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://192.168.99.100:8761/eureka/
      - SERVER_PORT=8082
     #Database
      - SPRING_DATASOURCE_URL=jdbc:mysql://database_user_competence:3306/user_competence
      - SPRING_DATASOURCE_USERNAME=guimiom
      - SPRING_DATASOURCE_PASSWORD=guimiom
+    #liquibase
+     - SPRING_LIQUIBASE_URL=jdbc:mysql://database_user_competence:3306/user_competence
+     - SPRING_LIQUIBASE_USER=guimiom
+     - SPRING_LIQUIBASE_PASSWORD=guimiom
+    #RabbitMQ
+     - SPRING_RABBITMQ_HOST=192.168.99.100 
+    
     networks:
       - backend 
+    links:
+      - service-register
     
       
 
   #Mysql Database user&competence
   database_user_competence:
         container_name: database_user_competence
-        image: "mysql:5.6.51"
+        image: "mysql:5.7.33"
         
        
         environment:
@@ -86,7 +130,7 @@ services:
            - MYSQL_PASSWORD=guimiom
            - MYSQL_ROOT_PASSWORD=guimiom
            - MYSQL_ROOT_USER=guimiom
-           - MYSQL_ROOT_HOST=%  # needs to be enclosed with quotes
+           - MYSQL_ROOT_HOST=%  
         entrypoint:
           sh -c "
           echo 'CREATE DATABASE IF NOT EXISTS user_competence;' > /docker-entrypoint-initdb.d/init.sql;
@@ -95,40 +139,21 @@ services:
            - ./mysql_data_userCommpetence:/var/lib/mysql
         networks:
           - backend 
-        
- 
-# Networks to be created to facilitate communication between containers
- 
-        
-  #Mysql Database creneaux_requetes    
-  database_creneaux_requetes:
-        container_name: database_creneaux_requetes
-        image: "mysql:5.6.51"
-        
-        
-        environment:
-           - MYSQL_DATABASE=creneaux_requetes
-           - MYSQL_USER=guimiom
-           - MYSQL_PASSWORD=guimiom
-           - MYSQL_ROOT_PASSWORD=guimiom
-        entrypoint:
-          sh -c "
-          echo 'CREATE DATABASE IF NOT EXISTS creneaux_requetes;' > /docker-entrypoint-initdb.d/init.sql;
-          /usr/local/bin/docker-entrypoint.sh --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci"
-        volumes:
-           - ./mysql_data_creneaux_requetes:/var/lib/mysql
    
-
+  #Mysql Database chat_batch  
   database_chat_batch:
         container_name: database_chat_batch
-        image: "mysql:5.6.51"
+        image: "mysql:5.7.33"
         
         
         environment:
            - MYSQL_DATABASE=chat_batch
-           - MYSQL_USER=guimiom
-           - MYSQL_PASSWORD=guimiom
-           - MYSQL_ROOT_PASSWORD=guimiom
+           - MYSQL_USER=guimiom2
+           - MYSQL_PASSWORD=guimiom2
+           - MYSQL_ROOT_PASSWORD=guimiom2
+           - MYSQL_ROOT_USER=guimiom2
+           - MYSQL_ROOT_HOST=% 
+           
         entrypoint:
           sh -c "
           echo 'CREATE DATABASE IF NOT EXISTS chat_batch;' > /docker-entrypoint-initdb.d/init.sql;
@@ -144,6 +169,16 @@ services:
       dockerfile: Dockerfile
     ports: 
      - "8089:8089"
+    environment:
+      - SPRING_CLOUD_CONFIG_URI=http://service-config:8888/
+      #Eureka  
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-register:8761/eureka/
+       #Port
+      - SERVER_PORT=8089
+     
+     
+
+     
  
 # service-Front-end
   service-front_end:
@@ -155,7 +190,9 @@ services:
      - "8099:8099"
     environment:
      - SPRING_CLOUD_CONFIG_URI=http://service-config:8888/
-    
+     #Eureka  
+     - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-register:8761/eureka/
+    #Port
      - SERVER_PORT=8099
     
     
@@ -163,6 +200,8 @@ services:
   service-chats_batch:
     depends_on: 
       - database_chat_batch
+      - service-register
+      - service-proxy
     restart: always
     build: 
       context: service-chats_batch
@@ -171,12 +210,22 @@ services:
      - "8234:8234"
     environment:
       - SPRING_CLOUD_CONFIG_URI=http://service-config:8888/
-      - SPRING_APPLICATION_NAME=compagny-chat_batch
+
+     #Eureka  
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-register:8761/eureka/
       - SERVER_PORT=8234
     #Database
-      - SPRING_DATASOURCE_URL=jdbc:mysql://database_chat_batch:3306/chat&batch
-      - SPRING_DATASOURCE_USERNAME=guimiom
-      - SPRING_DATASOURCE_PASSWORD=guimiom
+      - SPRING_DATASOURCE_URL=jdbc:mysql://database_chat_batch:3306/chat_batch
+      - SPRING_DATASOURCE_USERNAME=guimiom2
+      - SPRING_DATASOURCE_PASSWORD=guimiom2
+    #liquibase
+      - SPRING_LIQUIBASE_URL=jdbc:mysql://database_chat_batch:3306/chat_batch
+      - SPRING_LIQUIBASE_USER=guimiom2
+      - SPRING_LIQUIBASE_PASSWORD=guimiom2
+    #RabbitMQ
+      - SPRING_RABBITMQ_HOST=192.168.99.100 
+    #Host to connect other MicroServices
+      - API_URL=http://192.168.99.100:8089
 
 # keycloak
   keycloak:

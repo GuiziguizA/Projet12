@@ -1,6 +1,7 @@
 package sid.org.classe;
 
 public class TokenString {
+
 	private final String value;
 
 	public TokenString(String value) {

@@ -3,7 +3,6 @@ package sid.org.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -67,14 +66,6 @@ public class RequeteController {
 		Page<Requete> requetes = requeteService.getRequetesComp(idUser, page, size);
 
 		return requetes;
-	}
-
-	@DeleteMapping("/requete")
-	public void deleteRequetes(@RequestParam Long id, @RequestParam Long idUser)
-			throws ResultNotFoundException, APiUSerAndCompetenceException, ForbiddenException {
-
-		requeteService.deleteRequete(id, idUser);
-
 	}
 
 	@PostMapping("/validateRequete")

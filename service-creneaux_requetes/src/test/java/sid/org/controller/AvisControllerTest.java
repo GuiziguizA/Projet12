@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
-public class requeteControllerTest {
+public class AvisControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
 
@@ -27,27 +27,9 @@ public class requeteControllerTest {
 			MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
 
 	@Test
-	void getRequeteTest() throws Exception {
+	void getAvisTest() throws Exception {
 
-		String url = BASE_URL + "requete?id=1&idUser=1";
-
-		mockMvc.perform(get(url).contentType(APPLICATION_JSON_UTF8)).andExpect(status().isOk());
-
-	}
-
-	@Test
-	void getRequetesTest() throws Exception {
-
-		String url = BASE_URL + "requetes?idUserComp=1&page=0&size=2";
-
-		mockMvc.perform(get(url).contentType(APPLICATION_JSON_UTF8)).andExpect(status().isOk());
-
-	}
-
-	@Test
-	void getRequetesUTest() throws Exception {
-
-		String url = BASE_URL + "requetesU?idUser=1&page=0&size=2";
+		String url = BASE_URL + "/avis?idComp=1&page=0&size=2";
 
 		mockMvc.perform(get(url).contentType(APPLICATION_JSON_UTF8)).andExpect(status().isOk());
 

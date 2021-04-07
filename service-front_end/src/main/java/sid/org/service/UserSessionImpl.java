@@ -31,7 +31,7 @@ public class UserSessionImpl implements UserSession {
 		if ((Users) session.getAttribute("user") == null) {
 
 			RestTemplate rt = new RestTemplate();
-			final String uri = apiUrl + "/compagny-user_competence/user/identity?name=" + username;
+			final String uri = apiUrl + "/service-user_competence/user/identity?name=" + username;
 
 			HttpHeaders headers = headersService.createTokenHeaders1(username, password);
 

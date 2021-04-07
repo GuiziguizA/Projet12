@@ -1,27 +1,37 @@
 @echo off
 
-pushd C:\Programmation\Environnement\Projet12
+pushd C:\Program Files\Docker Toolbox
+start.sh
 
 
 
-start docker-compose up service-config 
-timeout 300
-start docker-compose up service-register
-start docker-compose up rabbitmq
+
+
 
 timeout 30
-start docker-compose up database_user_competence
 
-start docker-compose up database_creneaux_requetes
+pushd C:\Programmation\Environnement\Projet12
+
+start docker-compose up -d service-config 
+timeout 300
+start docker-compose up -d service-register
+start docker-compose up -d rabbitmq
+
+
+timeout 30
+
+start docker-compose up -d database_user_competence
+
+start docker-compose up -d database_creneaux_requetes
  
-start docker-compose up database_chat_batch
+start docker-compose up -d database_chat_batch
 timeout 60
-start docker-compose up service-proxy
+start docker-compose up -d service-proxy
  
-start docker-compose up service-user_competence
+start docker-compose up -d service-user_competence
 
-start docker-compose up service-chats_batch
+start docker-compose up -d service-chats_batch
 
-start docker-compose up service-creneaux_requetes
+start docker-compose up -d service-creneaux_requetes
 
-start docker-compose up service-front_end 
+start docker-compose up -d service-front_end 

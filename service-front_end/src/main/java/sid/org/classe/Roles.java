@@ -1,14 +1,10 @@
 package sid.org.classe;
 
-import java.util.Collection;
-
 public class Roles {
 
 	private Long codeRole;
 
 	private String nom;
-
-	private Collection<Users> users;
 
 	public Roles() {
 		super();

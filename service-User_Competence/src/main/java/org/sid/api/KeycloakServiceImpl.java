@@ -10,6 +10,7 @@ import org.sid.config.RequestFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -30,12 +31,15 @@ public class KeycloakServiceImpl implements KeycloakService {
 	@Autowired
 	RequestFactory requestFactory;
 
+	@Value("${keycloak.auth-server-url}")
+	private String hostUrl;
+
 	@Override
 	public String RecupTokenAdmin(String username, String password, String clientId) {
 
 		MultiValueMap<String, String> token = null;
 		RestTemplate restTemplate = new RestTemplate();
-		String url = "http://localhost:8080/auth/realms/master/protocol/openid-connect/token";
+		String url = hostUrl + "realms/master/protocol/openid-connect/token";
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 		ParameterizedTypeReference<MultiValueMap<String, String>> responseType = new ParameterizedTypeReference<MultiValueMap<String, String>>() {
@@ -62,7 +66,7 @@ public class KeycloakServiceImpl implements KeycloakService {
 	@Override
 	public void createUserKeycloak(String name, String mail, String password) {
 		RestTemplate restTemplate = requestFactory.getRestTemplate();
-		String url = "http://localhost:8080/auth/admin/realms/SocialAppRealm/users";
+		String url = hostUrl + "admin/realms/SocialAppRealm/users";
 		String accessToken = RecupTokenAdmin("admin", "admin", "admin-cli");
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
@@ -84,7 +88,7 @@ public class KeycloakServiceImpl implements KeycloakService {
 	@Override
 	public String UserGetId(String mail) {
 		RestTemplate restTemplate = requestFactory.getRestTemplate();
-		String url = "http://localhost:8080/auth/admin/realms/SocialAppRealm/users";
+		String url = hostUrl + "admin/realms/SocialAppRealm/users";
 		String accessToken = RecupTokenAdmin("admin", "admin", "admin-cli");
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);

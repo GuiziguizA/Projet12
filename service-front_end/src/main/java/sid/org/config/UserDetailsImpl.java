@@ -49,7 +49,7 @@ public class UserDetailsImpl implements UserDetailsService {
 
 		String[] split = mailAndPassword.split(":");
 		String username = split[0];
-		final String uri = apiUrl + "/compagny-user_competence/user/identity?name=" + username;
+		final String uri = apiUrl + "/service-user_competence/user/identity?name=" + username;
 		logger.info(username);
 		String motDePasse = split[1];
 		logger.info(motDePasse);

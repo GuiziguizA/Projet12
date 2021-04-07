@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
@@ -28,7 +27,7 @@ public class ChatConnectImpl implements ChatConnect {
 
 	@Override
 	public int getChat(Long idUser, Long idUser1, Long idRequete) throws HttpStatusCodeException {
-		String uri = url + "/compagny-chat_batch/chat?idUser1=" + idUser1 + "&idUser=" + idUser + "&idRequete="
+		String uri = url + "/service-chat_batch/chat?idUser1=" + idUser1 + "&idUser=" + idUser + "&idRequete="
 				+ idRequete;
 		RecupToken token = new RecupToken();
 		TokenString tok = token.tokenString();
@@ -36,7 +35,7 @@ public class ChatConnectImpl implements ChatConnect {
 		RestTemplate rt = new RestTemplate();
 
 		try {
-			ResponseEntity<Chat> chat = rt.exchange(uri, HttpMethod.GET, new HttpEntity<>(headers), Chat.class);
+			rt.exchange(uri, HttpMethod.GET, new HttpEntity<>(headers), Chat.class);
 
 			return 1;
 		} catch (HttpStatusCodeException e) {
@@ -54,13 +53,12 @@ public class ChatConnectImpl implements ChatConnect {
 
 		logger.info("idUser" + chatDto.getIdUser(), "idRequete" + idRequete);
 
-		String uri = url + "/compagny-chat_batch/chat?idRequete=" + idRequete + "&codeMicroservice=1&idUser="
+		String uri = url + "/service-chat_batch/chat?idRequete=" + idRequete + "&codeMicroservice=1&idUser="
 				+ chatDto.getIdUser();
 		HttpHeaders headers = headersService.createTokenHeaders(tok.getValue());
 		RestTemplate rt = new RestTemplate();
 		try {
-			ResponseEntity<Chat> chat = rt.exchange(uri, HttpMethod.POST, new HttpEntity<>(chatDto, headers),
-					Chat.class);
+			rt.exchange(uri, HttpMethod.POST, new HttpEntity<>(chatDto, headers), Chat.class);
 		} catch (HttpStatusCodeException e) {
 
 			e.getMessage();

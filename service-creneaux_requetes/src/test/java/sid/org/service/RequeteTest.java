@@ -4,7 +4,9 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -13,9 +15,17 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import sid.org.api.CompetenceApi;
+import sid.org.api.UserConnect;
+import sid.org.classe.Competence;
 import sid.org.classe.Requete;
+import sid.org.classe.Users;
 import sid.org.dao.RequeteRepository;
 import sid.org.dto.RequeteDto;
 import sid.org.exception.APiUSerAndCompetenceException;
@@ -31,15 +41,25 @@ public class RequeteTest {
 	RequeteServiceImpl requeteService;
 	@Mock
 	RequeteRepository requeteRepository;
+	@Mock
+	UserConnect userConnect;
+	@Mock
+	CompetenceApi competenceApi;
 
 	@Test
 	public void createRequeteTest()
 			throws EntityAlreadyExistException, APiUSerAndCompetenceException, ForbiddenException {
 		Requete requete = new Requete(1L, new Date(), 1L, 2L, "demande");
 		RequeteDto requeteDto = new RequeteDto(1L, 2L, "demande");
+		Users user = new Users(2L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125");
+		Competence competence = new Competence(1L, "changer un pneu", "mecanique",
+				"j'ai une machine permettant de changer les pneus d'une voiture", user);
 
-		Mockito.when(requeteRepository.findByIdUserAndIdCompAndStatut(Mockito.anyLong(), Mockito.anyLong(), "demande"))
-				.thenReturn(Optional.empty());
+		Mockito.when(userConnect.getUser(Mockito.anyLong())).thenReturn(user);
+		Mockito.when(requeteRepository.findByIdUserAndIdCompAndStatut(Mockito.anyLong(), Mockito.anyLong(),
+				Mockito.anyString())).thenReturn(Optional.empty());
+		Mockito.when(competenceApi.getCompetence(Mockito.anyLong())).thenReturn(competence);
+		Mockito.when(requeteRepository.saveAndFlush(Mockito.any(Requete.class))).thenReturn(requete);
 
 		Requete requete1 = requeteService.createRequete(requeteDto);
 
@@ -52,9 +72,11 @@ public class RequeteTest {
 	public void createRequeteTestEntityAlreadyExistException() throws EntityAlreadyExistException {
 		Requete requete = new Requete(1L, new Date(), 1L, 2L, "demande");
 		RequeteDto requeteDto = new RequeteDto(1L, 1L, "demande");
+		Users user = new Users(2L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125");
 
-		Mockito.when(requeteRepository.findByIdUserAndIdCompAndStatut(Mockito.anyLong(), Mockito.anyLong(), "demande"))
-				.thenReturn(Optional.of(requete));
+		Mockito.when(userConnect.getUser(Mockito.anyLong())).thenReturn(user);
+		Mockito.when(requeteRepository.findByIdUserAndIdCompAndStatut(Mockito.anyLong(), Mockito.anyLong(),
+				Mockito.anyString())).thenReturn(Optional.of(requete));
 
 		EntityAlreadyExistException exception = assertThrows(EntityAlreadyExistException.class, () -> {
 			requeteService.createRequete(requeteDto);
@@ -72,9 +94,12 @@ public class RequeteTest {
 	public void getRequeteTest() throws ResultNotFoundException, ForbiddenException, APiUSerAndCompetenceException {
 
 		Requete requete = new Requete(1L, new Date(), 1L, 2L, "demande");
+		Users user = new Users(2L, "bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125");
+		Competence competence = new Competence(1L, "changer un pneu", "mecanique",
+				"j'ai une machine permettant de changer les pneus d'une voiture", user);
 
 		Mockito.when(requeteRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(requete));
-
+		Mockito.when(competenceApi.getCompetence(Mockito.anyLong())).thenReturn(competence);
 		Requete requete1 = requeteService.getRequete(1L, 2L);
 
 		assertEquals(requete, requete1);
@@ -98,50 +123,40 @@ public class RequeteTest {
 
 	}
 
-	/*
-	 * @Test public void getRequetesTest() throws APiUSerAndCompetenceException {
-	 * 
-	 * Requete requete = new Requete(1L, new Date(), 1L, 2L, "demande"); Requete
-	 * requete1 = new Requete(1L, new Date(), 1L, 2L, "demande");
-	 * 
-	 * List<Requete> listRequetes = new ArrayList<Requete>();
-	 * listRequetes.add(requete); listRequetes.add(requete1); Pageable pageable =
-	 * PageRequest.of(0, 2); Page<Requete> pageRequetes = new
-	 * PageImpl<Requete>(listRequetes);
-	 * 
-	 * Mockito.when(requeteRepository.findByIdUser(1L,
-	 * pageable)).thenReturn(pageRequetes);
-	 * 
-	 * requeteService.getRequetes(1L);
-	 * 
-	 * }
-	 */
-
 	@Test
-	public void deleteRequetesTest() throws ResultNotFoundException, APiUSerAndCompetenceException, ForbiddenException {
+	public void getRequetesTest() throws APiUSerAndCompetenceException, ResultNotFoundException, ForbiddenException {
+
 		Requete requete = new Requete(1L, new Date(), 1L, 2L, "demande");
+		Requete requete1 = new Requete(1L, new Date(), 1L, 2L, "demande");
 
-		Mockito.when(requeteRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(requete));
-		Mockito.doNothing().when(requeteRepository).delete(requete);
+		List<Requete> listRequetes = new ArrayList<Requete>();
+		listRequetes.add(requete);
+		listRequetes.add(requete1);
+		Pageable pageable = PageRequest.of(0, 2);
+		Page<Requete> pageRequetes = new PageImpl<Requete>(listRequetes);
 
-		requeteService.deleteRequete(1L, 2L);
+		Mockito.when(requeteRepository.findByIdUser(1L, pageable)).thenReturn(pageRequetes);
+
+		requeteService.getRequetes(1L, 0, 2);
 
 	}
 
 	@Test
-	public void deleteRequetesTestResultNotFoundException() throws ResultNotFoundException {
+	public void getRequetesCompTest()
+			throws APiUSerAndCompetenceException, ResultNotFoundException, ForbiddenException {
 
-		Mockito.when(requeteRepository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
+		Requete requete = new Requete(1L, new Date(), 1L, 2L, "demande");
+		Requete requete1 = new Requete(1L, new Date(), 1L, 2L, "demande");
 
-		ResultNotFoundException exception = assertThrows(ResultNotFoundException.class, () -> {
-			requeteService.deleteRequete(1L, 3L);
+		List<Requete> listRequetes = new ArrayList<Requete>();
+		listRequetes.add(requete);
+		listRequetes.add(requete1);
+		Pageable pageable = PageRequest.of(0, 2);
+		Page<Requete> pageRequetes = new PageImpl<Requete>(listRequetes);
 
-		});
+		Mockito.when(requeteRepository.findByIdUser(1L, pageable)).thenReturn(pageRequetes);
 
-		String expectedMessage = "le requete est introuvable";
-		String actualMessage = exception.getMessage();
-
-		assertTrue(actualMessage.contains(expectedMessage));
+		requeteService.getRequetesComp(1L, 0, 2);
 
 	}
 

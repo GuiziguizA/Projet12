@@ -8,6 +8,8 @@ import java.util.stream.IntStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -39,6 +41,8 @@ public class RequeteController {
 	UserSession userSession;
 	@Autowired
 	HttpService httpService;
+
+	private static final Logger logger = LoggerFactory.getLogger(RequeteController.class);
 
 	@PostMapping("/requete")
 	public String addRequete(Model model, @RequestParam Long idComp, HttpServletRequest request,
@@ -103,7 +107,8 @@ public class RequeteController {
 	public String getRequetes(Model model, @RequestParam(required = false) Optional<Integer> size,
 			@RequestParam(required = false) Optional<Integer> page,
 			@RequestParam(required = false) Optional<Integer> size1,
-			@RequestParam(required = false) Optional<Integer> page1, HttpServletRequest request) {
+			@RequestParam(required = false) Optional<Integer> page1, HttpServletRequest request,
+			RedirectAttributes redirectAttrs) {
 
 		int currentPage = page.orElse(0);
 		int pageSize = size.orElse(2);
@@ -136,11 +141,13 @@ public class RequeteController {
 
 		} catch (HttpStatusCodeException e) {
 			String error = httpService.traiterLesExceptionsApi(e);
+			logger.info(e.getLocalizedMessage());
 			if (error == "error") {
 				return "redirect:/logout";
 			} else {
-				model.addAttribute("error", error);
-				return "error";
+				redirectAttrs.addFlashAttribute("error", e);
+				return "redirect:/error";
+
 			}
 
 		}

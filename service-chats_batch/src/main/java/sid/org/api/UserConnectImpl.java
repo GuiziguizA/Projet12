@@ -25,7 +25,7 @@ public class UserConnectImpl implements UserConnect {
 	@Override
 	public Users getUser(Long idUser) throws APiUSerAndCompetenceException {
 
-		String uri = url + "/compagny-user_competence/user/" + idUser;
+		String uri = url + "/service-user_competence/user/" + idUser;
 		RecupToken token = new RecupToken();
 		TokenString tok = token.tokenString();
 		HttpHeaders headers = headersService.createTokenHeaders(tok.getValue());

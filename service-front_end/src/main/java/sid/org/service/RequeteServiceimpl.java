@@ -41,7 +41,7 @@ public class RequeteServiceimpl implements RequeteService {
 	@Override
 	public void createRequete(Long idComp, Long idUser, HttpServletRequest request) throws HttpStatusCodeException {
 
-		String uri = url + "/compagny-creneaux_requetes/requete/";
+		String uri = url + "/service-creneaux_requetes/requete/";
 
 		HttpHeaders headers = headersService.createTokenHeaders(request);
 
@@ -61,11 +61,11 @@ public class RequeteServiceimpl implements RequeteService {
 	@Override
 	public void validerRequete(Long idRequete, Long idUser, HttpServletRequest request) throws HttpStatusCodeException {
 		logger.info(idRequete.toString() + idUser.toString());
-		String uri = url + "/compagny-creneaux_requetes/validateRequete?idRequete=" + idRequete + "&idUser1=" + idUser;
+		String uri = url + "/service-creneaux_requetes/validateRequete?idRequete=" + idRequete + "&idUser1=" + idUser;
 		RestTemplate rt = new RestTemplate();
 		HttpHeaders headers = headersService.createTokenHeaders(request);
 
-		ResponseEntity<Long> requete = rt.exchange(uri, HttpMethod.POST, new HttpEntity<>(headers), Long.class);
+		rt.exchange(uri, HttpMethod.POST, new HttpEntity<>(headers), Long.class);
 
 	}
 
@@ -77,7 +77,7 @@ public class RequeteServiceimpl implements RequeteService {
 		HttpHeaders headers = headersService.createTokenHeaders(request);
 		ParameterizedTypeReference<RestResponsePage<Requete>> responseType = new ParameterizedTypeReference<RestResponsePage<Requete>>() {
 		};
-		String uri = url + "/compagny-creneaux_requetes/requetes?idUserComp=" + idUserComp + "&page=" + page + "&size="
+		String uri = url + "/service-creneaux_requetes/requetes?idUserComp=" + idUserComp + "&page=" + page + "&size="
 				+ size;
 
 		ResponseEntity<RestResponsePage<Requete>> result = rt.exchange(uri, HttpMethod.GET, new HttpEntity<>(headers),
@@ -94,7 +94,7 @@ public class RequeteServiceimpl implements RequeteService {
 		HttpHeaders headers = headersService.createTokenHeaders(request);
 		ParameterizedTypeReference<RestResponsePage<Requete>> responseType = new ParameterizedTypeReference<RestResponsePage<Requete>>() {
 		};
-		String uri = url + "/compagny-creneaux_requetes/requetesU?idUser=" + idUser + "&page=" + page + "&size=" + size;
+		String uri = url + "/service-creneaux_requetes/requetesU?idUser=" + idUser + "&page=" + page + "&size=" + size;
 
 		ResponseEntity<RestResponsePage<Requete>> result = rt.exchange(uri, HttpMethod.GET, new HttpEntity<>(headers),
 				responseType);

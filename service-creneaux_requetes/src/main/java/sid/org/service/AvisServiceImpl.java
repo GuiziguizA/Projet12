@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -41,6 +42,9 @@ public class AvisServiceImpl implements AvisService {
 	@Autowired
 	public RabbitTemplate template;
 	private static final Logger logger = LoggerFactory.getLogger(AvisServiceImpl.class);
+
+	@Value("${statut.4}")
+	private String statut4;
 
 	@Override
 	public Avis createAvis(AvisDto avisDto, Long idUser)
@@ -94,8 +98,6 @@ public class AvisServiceImpl implements AvisService {
 
 	}
 
-	
-
 	public void modifNoteCompetence(Long idComp) {
 		List<Avis> listAvis = avisRepository.findByIdComp(idComp);
 
@@ -123,11 +125,11 @@ public class AvisServiceImpl implements AvisService {
 			throw new ResultNotFoundException("le creneau est inexistant");
 		}
 		Optional<Requete> requete = requeteRepository.findById(creneau.get().getIdRequete());
-		creneau.get().setStatut("cloturé");
+		creneau.get().setStatut(statut4);
 		if (!requete.isPresent()) {
 			throw new ResultNotFoundException("la requete est inexistante");
 		}
-		requete.get().setStatut("cloturé");
+		requete.get().setStatut(statut4);
 
 		creneauRepository.saveAndFlush(creneau.get());
 		requeteRepository.saveAndFlush(requete.get());

@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void createUser(UserDto userDto, HttpServletRequest request) throws HttpStatusCodeException {
-		String uri = url + "/compagny-user_competence/user";
+		String uri = url + "/service-user_competence/user";
 
 		RestTemplate rt = new RestTemplate();
 
@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<Users> getUsers(HttpServletRequest request) throws HttpStatusCodeException {
-		String uri = url + "/compagny-user_competence/users";
+		String uri = url + "/service-user_competence/users";
 
 		RestTemplate rt = new RestTemplate();
 		HttpHeaders headers = headersService.createTokenHeaders(request);
@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Users getUser(HttpServletRequest request) throws HttpStatusCodeException {
-		String uri = url + "/compagny-user_competence/user";
+		String uri = url + "/service-user_competence/user";
 
 		RestTemplate rt = new RestTemplate();
 		HttpHeaders headers = headersService.createTokenHeaders(request);
