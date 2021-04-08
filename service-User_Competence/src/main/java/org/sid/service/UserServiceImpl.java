@@ -11,11 +11,13 @@ import org.sid.dao.RolesRepository;
 import org.sid.dao.UsersRepository;
 import org.sid.dto.UserDto;
 import org.sid.exception.EntityAlreadyExistException;
+import org.sid.exception.ForbiddenException;
 import org.sid.exception.ResultNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.HttpStatusCodeException;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -31,7 +33,8 @@ public class UserServiceImpl implements UserService {
 	KeycloakService keycloakService;
 
 	@Override
-	public Users createUser(UserDto userDto) throws ResultNotFoundException, EntityAlreadyExistException {
+	public Users createUser(UserDto userDto)
+			throws ResultNotFoundException, EntityAlreadyExistException, ForbiddenException {
 		Optional<Role> role = rolesRepository.findByNom("user");
 		if (!role.isPresent()) {
 			throw new ResultNotFoundException("role doesn't exist");
@@ -42,6 +45,10 @@ public class UserServiceImpl implements UserService {
 			throw new EntityAlreadyExistException("mail use by an other user");
 		}
 
+		if (userDto.getCodePostal().length() != 5) {
+			throw new ForbiddenException("code postal invalide");
+		}
+
 		Users user = new Users();
 
 		user.setAdresse(userDto.getAdresse());
@@ -50,10 +57,12 @@ public class UserServiceImpl implements UserService {
 		user.setPassword(passwordcryptage(userDto.getMotDePasse()));
 		user.setUsername(userDto.getNom());
 		user.setRoles(role.get());
-		keycloakService.createUserKeycloak(userDto.getNom(), userDto.getMail(), userDto.getMotDePasse());
-
-		userRepository.saveAndFlush(user);
-
+		try {
+			userRepository.saveAndFlush(user);
+			keycloakService.createUserKeycloak(userDto.getNom(), userDto.getMail(), userDto.getMotDePasse());
+		} catch (HttpStatusCodeException e) {
+			throw new ForbiddenException("l'utilisateur ne peut pas être créé désolé");
+		}
 		return user;
 	}
 
@@ -64,13 +73,7 @@ public class UserServiceImpl implements UserService {
 		if (!user.isPresent()) {
 			throw new ResultNotFoundException("user doesn't exist");
 		}
-		/*
-		 * if (!user.get().getCompetences().isEmpty()) {
-		 * 
-		 * competenceRepository.deleteUSer(user.get());
-		 * 
-		 * }
-		 */
+
 		userRepository.delete(user.get());
 
 	}

@@ -6,11 +6,13 @@ import java.util.Optional;
 import org.sid.classe.Users;
 import org.sid.dto.UserDto;
 import org.sid.exception.EntityAlreadyExistException;
+import org.sid.exception.ForbiddenException;
 import org.sid.exception.ResultNotFoundException;
 
 public interface UserService {
 
-	public Users createUser(UserDto userDto) throws ResultNotFoundException, EntityAlreadyExistException;
+	public Users createUser(UserDto userDto)
+			throws ResultNotFoundException, EntityAlreadyExistException, ForbiddenException;
 
 	public void deleteUser(Long id) throws ResultNotFoundException;
 

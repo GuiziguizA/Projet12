@@ -23,6 +23,7 @@ import org.sid.dao.RolesRepository;
 import org.sid.dao.UsersRepository;
 import org.sid.dto.UserDto;
 import org.sid.exception.EntityAlreadyExistException;
+import org.sid.exception.ForbiddenException;
 import org.sid.exception.ResultNotFoundException;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -47,7 +48,7 @@ class UserServiceTest {
 	}
 
 	@Test
-	public void createUserTest() throws ResultNotFoundException, EntityAlreadyExistException {
+	public void createUserTest() throws ResultNotFoundException, EntityAlreadyExistException, ForbiddenException {
 		Role role = new Role("user");
 		Users user = new Users("bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125", null, role);
 		UserDto userDto = new UserDto("bob", "bob@gmail.com", "3 rue du cerisier", "bob", "45125");

@@ -30,23 +30,23 @@
         <br>
         <input type="text" th:field="*{nom}" id="nom" class="form-control" placeholder="nom">
         <div th:if="${#fields.hasErrors('nom')}" class="alert alert-danger" role="alert"><span
-            class="alert alert-primary" th:errors="*{nom}"></span></div>
+            th:errors="*{nom}"></span></div>
         <br>
         <input type="text" th:field="*{mail}" id="mail" class="form-control" placeholder="adresse e-mail">
         <div th:if="${#fields.hasErrors('mail')}" class="alert alert-danger" role="alert"><span
-            class="alert alert-primary" th:errors="*{mail}"></span></div>
+             th:errors="*{mail}"></span></div>
         <br>
         <input type="password" th:field="*{motDePasse}" id="motDePasse" class="form-control" placeholder="mot de passe">
         <div th:if="${#fields.hasErrors('motDePasse')}" class="alert alert-danger" role="alert"> <span
-            class="alert alert-primary" th:errors="*{motDePasse}"></span></div>
+            th:errors="*{motDePasse}"></span></div>
         <br>
         <input type="text" th:field="*{adresse}" id="adresse" class="form-control" placeholder="adresse">
         <div th:if="${#fields.hasErrors('adresse')}" class="alert alert-danger" role="alert"><span
-            class="alert alert-primary" th:errors="*{adresse}"></span></div>
+           th:errors="*{adresse}"></span></div>
         <br>
         <input type="text" th:field="*{codePostal}" id="description" class="form-control" placeholder="codePostal">
         <div th:if="${#fields.hasErrors('codePostal')}" class="alert alert-danger" role="alert"> <span
-            class="alert alert-primary" th:errors="*{codePostal}"></span></div>
+            th:errors="*{codePostal}"></span></div>
         <br>
 
 

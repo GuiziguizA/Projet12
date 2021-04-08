@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.sid.classe.Users;
 import org.sid.dto.UserDto;
 import org.sid.exception.EntityAlreadyExistException;
+import org.sid.exception.ForbiddenException;
 import org.sid.exception.ResultNotFoundException;
 import org.sid.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class UserController {
 
 	@PostMapping("/user")
 	public void createUserController(@RequestBody UserDto userDto)
-			throws ResultNotFoundException, EntityAlreadyExistException {
+			throws ResultNotFoundException, EntityAlreadyExistException, ForbiddenException {
 		userService.createUser(userDto);
 	}
 
