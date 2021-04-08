@@ -110,11 +110,11 @@
 						<!-- <td>	
 								<input type="submit" class="btn btn-danger delBtn"  id="delBtn" value="Demande de creneau">
 					</td> -->
-						<td ><a th:if="${chat.statut != 'cloturé'}"
+						<td ><a th:if="${chat.statut != 'cloture'}"
 								th:href="@{/creneau(idUser=${chat.idUser},idUser1=${chat.idUser1},idRequete=${chat.idRequete})}"><input
 									type="button" id="${chat.id}" class="btn btn-primary"
 									value="Demande de creneau" /></a></td>
-						<td ><a th:if="${chat.statut != 'cloturé'}" th:href="@{/messages(idChat=${chat.id},page=0,size=20)}"><input type="button"
+						<td ><a th:if="${chat.statut != 'cloture'}" th:href="@{/messages(idChat=${chat.id},page=0,size=20)}"><input type="button"
 									id="${chat.id}" class="btn btn-primary" value="Messages" /></a></td>
 					</tr>
 				</table>

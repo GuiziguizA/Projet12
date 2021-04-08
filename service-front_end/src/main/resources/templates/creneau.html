@@ -25,11 +25,11 @@
 		<div class="container pt-3">
 			<div class="form-group">
 				<div class="jumbotron text-center">
-
+			<h2>Demande de creneau</h2>
 				</div>
 
 				<br>
-				<h2>Creneau</h2>
+				
 				<div>
 					<div class="modal-footer">
 						<form th:action="@{/creneau(idUser=${idUser},idUser1=${idUser1},idRequete=${idRequete})}"
@@ -52,7 +52,7 @@
 
 
 
-
+ <a th:href="@{/creneaux?page=0&size=2&page1=0&size1=2}" class="navbar-brand">Retour aux creneaux</a>
 
 						</form>
 

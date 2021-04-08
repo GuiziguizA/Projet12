@@ -114,7 +114,7 @@ public class CreneauServiceImpl implements CreneauService {
 		}
 
 		if (creneau.get().getIdUserDemande() == idUser) {
-			throw new ForbiddenException("Vous n'etes pas autorisé a valider le creneaux");
+			throw new ForbiddenException("Vous n'etes pas autorisé a valider le creneau");
 		}
 		if (creneau.get().getStatut().equals(statut1)) {
 			creneau.get().setStatut(statut2);
@@ -122,6 +122,8 @@ public class CreneauServiceImpl implements CreneauService {
 			if (!listCreneau.isEmpty()) {
 				creneauRepository.deleteAll(listCreneau);
 			}
+		} else if (creneau.get().getStatut().equals(statut2) && idUser == creneau.get().getIdUserDemande()) {
+			throw new ForbiddenException("Vous n'etes pas autorisé a valider le creneau");
 		} else if (creneau.get().getStatut().equals(statut2)) {
 			creneau.get().setStatut(statut3);
 

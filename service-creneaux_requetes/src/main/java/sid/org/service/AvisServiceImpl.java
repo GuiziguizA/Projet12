@@ -72,7 +72,7 @@ public class AvisServiceImpl implements AvisService {
 		if (user.getCodeUtilisateur() == requete.get().getIdUserComp()) {
 			logger.info("id du User co" + user.getCodeUtilisateur());
 			logger.info("id du User qui a fait la demande de la competence" + avisDto.getCreneau().getIdUserDemande());
-			throw new ForbiddenException("Vous n'estes pas autorisé a laisser un avis1");
+			throw new ForbiddenException("Vous n'estes pas autorisé a laisser un avis");
 		}
 
 		Avis avis = new Avis();

@@ -61,14 +61,7 @@ public class CreneauController {
 			logger.info("show the chat " + chatDateDtoObject.getChat().toString());
 
 			creneauService.createCreneau(chatDateDtoObject, idUser2, user.getUsername(), request);
-			/*
-			 * int currentPage = 0; int pageSize = 2; Page<Chat> pageChat =
-			 * chatService.getChatUser(idUser, currentPage, pageSize, request);
-			 * model.addAttribute("pageChat", pageChat); int totalPages =
-			 * pageChat.getTotalPages(); if (totalPages > 0) { List<Integer> pageNumbers =
-			 * IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
-			 * model.addAttribute("pageNumbers", pageNumbers); }
-			 */
+
 			String succes = "le creneau a été envoyé";
 			model.addAttribute("succes", succes);
 			redirectAttrs.addFlashAttribute("succes", succes);

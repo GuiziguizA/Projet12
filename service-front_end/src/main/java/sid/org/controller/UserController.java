@@ -46,7 +46,7 @@ public class UserController {
 			return "redirect:/login";
 		} catch (HttpStatusCodeException e) {
 			String error = httpService.traiterLesExceptionsApi(e);
-			model.addAttribute("error", error);
+			model.addAttribute("error", e);
 			return "formulaireUser";
 		}
 
